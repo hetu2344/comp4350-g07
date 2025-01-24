@@ -11,3 +11,9 @@ GitHub repo for project of comp4350
 |Rishamdeep Singh| singhr50@myumanitoba.ca|
 |Seyi Asoga| asogao@myumanitoba.ca|
 |Aidan Labossiere|laboss42@myumanitoba.ca|
+
+# TA
+
+|Name|email|
+|----|----|
+|Xu Yang|yangx4@myumanitoba.ca|
