@@ -91,6 +91,7 @@ Then the system should authenticate my credentials
 And I should be redirected to the dashboard
 
 ### Title - 1c - User Logout
+
 **Description**:
 
 As a logged-in user, I want to logout of my account so that my account remains secured on public devices.
@@ -107,6 +108,65 @@ And I am on any page within the application
 When I click the "Logout" button
 Then the system should log me out
 And I should be redirected to the login page
+
+### Title - 1d - Adding new user
+
+**Description**:
+
+As a restaurant owner or manager, I want to register my restaurant staff to application so that they can access the features and make restaurant run efficiently.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful Staff Registration
+
+Given I am a restaurant owner or manager
+And I am on the Staff Management page
+When I enter the staff member’s details (name, email, role)
+And I click the "Register" button
+Then the system should create a staff account
+And the staff member should receive an email with login credentials
+
+### Title - 1e - User Role Management
+
+**Description**:
+
+As a restaurant owner, I want to modify the roles of my restaurant staff so that I can efficiently manage my employees.
+
+* Priority: High
+* Time: 1 day
+
+**Acceptance Criteria**:
+
+**Scenario**: Successfully Modify a Staff Member’s Role
+
+Given I am a restaurant owner
+And I am on the Staff Management page
+When I select a staff member and change their role (e.g., from Employee to Manager)
+And I click the "Save Changes" button
+Then the system should update their role
+And the staff member should receive a notification about their updated permissions
+
+### Title - 1f - Removing user from the application
+
+**Description**:
+
+As a restaurant owner, I want to remove staff from the application, so that my restaurant's data is secure and not accessed by an unauthorized user.
+
+* Priority: High
+* Time: 1 day
+
+**Acceptance Criteria**:
+
+**Scenario**: Successfully Remove a Staff Member
+
+Given I am a restaurant owner
+And I am on the Staff Management page
+When I select a staff member and click the "Remove" button
+Then the system should revoke their access to the application
+And the staff member should no longer be able to log in
 
 
 
