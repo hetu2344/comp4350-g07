@@ -206,7 +206,33 @@ Given I am a manager making changes to a menu item,
 When I change the price or description of the item and click "Save Changes"
 The price and description of the item should be updated and the system sends a confirmation email to me. 
 
+### Title - 3c - View the menu for order accuracy
 
+**Description**:
+
+As a store employee, I want to view the menu so that I can provide accurate information to customers.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**
+
+**Scenario**: Menu is visible and up to date
+Given I am a waiter or front desk employee, I should be able to view the menu for the restaurant with the latest changes. If there is an update pending, An alert should show up.
+
+### Title - 3d - Browse the menu online
+
+**Description**:
+
+As a customer, I want to browse the menu online so that I can see available dishes and prices before ordering.
+
+* Priority: High
+* Time: 1 day
+
+**Acceptance Criteria**
+
+**Scenario**: Menu is visible and up to date
+Given I am a customer at a restaurant, I should be able to view the menu for the restaurant. 
 
 # Technologies
 
