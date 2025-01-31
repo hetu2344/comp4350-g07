@@ -77,6 +77,8 @@ And I click the "Register" button
 Then the system should create my account
 And I should receive a confirmation email
 
+---
+
 ### 1b - User Login
 
 **Description**:
@@ -97,6 +99,8 @@ And I click the "Login" button
 Then the system should authenticate my credentials
 And I should be redirected to the dashboard
 
+---
+
 ### 1c - User Logout
 
 **Description**:
@@ -115,6 +119,8 @@ And I am on any page within the application
 When I click the "Logout" button
 Then the system should log me out
 And I should be redirected to the login page
+
+---
 
 ### 1d - Adding new user
 
@@ -136,6 +142,8 @@ And I click the "Register" button
 Then the system should create a staff account
 And the staff member should receive an email with login credentials
 
+---
+
 ### 1e - User Role Management
 
 **Description**:
@@ -155,6 +163,8 @@ When I select a staff member and change their role (e.g., from Employee to Manag
 And I click the "Save Changes" button
 Then the system should update their role
 And the staff member should receive a notification about their updated permissions
+
+---
 
 ### 1f - Removing user from the application
 
@@ -197,6 +207,8 @@ When I enter my reservation time and party size
 And click the reserve button 
 Then my table will be reserved for when I arrive with my party at the specified time.
 
+---
+
 ### 2b - Cancel a reservation
 
 **Description**:
@@ -215,6 +227,8 @@ And I am on the My Reservations Page
 When I choose a listed reservation 
 And click the cancel button 
 Then my reservation will be canceled and the table will be freed in the restaurant for that time.
+
+---
 
 ### 2c - Add reservations for customers
 
@@ -237,6 +251,8 @@ And click the reserve button
 Then a table that fits the party will be reserved for the specified time 
 And the reservation will be added to the reservations list.
 
+---
+
 ### 2d - View available tables in real time
 
 **Description**:
@@ -254,6 +270,8 @@ Given that I am a logged in employee
 And I am on the Table Management page 
 When I am viewing the tables
 Then I am able to determine which ones are open, taken, or reserved.
+
+---
 
 ### 2e - Remove Bookings of customer
 
@@ -276,6 +294,7 @@ Then the reservation will be canceled
 And the table will be freed in the restaurant for that time 
 And the reservation will be removed from the list.
 
+---
 
 ### 2f - Change Status of Table to Taken
 
@@ -297,6 +316,8 @@ When I select an open table
 And click Mark as sat 
 Then the table will appear as taken on the Table Management page
 
+---
+
 ### 2g - Change Statues of Table to Open
 
 **Description**:
@@ -315,7 +336,6 @@ And I am on the Table Management page
 When I select a taken table 
 And click Mark as open
 Then the table will appear as open on the Table Management page 
-
 
 ## Feature 3 - Menu management
 
@@ -338,6 +358,8 @@ The system should show the new dish in the menu and send me a confirmation email
 When I remove a dish and click "Update"
 The dish should no longer show up on the menu and the system should send me a confirmation email.  
 
+---
+
 ### 3b - Modify existing menu items 
 
 **Description**:
@@ -354,6 +376,8 @@ Given I am a manager making changes to a menu item,
 When I change the price or description of the item and click "Save Changes"
 The price and description of the item should be updated and the system sends a confirmation email to me. 
 
+---
+
 ### 3c - View the menu for order accuracy
 
 **Description**:
@@ -368,6 +392,8 @@ As a store employee, I want to view the menu so that I can provide accurate info
 **Scenario**: Menu is visible and up to date
 Given I am a waiter or front desk employee, I should be able to view the menu for the restaurant with the latest changes. If there is an update pending, An alert should show up.
 
+---
+
 ### 3d - Browse the menu online
 
 **Description**:
@@ -381,6 +407,7 @@ As a customer, I want to browse the menu online so that I can see available dish
 
 **Scenario**: Menu is visible and up to date
 Given I am a customer at a restaurant, I should be able to view the menu for the restaurant. 
+
 ## Feature 4 - Order Management
 
 ### 4a - Take and record customer orders 
@@ -403,6 +430,8 @@ And I click the "Submit" button
 Then the system should store the order
 And mark it as "In Progress"
 
+---
+
 ### 4b - Update the Status of an Order
 
 **Description**:
@@ -422,6 +451,8 @@ When I select an order and change its status
 Then the system should update the order status
 And reflect the change in real-time
 
+---
+
 ### 4c - Viewing Orders
 
 **Description**:
@@ -438,6 +469,8 @@ As an employee, I want to be able to view current orders so that I can track the
 Given I am viewing the list of current orders
 When I click on an order
 Then I should see order details, including items, quantities, special requests, table number, and order time
+
+---
 
 ### 4d - Modifying Orders in Progress
 
