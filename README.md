@@ -70,6 +70,45 @@ And I click the "Register" button
 Then the system should create my account
 And I should receive a confirmation email
 
+### Title - 1b - User Login
+
+**Description**:
+
+As a registered user, I want to login to the application and use it to manage customer reservation and process their orders
+
+* Priority: High
+* Time: 1 day
+
+**Acceptance Criteria**:
+
+**Scenario**:  Successful Login
+
+Given I am a registered user
+And I am on the login page
+When I enter my email and password correctly
+And I click the "Login" button
+Then the system should authenticate my credentials
+And I should be redirected to the dashboard
+
+### Title - 1c - User Logout
+**Description**:
+
+As a logged-in user, I want to logout of my account so that my account remains secured on public devices.
+
+* Priority: Low
+* Time: 1 day
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful Logout
+
+Given I am a logged-in user
+And I am on any page within the application
+When I click the "Logout" button
+Then the system should log me out
+And I should be redirected to the login page
+
+
 
 
 # Technologies
