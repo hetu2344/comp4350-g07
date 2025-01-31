@@ -309,8 +309,82 @@ When I select a taken table
 And click Mark as open
 Then the table will appear as open on the Table Management page 
 
+## Feature - 4 - Order Management
 
+### Title - 4a - Take and record customer orders 
 
+**Description**:
+
+As a store employee, I want to take orders from customers (online/in-person) so that their requests are recorded properly.
+
+* Priority: High
+* Time: 1 Day
+
+**Acceptance Criteria**:
+
+**Scenario**: Successfully Take an In-Person Order
+
+Given I am a logged-in store employee
+And I am on the Order Management page
+When I select "New Order" and input the customer’s order details (menu items, quantity, special requests)
+And I click the "Submit" button
+Then the system should store the order
+And mark it as "In Progress"
+
+### Title - 4b - Update the Status of an Order
+
+**Description**:
+
+As an employee, I want to be able to change the status of an order so that it can be properly tracked.
+
+* Priority: Medium
+* Time: 1 Day
+
+**Acceptance Criteria**:
+
+**Scenario**: Successfully Update Order Status
+
+Given I am a logged-in store employee
+And I am on the Order Management page
+When I select an order and change its status (e.g., from "In Progress" to "Completed")
+Then the system should update the order status
+And reflect the change in real-time
+
+### Title - 4c - Viewing Orders
+
+**Description**:
+
+As an employee, I want to be able to view current orders so that I can track their progress.
+
+* Priority: High
+* Time: 2 Days
+
+**Acceptance Criteria**:
+
+**Scenario**: View Order Details
+
+Given I am viewing the list of current orders
+When I click on an order
+Then I should see order details, including items, quantities, special requests, table number (for dine-in), and order time
+
+### Title - 4d - Modifying Orders in Progress
+
+**Description**:
+
+As an employee, I want to be able to modify orders that are in progress so that I can add important information or add items.
+
+* Priority: High
+* Time: 2 Days
+
+**Acceptance Criteria**:
+
+**Scenario**: Add Items to an Order in Progress
+
+Given I am editing an order that is in progress
+When I add additional menu items to the order
+And I click "Save Changes"
+Then the new items should be added to the order
+And the updated order should be reflected in real-time
 
 # Technologies
 
