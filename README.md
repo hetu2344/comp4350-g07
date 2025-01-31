@@ -380,7 +380,7 @@ Given I am a customer at a restaurant, I should be able to view the menu for the
 
 **Description**:
 
-As a store employee, I want to take orders from customers (online/in-person) so that their requests are recorded properly.
+As a store employee, I want to take orders from customers so that their requests are recorded properly.
 
 * Priority: High
 * Time: 1 Day
@@ -391,7 +391,7 @@ As a store employee, I want to take orders from customers (online/in-person) so 
 
 Given I am a logged-in store employee
 And I am on the Order Management page
-When I select "New Order" and input the customer’s order details (menu items, quantity, special requests)
+When I select "New Order" and input the customer’s order details
 And I click the "Submit" button
 Then the system should store the order
 And mark it as "In Progress"
@@ -411,7 +411,7 @@ As an employee, I want to be able to change the status of an order so that it ca
 
 Given I am a logged-in store employee
 And I am on the Order Management page
-When I select an order and change its status (e.g., from "In Progress" to "Completed")
+When I select an order and change its status
 Then the system should update the order status
 And reflect the change in real-time
 
@@ -430,7 +430,7 @@ As an employee, I want to be able to view current orders so that I can track the
 
 Given I am viewing the list of current orders
 When I click on an order
-Then I should see order details, including items, quantities, special requests, table number (for dine-in), and order time
+Then I should see order details, including items, quantities, special requests, table number, and order time
 
 ### Title - 4d - Modifying Orders in Progress
 
