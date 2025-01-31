@@ -445,6 +445,60 @@ And I click "Save Changes"
 Then the new items should be added to the order
 And the updated order should be reflected in real-time
 
+## Feature - 5 - Sales Analysis
+
+### Feature - 5a - Viewing Sales by Item
+
+**Description**:
+
+As a restaurant owner, I want to be able to see sales information over time for every item on the menu.
+
+* Priority: Medium
+* Time: 2 Days
+
+**Acceptance Criteria**:
+
+**Scenario**: View sales information by item
+
+Given that I am logged in as a restaurant owner and I am on the sales dashboard 
+or sales report page, when I select an item from the menu, then I should be able 
+to see the total sales for that item, including both the quantity sold and the 
+total revenue generated.
+
+### Feature - 5b - Item Ranking by Sales
+
+**Description**:
+
+As a restaurant owner, I want to be able to view a ranking of all menu items based on sales, over a specified period of time.
+
+* Priority: Low 
+* Time: 2 Days
+
+**Acceptance Criteria**:
+
+**Scenario**: View Menu Item Ranking by Sales
+
+Given that I am logged in as a restaurant owner and I am on the sales dashboard 
+or item rankings page, when I select a time period (such as daily, weekly, monthly, 
+or yearly), then I should be able to see a ranked list of all menu items based on total 
+sales (either by revenue or quantity sold) for that period, with the top-selling items
+appearing at the top of the list
+
+### Feature - 5c - Viewing Gross Sales
+
+**Description**:
+
+As a restaurant owner, I want to be able to view the gross sales of the restaurant, by day, week, month, and year.
+
+* Priority: Medium
+* Time: 2 Days
+
+**Acceptance Criteria**: 
+
+**Scenario**: View Gross Sales by Time Period 
+
+Given that I am logged in as a restaurant owner and I am on the sales dashboard or sales report page, when I select a time period (such as day, week, month, or year), then I should be able to see the total gross sales for the restaurant within that selected time period, including both the total revenue and the number of transactions.
+
 # Technologies
 
 ## Block Diagram
