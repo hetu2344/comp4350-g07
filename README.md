@@ -169,6 +169,147 @@ Then the system should revoke their access to the application
 And the staff member should no longer be able to log in
 
 
+## Feature - 2 - Table Management Feature
+
+### Title - 2a - Book a table online
+
+**Description**:
+
+As a customer, I want to book a table online so that I can secure my reservation in advance.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful Table Reservation
+
+Given I am a logged in customer 
+And I am on the Reserve a Table page
+When I enter my reservation time and party size 
+And click the reserve button 
+Then my table will be reserved for when I arrive with my party at the specified time.
+
+### Title - 2b - Cancel a reservation
+
+**Description**:
+
+As a customer, I want to cancel my reservation so that I can free up the table if my plans change.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful Reservation Cancellation
+
+Given that I am a logged in customer 
+And I am on the My Reservations Page 
+When I choose a listed reservation 
+And click the cancel button 
+Then my reservation will be canceled and the table will be freed in the restaurant for that time.
+
+### Title - 2c - Add reservations for customers
+
+**Description**:
+
+As a restaurant employee, I want to add bookings so that I can manage customer reservations.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful Table Reservation on Behalf of a Customer
+ 
+Given that I am a logged in employee 
+And I am on the Reservations page
+When I click the Add Reservation button 
+And add the customer name, party size, and time
+And click the reserve button
+Then a table that fits the party will be reserved for the specified time 
+And the reservation will be added to the reservations list.
+
+### Title - 2d - View available tables in real time
+
+**Description**:
+
+As a store employee, I want to view available tables so that I can seat customers efficiently.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful View of Available Tables
+
+Given that I am a logged in employee 
+And I am on the Table Management page 
+When I am viewing the tables
+Then I am able to determine which ones are open, taken, or reserved.
+
+### Title - 2e - Remove Bookings of customer
+
+**Description**:
+
+As a restaurant employee, I want to remove bookings so that I can manage customer reservations.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful Reservation Cancellation as an Employee
+
+Given that I am a logged in employee 
+And I am on the Reservations page
+When I select a listed reservation 
+And click the remove button
+Then the reservation will be canceled 
+And the table will be freed in the restaurant for that time 
+And the reservation will be removed from the list.
+
+
+### Title - 2f - Change Status of Table to Taken
+
+**Description**:
+
+As a store employee, I want to be able to mark that a table has been taken.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful change of table status to taken
+
+
+Given that I am a logged in employee 
+And I am on the Table Management page
+When I select an open table 
+And click Mark as sat 
+Then the table will appear as taken on the Table Management page
+
+### Title - 2g - Change Statues of Table to Open
+
+**Description**:
+
+As a store employee, I want to be able to mark that a table has been taken.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful change of table status to open
+
+Given that I am a logged in employee 
+And I am on the Table Management page
+When I select a taken table 
+And click Mark as open
+Then the table will appear as open on the Table Management page 
+
+
 
 
 # Technologies
