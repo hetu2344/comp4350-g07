@@ -46,6 +46,32 @@ The Menu Management feature allows restaurant managers, owners, or head chefs to
 
 The web application can handle 100 concurrent servers, processing up to 1000 orders per minute 
 
+# User Stories
+
+## Feature - 1 - User Account Management Feature
+
+### Title - 1a - User Sign Up
+
+**Description**:
+
+As a restaurant owner, I want to register for an account so that I can integrate the management features available to make my restaurant run efficiently.
+
+* Priority: High
+* Time: 1 day
+
+**Acceptance Criteria**:
+
+**Scenario**: Successful Account Registration
+
+Given I am a new restaurant owner
+And I am on the registration page
+When I fill in my restaurant name, email, password, and other required details
+And I click the "Register" button
+Then the system should create my account
+And I should receive a confirmation email
+
+
+
 # Technologies
 
 ## Block Diagram
