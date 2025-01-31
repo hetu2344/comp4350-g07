@@ -55,9 +55,9 @@ This tech stack ensures a scalable, efficient, and well-tested solution for buil
 
 # User Stories
 
-## Feature - 1 - User Account Management Feature
+## Feature 1 - User Account Management Feature
 
-### Title - 1a - User Sign Up
+### 1a - User Sign Up
 
 **Description**:
 
@@ -77,7 +77,7 @@ And I click the "Register" button
 Then the system should create my account
 And I should receive a confirmation email
 
-### Title - 1b - User Login
+### 1b - User Login
 
 **Description**:
 
@@ -97,7 +97,7 @@ And I click the "Login" button
 Then the system should authenticate my credentials
 And I should be redirected to the dashboard
 
-### Title - 1c - User Logout
+### 1c - User Logout
 
 **Description**:
 
@@ -116,7 +116,7 @@ When I click the "Logout" button
 Then the system should log me out
 And I should be redirected to the login page
 
-### Title - 1d - Adding new user
+### 1d - Adding new user
 
 **Description**:
 
@@ -136,7 +136,7 @@ And I click the "Register" button
 Then the system should create a staff account
 And the staff member should receive an email with login credentials
 
-### Title - 1e - User Role Management
+### 1e - User Role Management
 
 **Description**:
 
@@ -156,7 +156,7 @@ And I click the "Save Changes" button
 Then the system should update their role
 And the staff member should receive a notification about their updated permissions
 
-### Title - 1f - Removing user from the application
+### 1f - Removing user from the application
 
 **Description**:
 
@@ -176,9 +176,9 @@ Then the system should revoke their access to the application
 And the staff member should no longer be able to log in
 
 
-## Feature - 2 - Table Management Feature
+## Feature 2 - Table Management Feature
 
-### Title - 2a - Book a table online
+### 2a - Book a table online
 
 **Description**:
 
@@ -197,7 +197,7 @@ When I enter my reservation time and party size
 And click the reserve button 
 Then my table will be reserved for when I arrive with my party at the specified time.
 
-### Title - 2b - Cancel a reservation
+### 2b - Cancel a reservation
 
 **Description**:
 
@@ -216,7 +216,7 @@ When I choose a listed reservation
 And click the cancel button 
 Then my reservation will be canceled and the table will be freed in the restaurant for that time.
 
-### Title - 2c - Add reservations for customers
+### 2c - Add reservations for customers
 
 **Description**:
 
@@ -237,7 +237,7 @@ And click the reserve button
 Then a table that fits the party will be reserved for the specified time 
 And the reservation will be added to the reservations list.
 
-### Title - 2d - View available tables in real time
+### 2d - View available tables in real time
 
 **Description**:
 
@@ -255,7 +255,7 @@ And I am on the Table Management page
 When I am viewing the tables
 Then I am able to determine which ones are open, taken, or reserved.
 
-### Title - 2e - Remove Bookings of customer
+### 2e - Remove Bookings of customer
 
 **Description**:
 
@@ -277,7 +277,7 @@ And the table will be freed in the restaurant for that time
 And the reservation will be removed from the list.
 
 
-### Title - 2f - Change Status of Table to Taken
+### 2f - Change Status of Table to Taken
 
 **Description**:
 
@@ -297,7 +297,7 @@ When I select an open table
 And click Mark as sat 
 Then the table will appear as taken on the Table Management page
 
-### Title - 2g - Change Statues of Table to Open
+### 2g - Change Statues of Table to Open
 
 **Description**:
 
@@ -317,9 +317,9 @@ And click Mark as open
 Then the table will appear as open on the Table Management page 
 
 
-## Feature - 3 - Menu management
+## Feature 3 - Menu management
 
-### Title - 3a - Add or remove menu items
+### 3a - Add or remove menu items
 
 **Description**:
 
@@ -338,7 +338,7 @@ The system should show the new dish in the menu and send me a confirmation email
 When I remove a dish and click "Update"
 The dish should no longer show up on the menu and the system should send me a confirmation email.  
 
-### Title - 3b - Modify existing menu items 
+### 3b - Modify existing menu items 
 
 **Description**:
 
@@ -354,7 +354,7 @@ Given I am a manager making changes to a menu item,
 When I change the price or description of the item and click "Save Changes"
 The price and description of the item should be updated and the system sends a confirmation email to me. 
 
-### Title - 3c - View the menu for order accuracy
+### 3c - View the menu for order accuracy
 
 **Description**:
 
@@ -368,7 +368,7 @@ As a store employee, I want to view the menu so that I can provide accurate info
 **Scenario**: Menu is visible and up to date
 Given I am a waiter or front desk employee, I should be able to view the menu for the restaurant with the latest changes. If there is an update pending, An alert should show up.
 
-### Title - 3d - Browse the menu online
+### 3d - Browse the menu online
 
 **Description**:
 
@@ -381,9 +381,9 @@ As a customer, I want to browse the menu online so that I can see available dish
 
 **Scenario**: Menu is visible and up to date
 Given I am a customer at a restaurant, I should be able to view the menu for the restaurant. 
-## Feature - 4 - Order Management
+## Feature 4 - Order Management
 
-### Title - 4a - Take and record customer orders 
+### 4a - Take and record customer orders 
 
 **Description**:
 
@@ -403,7 +403,7 @@ And I click the "Submit" button
 Then the system should store the order
 And mark it as "In Progress"
 
-### Title - 4b - Update the Status of an Order
+### 4b - Update the Status of an Order
 
 **Description**:
 
@@ -422,7 +422,7 @@ When I select an order and change its status
 Then the system should update the order status
 And reflect the change in real-time
 
-### Title - 4c - Viewing Orders
+### 4c - Viewing Orders
 
 **Description**:
 
@@ -439,7 +439,7 @@ Given I am viewing the list of current orders
 When I click on an order
 Then I should see order details, including items, quantities, special requests, table number, and order time
 
-### Title - 4d - Modifying Orders in Progress
+### 4d - Modifying Orders in Progress
 
 **Description**:
 
