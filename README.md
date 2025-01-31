@@ -309,6 +309,71 @@ When I select a taken table
 And click Mark as open
 Then the table will appear as open on the Table Management page 
 
+
+## Feature - 3 - Menu management
+
+### Title - 3a - Add or remove menu items
+
+**Description**:
+
+As a store manager, I want to add or remove menu items so that I can keep the menu updated.
+
+* Priority: High
+* Time: 2 days
+  
+**Acceptance Criteria**
+
+**Scenario**: Dish is added/removed from the menu
+
+Given I am a manager looking at the menu,
+When I add a new dish to the menu and click "Update"
+The system should show the new dish in the menu and send me a confirmation email.
+When I remove a dish and click "Update"
+The dish should no longer show up on the menu and the system should send me a confirmation email.  
+
+### Title - 3b - Modify existing menu items 
+
+**Description**:
+
+As a store manager, I want to modify menu items so that I can adjust prices or descriptions.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**
+
+**Scenario**: Details are updated on the menu
+Given I am a manager making changes to a menu item,
+When I change the price or description of the item and click "Save Changes"
+The price and description of the item should be updated and the system sends a confirmation email to me. 
+
+### Title - 3c - View the menu for order accuracy
+
+**Description**:
+
+As a store employee, I want to view the menu so that I can provide accurate information to customers.
+
+* Priority: High
+* Time: 2 days
+
+**Acceptance Criteria**
+
+**Scenario**: Menu is visible and up to date
+Given I am a waiter or front desk employee, I should be able to view the menu for the restaurant with the latest changes. If there is an update pending, An alert should show up.
+
+### Title - 3d - Browse the menu online
+
+**Description**:
+
+As a customer, I want to browse the menu online so that I can see available dishes and prices before ordering.
+
+* Priority: High
+* Time: 1 day
+
+**Acceptance Criteria**
+
+**Scenario**: Menu is visible and up to date
+Given I am a customer at a restaurant, I should be able to view the menu for the restaurant. 
 ## Feature - 4 - Order Management
 
 ### Title - 4a - Take and record customer orders 
@@ -392,7 +457,7 @@ And the updated order should be reflected in real-time
 
 ![Block Diagram](https://github.com/hetu2344/comp4350-g07/blob/main/Architecture_Diagram_v1.jpeg)
 
-## Tach Stack
+## Tech Stack
 This project follows a three-tier architecture, consisting of a Client Tier (View), Business Logic Tier (Controller), and Database Tier (Model). The frontend is built using ReactJS with HTML, CSS, and JavaScript, ensuring a responsive and interactive user experience. The backend is powered by Node.js and Express.js, serving as the application server to handle HTTP requests and process business logic. Data is stored and managed in a PostgreSQL database, which efficiently handles relational data storage.
 
 To ensure seamless deployment and scalability, Docker is used to containerize the entire application, facilitating Continuous Deployment (CD). The project incorporates CI/CD pipelines, leveraging either Jenkins or GitHub Actions to automate builds, testing, and deployments. API testing is streamlined using Postman, allowing for thorough validation of backend services. Performance and load testing are handled using Apache JMeter, ensuring the system can withstand high traffic and maintain optimal performance.
