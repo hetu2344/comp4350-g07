@@ -1,0 +1,59 @@
+Makefile
+
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-error.log
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Database and Secrets
+*.sql
+*.sqlite
+*.sqlite3
+*.pgpass
+
+# PostgreSQL (Local and Docker Volumes)
+pgdata/
+db_data/
+postgres-data/
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+Dockerfile*
+docker-entrypoint-initdb.d/
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Build artifacts
+dist/
+build/
+.cache/
+
+# React (Frontend)
+**/build/
+**/node_modules/
+**/.parcel-cache/
+**/.next/
+**/coverage/
+**/.turbo/
+
+# Miscellaneous
+.DS_Store
+Thumbs.db
