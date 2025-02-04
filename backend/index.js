@@ -33,11 +33,12 @@ app.post("/api/user", async(req, res) => {
 // get all users
 app.get("/api/users", async(req, res) => {
     try {
+        console.log("get all users called");
        const allUsers = await pool.query("SELECT * FROM users"); 
         res.json(allUsers.rows);
     } catch (err) {
-        console.error(err.message);
-        
+        console.log(err);
+       console.log("an error occured"); 
     }
 });
 
