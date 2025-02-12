@@ -1,12 +1,12 @@
 import Card from "../general-ui/Card";
 import classes from "./LogInForm.module.css";
+import { useRef } from "react";
 
 function SignUpForm() {
   const userIdInputRef = useRef();
   const passwordInputRef = useRef();
-  const fnameInputRef = userRef();
+  const fnameInputRef = useRef();
   const lnameInputRef = useRef();
-  const restIdInputRef = useRef();
 
   function submitHandler(event) {
     event.preventDefault();
@@ -14,14 +14,12 @@ function SignUpForm() {
     const enteredFirstName = fnameInputRef.current.value;
     const enteredLastName = lnameInputRef.current.value;
     const enteredUserId = userIdInputRef.current.value;
-    const enteredRestaurantId = restIdInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
 
     const userSignUpData = {
       fname: enteredFirstName,
       lname: enteredLastName,
       username: enteredUserId,
-      restaurantID: enteredRestaurantId,
       password: enteredPassword,
     };
 
@@ -44,10 +42,6 @@ function SignUpForm() {
         <div className={classes.control}>
           <label htmlFor="userID">Username</label>
           <input type="text" required id="userID" ref={userIdInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="restaurantID">Restaurant ID</label>
-          <input type="text" required id="restaurantID" ref={restIdInputRef} />
         </div>
         <div className={classes.control}>
           <label htmlFor="password">Password</label>
