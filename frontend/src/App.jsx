@@ -5,7 +5,16 @@ import SignUpPage from "./pages/SignUp";
 import DashboardPage from "./pages/Dashboard";
 import ProtectedRoute from "./components/security/ProtectedRoute";
 
-//Focus of this component is to render routing configuration
+/*
+This function is used for adding routes to the website. Whenever you add a new page
+just add the path here along with the page component that will be renedered 
+inside element={}
+
+For pages that are used after staff has loged in, place page components inside <ProtectedRoute>
+component for security. More info on why this component is used for security is provided in 
+its corresponding component page (Componenets->security->ProtectedRoutes.jsx).
+*/
+
 function App() {
   return (
     //Add all the paths to the website here

@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import classes from "./Navigation.module.css";
 
-//<div className={classes.dashboard}>-UserName's Dashboard-</div>//
+/*
+This component is used to render the header for the Home Page
+*/
 
 function HomePageNavigation() {
   return (

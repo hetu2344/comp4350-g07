@@ -2,12 +2,20 @@ import Card from "../general-ui/Card";
 import classes from "./LogInForm.module.css";
 import { useRef } from "react";
 
+/*
+This component renders the Sign Up Form and collects the entered information and forwards it
+a function on the SignUp Page under pages
+*/
+
 function SignUpForm(props) {
   const userIdInputRef = useRef();
   const passwordInputRef = useRef();
   const fnameInputRef = useRef();
   const lnameInputRef = useRef();
 
+  /*
+Handles Sign up input
+*/
   function submitHandler(event) {
     event.preventDefault();
 
@@ -27,7 +35,8 @@ function SignUpForm(props) {
   }
 
   return (
-    //<h1 className={classes.title}>Staff Login</h1>
+    //Below I enclosed the whole form within the Card Component
+    //to apply the properties of the card to the form
     <Card>
       <form className={classes.form} onSubmit={submitHandler}>
         <div className={classes.title}>Staff Sign Up</div>

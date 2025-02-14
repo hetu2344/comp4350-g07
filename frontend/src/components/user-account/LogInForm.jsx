@@ -2,10 +2,18 @@ import Card from "../general-ui/Card";
 import classes from "./SignUpForm.module.css";
 import { useRef } from "react";
 
+/*
+This component renders the LogInForm and also collects the information and forwards it
+a function on the Log In Page under pages
+*/
+
 function LogInForm(props) {
   const userIdInputRef = useRef();
   const passwordInputRef = useRef();
 
+  /*
+Handles log in input
+*/
   function submitHandler(event) {
     event.preventDefault();
 
@@ -17,10 +25,12 @@ function LogInForm(props) {
       password: enteredPassword,
     };
 
-    props.onLogIn(userLoginData);
+    props.onLogIn(userLoginData); /*Forwards data to onLogIn function*/
   }
 
   return (
+    //Below I enclosed the whole form within the Card Component
+    //to apply the properties of the card to the form
     <Card>
       <form className={classes.form} onSubmit={submitHandler}>
         <div className={classes.title}>Staff Login</div>

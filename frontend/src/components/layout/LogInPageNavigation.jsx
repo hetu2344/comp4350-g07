@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import classes from "./Navigation.module.css";
 
+/*
+This component is used to render the header for the Log In Page
+*/
+
 function LogInPageNavigation() {
   return (
     <header className={classes.header}>
