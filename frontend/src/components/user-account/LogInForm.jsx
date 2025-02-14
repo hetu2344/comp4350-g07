@@ -2,7 +2,7 @@ import Card from "../general-ui/Card";
 import classes from "./SignUpForm.module.css";
 import { useRef } from "react";
 
-function LogInForm() {
+function LogInForm(props) {
   const userIdInputRef = useRef();
   const passwordInputRef = useRef();
 

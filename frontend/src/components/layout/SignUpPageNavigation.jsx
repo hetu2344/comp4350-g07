@@ -8,6 +8,9 @@ function SignUpPageNavigation() {
       <nav>
         <ul>
           <li>
+            <Link to="/log-in">Log In</Link>
+          </li>
+          <li>
             <Link to="/">Home</Link>
           </li>
         </ul>
