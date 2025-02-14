@@ -1,6 +1,12 @@
 import HomePageNavigation from "../components/layout/HomePageNavigation";
 
+/*
+This page will be the homepage of the website
+*/
+
 function HomePage() {
+  //The way this page is renedered is by first placing the Navigation header on top and then
+  //rendering the rest of the page below
   return (
     <div>
       <HomePageNavigation />

@@ -2,12 +2,17 @@ import { useNavigate } from "react-router-dom";
 import SignUpPageNavigation from "../components/layout/SignUpPageNavigation";
 import SignUpForm from "../components/user-account/SignUpForm";
 
+/*
+Renders the SignUp Page with header and signupform components
+<For now> it also fetches all users, checks if entered username exists, if not
+adds the user to the database
+*/
 function SignUpPage() {
   const navigate = useNavigate();
 
   async function addUserHandler(userSignUpData) {
     try {
-      console.log("Fetching users..."); // Step 1: Log before fetch
+      console.log("Fetching users..."); //Logging before fetch
 
       const response = await fetch("http://localhost:8018/api/users");
 
@@ -15,9 +20,9 @@ function SignUpPage() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const users = await response.json(); // Step 2: Convert response to JSON
+      const users = await response.json(); //Convert response to JSON
 
-      console.log("Fetched users:", users); // Step 3: Log the fetched users
+      console.log("Fetched users:", users); //Logging the fetched users
 
       const usernameExists = users.some(
         (user) =>
@@ -29,10 +34,10 @@ function SignUpPage() {
       if (usernameExists) {
         console.log("Username already taken!");
         alert("This username is already taken. Please choose another one.");
-        return; // Stop execution if username exists
+        return; //Stop execution if username exists
       }
 
-      // If username is unique, proceed with POST request
+      //If username is unique, proceed with POST request and add user to database
       console.log("Username is unique, creating user...");
       const postResponse = await fetch("http://localhost:8018/api/user", {
         method: "POST",

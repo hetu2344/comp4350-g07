@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import classes from "./Navigation.module.css";
 
+/*
+This component is used to render the header for the Sign up Page
+*/
+
 function SignUpPageNavigation() {
   return (
     <header className={classes.header}>
