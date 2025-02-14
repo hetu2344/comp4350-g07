@@ -3,13 +3,13 @@
   }
 
   .title {
-    font-size: 1.8rem;      /* Larger font */
-  font-weight: bold;      /* Bold text */
-  text-align: center;     /* Center the text */
-  color: #333;           /* Darker text for better readability */
-  margin-bottom: 1.5rem;  /* Space between title and input fields */
-  padding-bottom: 0.5rem; /* Space below */
-  border-bottom: 2px solid #ccc; /* Underline effect */
+    font-size: 1.8rem;      
+  font-weight: bold;     
+  text-align: center;     
+  color: #333;           
+  margin-bottom: 1.5rem;  
+  padding-bottom: 0.5rem; 
+  border-bottom: 2px solid #ccc; 
     
   }
   
