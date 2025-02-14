@@ -15,8 +15,9 @@
     font-weight: bold;
     font-family: 'Pacifico', cursive;
     color: white;
-    background: linear-gradient(to right, #8a1f00, #9e4500); /* Even darker gradient */
+    background: linear-gradient(to right, #8a1f00, #9e4500); 
     -webkit-background-clip: text;
+    background-clip: text; 
     -webkit-text-fill-color: transparent;
     padding: 0.3rem 1.5rem;
     border-radius: 8px;
@@ -68,8 +69,8 @@
     background-color: white; 
     padding: 0.5rem 1rem; 
     border-radius: 8px; 
-    border: none; /* Removes default button border */
-    cursor: pointer; /* Makes it behave like a link */
+    border: none; 
+    cursor: pointer; 
     transition: background-color 0.3s ease, color 0.3s ease;
   }
   
