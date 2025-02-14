@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/Home";
 import LoginPage from "./pages/LogIn";
 import SignUpPage from "./pages/SignUp";
+import DashboardPage from "./pages/Dashboard";
 
 //Focus of this component is to render routing configuration
 function App() {
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/log-in" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
     </div>
   );
