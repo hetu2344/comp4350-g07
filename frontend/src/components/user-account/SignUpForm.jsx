@@ -2,7 +2,7 @@ import Card from "../general-ui/Card";
 import classes from "./LogInForm.module.css";
 import { useRef } from "react";
 
-function SignUpForm() {
+function SignUpForm(props) {
   const userIdInputRef = useRef();
   const passwordInputRef = useRef();
   const fnameInputRef = useRef();
@@ -17,13 +17,13 @@ function SignUpForm() {
     const enteredPassword = passwordInputRef.current.value;
 
     const userSignUpData = {
-      fname: enteredFirstName,
-      lname: enteredLastName,
+      fName: enteredFirstName,
+      lName: enteredLastName,
       username: enteredUserId,
       password: enteredPassword,
     };
 
-    console.log(userSignUpData);
+    props.onSignUp(userSignUpData);
   }
 
   return (
