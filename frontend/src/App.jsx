@@ -3,6 +3,7 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/LogIn";
 import SignUpPage from "./pages/SignUp";
 import DashboardPage from "./pages/Dashboard";
+import ProtectedRoute from "./components/security/ProtectedRoute";
 
 //Focus of this component is to render routing configuration
 function App() {
@@ -13,7 +14,14 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/log-in" element={<LoginPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </div>
   );
