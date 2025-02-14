@@ -7,10 +7,7 @@ function HomePage() {
       <h2>
         This will be the homepage when customer/staff first enters the website
       </h2>
-      <ul>
-        <li>This page will have a menu displayed</li>
-        <li>plus other features</li>
-      </ul>
+      <h2>This page will have a menu displayed</h2>
     </div>
   );
 }

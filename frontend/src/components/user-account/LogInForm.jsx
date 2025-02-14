@@ -17,7 +17,7 @@ function LogInForm(props) {
       password: enteredPassword,
     };
 
-    console.log(userLoginData);
+    props.onLogIn(userLoginData);
   }
 
   return (
