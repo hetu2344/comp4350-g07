@@ -20,7 +20,7 @@ async function createUser(req, res){
 async function getAllUsers(req, res){
   try {
     console.log("get all users called");
-    const allUsers = getUsers();
+    const allUsers = await getUsers();
     console.log(allUsers);
     res.json(allUsers);
   } catch (err) {
