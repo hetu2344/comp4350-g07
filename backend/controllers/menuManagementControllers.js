@@ -6,6 +6,7 @@ const {
   getAllItems
 } = require("../models/menuManagementModel");
 
+
 // Method that creates new MenuItem
 async function createMenuItem(req, res) {
   try {
@@ -46,7 +47,7 @@ async function createMenuItem(req, res) {
 // Function that updates menu items
 async function updateMenuItem(req, res) {
   try {
-    const { itemId } = req.params;
+    const { id } = req.params;
     const {
       itemName,
       itemDescription,

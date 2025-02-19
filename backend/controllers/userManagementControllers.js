@@ -1,5 +1,7 @@
 //  Create a new uer
- async function createUser(req, res){
+const pool=require("../db/db");
+ 
+async function createUser(req, res){
   try {
     console.log(req.body);
     const { fName } = req.body;

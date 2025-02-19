@@ -5,13 +5,13 @@ const router=express.Router();
 
 
 // Get all Menu Items
-router.get("/",getAllMenuItems);
+router.get("/",getAllMenuItems());
 
 // Create a Menu Item
-router.post("/",createMenuItem);
+router.post("/",createMenuItem());
 
 // Update a menu Item
-router.put("/:id",updateMenuItem);
+router.put("/:id",updateMenuItem());
 
 
 
