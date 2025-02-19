@@ -18,6 +18,6 @@ app.use("/api/user", userManagementRoutes);
 app.use("/api/menu", menuManagementRoutes);
 
 // get all menu items
-app.listen(PORT, () => {
+app.listen(PORT,"0.0.0.0" , () => {
   console.log(`Backend server has started at port ${PORT}`);
 });

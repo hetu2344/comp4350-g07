@@ -8,5 +8,6 @@ const pool = new Pool({
     database: "restro_sync"
 });
 
+
 module.exports = pool;
 

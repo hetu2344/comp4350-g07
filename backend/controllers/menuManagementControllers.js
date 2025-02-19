@@ -61,7 +61,7 @@ async function updateMenuItem(req, res) {
     } = req.body;
 
     await updateItem(
-      itemId,
+      id,
       itemName,
       itemDescription,
       price,

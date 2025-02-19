@@ -9,10 +9,10 @@ const router = express.Router();
 // Routes
 
 // create a user
-router.post("/", createUser());
+router.post("/", createUser);
 
 // get all users
-router.get("/", getAllUsers());
+router.get("/", getAllUsers);
 
 // get a user
 
