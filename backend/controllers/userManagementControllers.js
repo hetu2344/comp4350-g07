@@ -17,6 +17,7 @@ async function createUser(req, res){
   }
 }
 
+
 async function getAllUsers(req, res){
   try {
     console.log("get all users called");

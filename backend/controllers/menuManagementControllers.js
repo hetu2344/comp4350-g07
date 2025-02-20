@@ -21,7 +21,7 @@ async function createMenuItem(req, res) {
       isGlutenFree,
       allergens,
     } = req.body;
-
+    console.log(itemName);
     const { menuItemId, menuItemName } = await insertMenuItem(
       itemName,
       itemDescription,
