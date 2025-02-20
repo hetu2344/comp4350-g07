@@ -56,13 +56,13 @@ async function insertMenuItem(
       menuItemName: result.rows[0].item_name,
     };
   } catch (error) {
-    if (client){
-    await client.query("ROLLBACK");
+    if (client) {
+      await client.query("ROLLBACK");
     }
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
-    if(client){
+    if (client) {
       client.release();
     }
   }
@@ -80,7 +80,6 @@ async function updateItem(
   isVegan,
   isGlutenFree
 ) {
-
   let client;
   try {
     client = await pool.connect();
@@ -161,10 +160,8 @@ async function insertAllergens(itemId, allergens) {
         `INSERT INTO menu_item_allergens (menu_item_id,allergen_id) VALUES ($1, (SELECT id FROM menu_allergens WHERE name = $2))`,
         [itemId, allergenName]
       );
-
     }
-      await client.query("COMMIT");
-
+    await client.query("COMMIT");
   } catch (error) {
     if (client) {
       await client.query("ROLLBACK");
@@ -176,17 +173,20 @@ async function insertAllergens(itemId, allergens) {
       client.release();
     }
   }
-  }
+}
 
-  // Method that removes and item from menu_items table
-async function removeItem(id){
-  try{
+// Method that removes and item from menu_items table
+async function removeItem(id) {
+  try {
     // DELETE Query
-  const result=await pool.query("DELETE FROM menu_items WHERE item_id=$1 RETURNING *",[id]);
-  return result;
-  }catch(err){
-        console.error("Error removing menu item:", err);
-        throw err;
+    const result = await pool.query(
+      "DELETE FROM menu_items WHERE item_id=$1 RETURNING *",
+      [id]
+    );
+    return result;
+  } catch (err) {
+    console.error("Error removing menu item:", err);
+    throw err;
   }
 }
 
@@ -194,7 +194,37 @@ async function removeItem(id){
 async function getAllItems() {
   try {
     // SELECT Query
-    const result = await pool.query("SELECT * FROM menu_items");
+    const result = await pool.query(
+      `SELECT mi.*,c.name AS category_name,
+      ARRAY_REMOVE(ARRAY_AGG(a.name),NULL) AS allergens 
+      FROM menu_items AS mi 
+      LEFT JOIN menu_categories AS c ON mi.category_id=c.id 
+      LEFT JOIN menu_item_allergens AS mia ON mi.item_id=mia.menu_item_id 
+      LEFT JOIN menu_allergens AS a ON mia.allergen_id=a.id 
+      GROUP BY mi.item_id,c.name`
+    );
+    return result.rows;
+  } catch (err) {
+    console.error("Error fetching menu items:", err);
+    throw err;
+  }
+}
+
+// Method that gets any one item by id
+async function getAnItemById(id) {
+  try {
+    // SELECT Query
+    const result = await pool.query(
+      `SELECT mi.*,c.name AS category_name,
+      ARRAY_REMOVE(ARRAY_AGG(a.name),NULL) AS allergens 
+      FROM menu_items AS mi 
+      LEFT JOIN menu_categories AS c ON mi.category_id=c.id 
+      LEFT JOIN menu_item_allergens AS mia ON mi.item_id=mia.menu_item_id 
+      LEFT JOIN menu_allergens AS a ON mia.allergen_id=a.id 
+      WHERE mi.item_id=$1      
+      GROUP BY mi.item_id,c.name`,
+      [id]
+    );
     return result.rows;
   } catch (err) {
     console.error("Error fetching menu items:", err);
@@ -208,5 +238,6 @@ module.exports = {
   updateItem,
   insertMenuItem,
   getAllItems,
-  removeItem
+  removeItem,
+  getAnItemById,
 };

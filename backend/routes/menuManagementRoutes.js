@@ -4,6 +4,7 @@ const {
   updateMenuItem,
   getAllMenuItems,
   removeMenuItem,
+  getAnyOneItemByID,
 } = require("../controllers/menuManagementControllers");
 
 const router = express.Router();
@@ -19,6 +20,10 @@ router.put("/:id", updateMenuItem);
 
 // Remove an item from menu
 router.delete("/:id",removeMenuItem);
+
+// Get a menu item by id
+router.get("/:id", getAnyOneItemByID);
+
 
 
 module.exports = router;

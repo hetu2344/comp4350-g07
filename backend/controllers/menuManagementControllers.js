@@ -5,6 +5,7 @@ const {
   removeAllAllergens,
   getAllItems,
   removeItem,
+  getAnItemById,
 } = require("../models/menuManagementModel");
 
 // Method that creates new MenuItem
@@ -116,9 +117,24 @@ async function getAllMenuItems(req, res) {
   }
 }
 
+// Method that gets any one item in menu by id
+async function getAnyOneItemByID(req, res) {
+  try {
+      const { id } = req.params;
+
+    const item = await getAnItemById(id);
+    res.json(item);
+  } catch (err) {
+    console.log(err);
+    console.log("an error occured");
+  }
+}
+
+
 module.exports = {
   createMenuItem,
   updateMenuItem,
   getAllMenuItems,
   removeMenuItem,
+  getAnyOneItemByID,
 };
