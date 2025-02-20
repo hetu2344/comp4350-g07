@@ -34,6 +34,7 @@ async function insertMenuItem(
     }
     const categoryId = categoryResult.rows[0].id;
 
+    // INSERT Query
     const result = await client.query(
       `INSERT INTO menu_items (item_name,item_description,price,category_id,is_available,is_vegetarian,is_vegan,is_gluten_free) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING item_id,item_name`,
       [
@@ -86,6 +87,7 @@ async function updateItem(
 
     await client.query("BEGIN");
 
+    // UPDATE Query
     const result = await client.query(
       `UPDATE menu_items SET item_name=$1,item_description=$2,price=$3,category_id=(SELECT id FROM menu_categories WHERE name=$4), is_available= $5 , is_vegetarian=$6,is_vegan=$7,is_gluten_free=$8 WHERE item_id=$9`,
       [
@@ -124,6 +126,7 @@ async function removeAllAllergens(itemId) {
 
     await client.query("BEGIN");
 
+    // DELETE Query
     const result = await client.query(
       "DELETE FROM menu_item_allergens WHERE menu_item_id=$1",
       [itemId]
@@ -153,6 +156,7 @@ async function insertAllergens(itemId, allergens) {
 
     await client.query("BEGIN");
     for (const allergenName of allergens) {
+      // INSERT Query
       await client.query(
         `INSERT INTO menu_item_allergens (menu_item_id,allergen_id) VALUES ($1, (SELECT id FROM menu_allergens WHERE name = $2))`,
         [itemId, allergenName]
@@ -174,10 +178,22 @@ async function insertAllergens(itemId, allergens) {
   }
   }
 
+  // Method that removes and item from menu_items table
+async function removeItem(id){
+  try{
+    // DELETE Query
+  const result=await pool.query("DELETE FROM menu_items WHERE item_id=$1 RETURNING *",[id]);
+  return result;
+  }catch(err){
+        console.error("Error removing menu item:", err);
+        throw err;
+  }
+}
 
 // Method that gets all the items in the menu
 async function getAllItems() {
   try {
+    // SELECT Query
     const result = await pool.query("SELECT * FROM menu_items");
     return result.rows;
   } catch (err) {
@@ -192,4 +208,5 @@ module.exports = {
   updateItem,
   insertMenuItem,
   getAllItems,
+  removeItem
 };

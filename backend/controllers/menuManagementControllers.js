@@ -3,9 +3,9 @@ const {
   updateItem,
   insertAllergens,
   removeAllAllergens,
-  getAllItems
+  getAllItems,
+  removeItem,
 } = require("../models/menuManagementModel");
-
 
 // Method that creates new MenuItem
 async function createMenuItem(req, res) {
@@ -85,14 +85,40 @@ async function updateMenuItem(req, res) {
   }
 }
 
-async function getAllMenuItems(req,res){
-    try {
-      const allItems = await getAllItems();
-      res.json(allItems);
-    } catch (err) {
-      console.log(err);
-      console.log("an error occured");
+// Method that removes a menu item
+async function removeMenuItem(req, res) {
+  try {
+    const { id } = req.params;
+
+    const removedItem = await removeItem(id);
+
+    if (removedItem.rowCount == 0) {
+      return res.status(404).json({ message: "Menu item not found." });
     }
+
+    res.json({
+      message: `${removedItem.rows[0].item_name} deleted successfully from menu!`,
+    });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error: Unable to remove menu item.");
+  }
 }
 
-module.exports = { createMenuItem, updateMenuItem,getAllMenuItems};
+// Method that gets all items in menu
+async function getAllMenuItems(req, res) {
+  try {
+    const allItems = await getAllItems();
+    res.json(allItems);
+  } catch (err) {
+    console.log(err);
+    console.log("an error occured");
+  }
+}
+
+module.exports = {
+  createMenuItem,
+  updateMenuItem,
+  getAllMenuItems,
+  removeMenuItem,
+};
