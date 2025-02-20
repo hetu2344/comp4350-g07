@@ -72,10 +72,10 @@ async function updateMenuItem(req, res) {
       isGlutenFree
     );
 
-    await removeAllAllergens(itemId);
+    await removeAllAllergens(id);
 
     if (allergens && allergens.length > 0) {
-      await insertAllergens(itemId, allergens);
+      await insertAllergens(id, allergens);
     }
 
     res.json({ message: `${itemName} updated successfully` });
