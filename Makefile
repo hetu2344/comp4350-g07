@@ -61,6 +61,14 @@ shell-db:
 psql:
 	docker exec -it my_postgres_db psql -U myuser -d mydatabase
 
+# Run Jest tests inside the Docker container
+test:
+	$(DOCKER_COMPOSE) run --rm test
+
+# Run API and tests simultaneously
+run-all:
+	$(DOCKER_COMPOSE) up --build backend test
+
 # Help command to show available commands
 help:
 	@echo "Available commands:"
@@ -78,3 +86,5 @@ help:
 	@echo "  make shell-backend   - Open shell inside the backend container"
 	@echo "  make shell-db        - Open shell inside the database container"
 	@echo "  make psql            - Connect to PostgreSQL database inside the container"
+	@echo "  make test            - Run Jest tests inside the Docker container"
+	@echo "  make run-all         - Run API and tests simultaneously"

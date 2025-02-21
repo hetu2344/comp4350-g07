@@ -7,4 +7,6 @@ WORKDIR /app
 
 RUN npm install
 
+ENV CI=true
+
 CMD ["npm", "start"]
