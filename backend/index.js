@@ -17,7 +17,11 @@ app.use(express.json());
 app.use("/api/user", userManagementRoutes);
 app.use("/api/menu", menuManagementRoutes);
 
+if(require.main===module){
 // get all menu items
 app.listen(PORT,"0.0.0.0" , () => {
   console.log(`Backend server has started at port ${PORT}`);
 });
+}
+
+module.exports= app;

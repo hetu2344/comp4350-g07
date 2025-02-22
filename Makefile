@@ -63,11 +63,13 @@ psql:
 
 # Run Jest tests inside the Docker container
 test:
-	$(DOCKER_COMPOSE) run --rm test
+	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
 
 # Run API and tests simultaneously
-run-all:
-	$(DOCKER_COMPOSE) up --build backend test
+run-all-tests:
+	$(DOCKER_COMPOSE) up -d --build backend db
+	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
+	$(DOCKER_COMPOSE) down
 
 # Help command to show available commands
 help:
@@ -87,4 +89,5 @@ help:
 	@echo "  make shell-db        - Open shell inside the database container"
 	@echo "  make psql            - Connect to PostgreSQL database inside the container"
 	@echo "  make test            - Run Jest tests inside the Docker container"
-	@echo "  make run-all         - Run API and tests simultaneously"
+	@echo "  make run-all-tests   - Run API and tests simultaneously"
+	@echo "  make test-coverage   - Opens test coverage."
