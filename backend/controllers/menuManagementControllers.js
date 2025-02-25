@@ -6,6 +6,7 @@ const {
   getAllItems,
   removeItem,
   getAnItemById,
+  checkItemExist,
 } = require("../models/menuManagementModel");
 
 // Method that creates new MenuItem
@@ -37,11 +38,18 @@ async function createMenuItem(req, res) {
     if (allergens && allergens.length > 0) {
       await insertAllergens(menuItemId, allergens);
     }
-
-    res.json({ message: `${menuItemName} added successfully.` });
+    res.status(201);
+    res.json({
+      message: `${menuItemName} added successfully.`,
+      item_id: menuItemId,
+    });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error : Unable to add item to the menu.");
+
+
+    res
+      .status(500)
+      .json({ error: "Server Error : Unable to add item to the menu." });
   }
 }
 
@@ -61,28 +69,74 @@ async function updateMenuItem(req, res) {
       allergens,
     } = req.body;
 
-    await updateItem(
-      id,
-      itemName,
-      itemDescription,
-      price,
-      category,
-      isAvailable,
-      isVegetarian,
-      isVegan,
-      isGlutenFree
-    );
+    if(!id || isNaN(id)){
+      return res.status(400).json({error:"Invalid item ID"});
+    }
+    if (
+      !itemName ||
+      !itemDescription ||
+      !category ||
+      price <= 0 ||
+      typeof isAvailable !== "boolean" ||
+      typeof isVegetarian !== "boolean" ||
+      typeof isVegan !== "boolean" ||
+      typeof isGlutenFree !== "boolean") {
+        console.log(!itemName);
+        console.log(!itemDescription);
+        console.log(!category);
+        console.log(price<=0);
+        console.log(typeof isAvailable !== "boolean");
+        console.log(typeof isVegetarian !== "boolean");
+        console.log(typeof isVegan !== "boolean");
+        console.log(typeof isGlutenFree !== "boolean");
+
+        console.log("BOOL");
+      return res.status(400).json({ error: "Invalid input provided." });
+    }
+
+    console.log("ID is ",id);
+    const itemExist = await checkItemExist(id);
+    
+    console.log(itemExist);
+
+    // if(!itemExist || itemExist.length === 0 ){
+    //   return res.status(404).json({error:`Menu item with ID ${id} not found.`});
+    // }
+
+     const updatedItem= await updateItem(
+        id,
+        itemName,
+        itemDescription,
+        price,
+        category,
+        isAvailable,
+        isVegetarian,
+        isVegan,
+        isGlutenFree,
+      );
+
+      console.log("UPDATE ITEM",updatedItem)
+      if(updatedItem.rowCount===0){
+        return res.status(404).json({error:"Menu item not found."});
+      }
+
+      console.log("ALLERGENS", allergens);
+
 
     await removeAllAllergens(id);
-
     if (allergens && allergens.length > 0) {
       await insertAllergens(id, allergens);
     }
 
-    res.json({ message: `${itemName} updated successfully` });
+    res.json({ message: `${itemName} updated successfully`,item_id:id });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error : Unable to update the menu item.");
+    console.error("Error while updating:",err.message);
+    if (err.message.includes("No menu item found")|| err.message.includes("not found")){
+      return res.status(404).json({ error: "Menu item not found." });
+    }
+      res
+        .status(500)
+        .json({ error: "Server Error : Unable to update the menu item." });
   }
 }
 
@@ -91,18 +145,24 @@ async function removeMenuItem(req, res) {
   try {
     const { id } = req.params;
 
-    const removedItem = await removeItem(id);
+      if (!id || isNaN(id)) {
+          return res.status(400).json({ error: "Invalid item ID." });
+        }
 
-    if (removedItem.rowCount == 0) {
-      return res.status(404).json({ message: "Menu item not found." });
-    }
+    const removedItem = await removeItem(id);
 
     res.json({
       message: `${removedItem.rows[0].item_name} deleted successfully from menu!`,
+      item_id:removedItem.rows[0].item_id
     });
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error: Unable to remove menu item.");
+    // console.error(err.message);
+    if(err.message.includes("not found")){
+     return res.status(404).json({ message: "Menu item not found." });
+    }
+    res
+      .status(500)
+      .json({ error: "Server Error: Unable to remove menu item." });
   }
 }
 
@@ -113,23 +173,35 @@ async function getAllMenuItems(req, res) {
     res.json(allItems);
   } catch (err) {
     console.log(err);
-    console.log("an error occured");
+
+    if (err.message.includes("No menu items found.")) {
+      return res.status(404).json({ error: err.message });
+    }
+    res.status(500).json({ error: "Server Error: Unable to fetch menu item." });
   }
 }
 
 // Method that gets any one item in menu by id
 async function getAnyOneItemByID(req, res) {
   try {
-      const { id } = req.params;
+    const { id } = req.params;
+
+    if (!id || isNaN(id)) {
+      return res.status(400).json({ error: "Invalid item ID." });
+    }
 
     const item = await getAnItemById(id);
+
     res.json(item);
   } catch (err) {
     console.log(err);
-    console.log("an error occured");
+    if (err.message.includes("No menu item found")) {
+      return res.status(404).json({ error: err.message });
+    }
+
+    res.status(500).json({ error: "Server Error: Unable to fetch menu item." });
   }
 }
-
 
 module.exports = {
   createMenuItem,

@@ -86,14 +86,21 @@ async function updateItem(
 
     await client.query("BEGIN");
 
+    const categoryResult=await client.query(`SELECT id FROM menu_categories WHERE name=$1 FOR UPDATE`,[category]);
+
+    if(!categoryResult || categoryResult.rows.length===0){
+      throw new Error(`Category ${category} not found.`);
+    }
+    console.log("Category",categoryResult);
+    const categoryId=categoryResult.rows[0].id;
     // UPDATE Query
     const result = await client.query(
-      `UPDATE menu_items SET item_name=$1,item_description=$2,price=$3,category_id=(SELECT id FROM menu_categories WHERE name=$4), is_available= $5 , is_vegetarian=$6,is_vegan=$7,is_gluten_free=$8 WHERE item_id=$9`,
+      `UPDATE menu_items SET item_name=$1,item_description=$2,price=$3,category_id=$4, is_available= $5 , is_vegetarian=$6,is_vegan=$7,is_gluten_free=$8 WHERE item_id=$9`,
       [
         itemName,
         itemDescription,
         price,
-        category,
+        categoryId,
         isAvailable,
         isVegetarian,
         isVegan,
@@ -101,6 +108,11 @@ async function updateItem(
         itemId,
       ]
     );
+
+    if(result.rowCount===0){
+      throw new Error(`Menu item with ID ${itemId} not found.`);
+    }
+
     await client.query("COMMIT");
 
     return result;
@@ -132,7 +144,7 @@ async function removeAllAllergens(itemId) {
     );
 
     await client.query("COMMIT");
-
+    console.log("REMOVE ITEM RESULT",result);
     return result;
   } catch (error) {
     if (client) {
@@ -154,14 +166,53 @@ async function insertAllergens(itemId, allergens) {
     client = await pool.connect();
 
     await client.query("BEGIN");
+    let insertCount=0;
     for (const allergenName of allergens) {
       // INSERT Query
-      await client.query(
+      const result=await client.query(
         `INSERT INTO menu_item_allergens (menu_item_id,allergen_id) VALUES ($1, (SELECT id FROM menu_allergens WHERE name = $2))`,
         [itemId, allergenName]
       );
+      if(result.rowCount>0){
+        insertCount++;
+      }
     }
     await client.query("COMMIT");
+    return insertCount;
+  } catch (error) {
+    if (client) {
+      await client.query("ROLLBACK");
+    }
+    console.error("Transaction Failed:", error);
+    throw error;
+  } finally {
+    if (client) {
+      client.release();
+    }
+  }
+}
+
+async function checkItemExist(id,){
+  let client;
+  try {
+    client = await pool.connect();
+
+    await client.query("BEGIN");
+
+    console.log(id);
+
+
+    const result = await client.query(
+      "SELECT * FROM menu_items WHERE item_id = $1",
+      [id]
+    );
+
+    console.log("RowCount:",result.rowCount);
+    console.log("ROWS:",result.rows);
+       if (result.rows.error && result.rows.error !== undefined) {
+         throw new Error(`Menu item not found.`);
+       }
+    return result.rows;
   } catch (error) {
     if (client) {
       await client.query("ROLLBACK");
@@ -183,6 +234,9 @@ async function removeItem(id) {
       "DELETE FROM menu_items WHERE item_id=$1 RETURNING *",
       [id]
     );
+    if(result.rows.length===0){
+      throw new Error(`Item with id = ${id} not found.`)
+    }
     return result;
   } catch (err) {
     console.error("Error removing menu item:", err);
@@ -203,6 +257,11 @@ async function getAllItems() {
       LEFT JOIN menu_allergens AS a ON mia.allergen_id=a.id 
       GROUP BY mi.item_id,c.name`
     );
+
+      if (result.rows.length === 0) {
+          throw new Error(`No menu items found.`);
+        }
+
     return result.rows;
   } catch (err) {
     console.error("Error fetching menu items:", err);
@@ -225,6 +284,11 @@ async function getAnItemById(id) {
       GROUP BY mi.item_id,c.name`,
       [id]
     );
+
+    if(!result || result.rows.length === 0){
+      throw new Error(`No menu item found with ID: ${id}`);
+    }
+
     return result.rows;
   } catch (err) {
     console.error("Error fetching menu items:", err);
@@ -240,4 +304,5 @@ module.exports = {
   getAllItems,
   removeItem,
   getAnItemById,
+  checkItemExist,
 };
