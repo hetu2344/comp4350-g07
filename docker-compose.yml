@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: restro_sync_db
+    restart: always
+    environment:
+      POSTGRES_USER: restro_usr
+      POSTGRES_PASSWORD: cs4350
+      POSTGRES_DB: restro_sync
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: node_server
+    restart: always
+    working_dir: /app
+    environment:
+      DB_HOST: db
+      DB_USER: restro_usr
+      DB_PASSWORD: cs4350
+      DB_NAME: restro_sync
+      DB_PORT: 5432
+    ports:
+      - "8018:8080" # Change based on your app's port
+    depends_on:
+      - db
+
+  # Jest Testing Service
+  test:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: node_test_server
+    working_dir: /app
+    command: npm test  # Run Jest inside the container
+    environment:
+      DB_HOST: db
+      DB_USER: restro_usr
+      DB_PASSWORD: cs4350
+      DB_NAME: restro_sync
+      DB_PORT: 5432
+      NODE_ENV: test  # Important for testing environment
+    depends_on:
+      - db
+volumes:
+  db_data:
