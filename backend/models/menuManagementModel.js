@@ -28,6 +28,7 @@ async function insertMenuItem(
       `SELECT id FROM menu_categories WHERE name = $1 FOR UPDATE`,
       [category]
     );
+    console.log("Category Result:",categoryResult.rows);
 
     if (categoryResult.rows.length === 0) {
       throw new Error("Category not found");

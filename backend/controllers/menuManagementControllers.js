@@ -44,12 +44,14 @@ async function createMenuItem(req, res) {
       item_id: menuItemId,
     });
   } catch (err) {
-    console.error(err.message);
-
-
-    res
-      .status(500)
-      .json({ error: "Server Error : Unable to add item to the menu." });
+    console.log(err.message);
+    if (err.message.includes("not found")){
+      console.log("HIIII returnning 404")
+      return res.status(404).json({error:err.message});
+    }
+      res
+        .status(500)
+        .json({ error: "Server Error : Unable to add item to the menu." });
   }
 }
 
