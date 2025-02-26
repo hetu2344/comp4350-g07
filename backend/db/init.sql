@@ -56,9 +56,9 @@ ADD CONSTRAINT fk_store FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE S
 --Insert Store Owners (Type: 'S')
 INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
 VALUES 
-    ('owner_john', 'John', 'Doe', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'S', NULL),
-    ('owner_alice', 'Alice', 'Johnson', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'S', NULL),
-    ('owner_mark', 'Mark', 'Williams', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'S', NULL);
+    ('owner_john', 'John', 'Doe', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'S', NULL),
+    ('owner_alice', 'Alice', 'Johnson', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'S', NULL),
+    ('owner_mark', 'Mark', 'Williams', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'S', NULL);
 
 --Insert Stores (Each store must have an owner)
 INSERT INTO stores (name, owner_username)
@@ -75,23 +75,23 @@ UPDATE users SET store_id = (SELECT id FROM stores WHERE owner_username = 'owner
 --Insert Managers (Type: 'M') Assigned to Stores
 INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
 VALUES 
-    ('manager_bob', 'Bob', 'Brown', '$2a$10$hashedpassword111', 'M', (SELECT id FROM stores WHERE name = 'SuperMart')),
-    ('manager_susan', 'Susan', 'Clark', '$2a$10$hashedpassword222', 'M', (SELECT id FROM stores WHERE name = 'TechGear')),
-    ('manager_mike', 'Mike', 'Davis', '$2a$10$hashedpassword333', 'M', (SELECT id FROM stores WHERE name = 'FreshFoods'));
+    ('manager_bob', 'Bob', 'Brown', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'M', (SELECT id FROM stores WHERE name = 'SuperMart')),
+    ('manager_susan', 'Susan', 'Clark', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'M', (SELECT id FROM stores WHERE name = 'TechGear')),
+    ('manager_mike', 'Mike', 'Davis', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'M', (SELECT id FROM stores WHERE name = 'FreshFoods'));
 
 --Insert Employees (Type: 'E') Assigned to Stores
 INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
 VALUES 
-    ('employee_emma', 'Emma', 'Jones', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'SuperMart')),
-    ('employee_david', 'David', 'Moore', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'TechGear')),
-    ('employee_lisa', 'Lisa', 'Taylor', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'FreshFoods')),
-    ('employee_chris', 'Chris', 'Anderson', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'FreshFoods'));
+    ('employee_emma', 'Emma', 'Jones', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'E', (SELECT id FROM stores WHERE name = 'SuperMart')),
+    ('employee_david', 'David', 'Moore', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'E', (SELECT id FROM stores WHERE name = 'TechGear')),
+    ('employee_lisa', 'Lisa', 'Taylor', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'E', (SELECT id FROM stores WHERE name = 'FreshFoods')),
+    ('employee_chris', 'Chris', 'Anderson', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'E', (SELECT id FROM stores WHERE name = 'FreshFoods'));
 
 --Insert Users Without a Store (Type: 'M' and 'E' but no store)
 INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
 VALUES 
-    ('user_no_store1', 'James', 'Harris', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'M', NULL),
-    ('user_no_store2', 'Natalie', 'Martinez', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', NULL);
+    ('user_no_store1', 'James', 'Harris', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'M', NULL),
+    ('user_no_store2', 'Natalie', 'Martinez', '$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6', 'E', NULL);
 INSERT INTO menu_categories
     (name)
 VALUES

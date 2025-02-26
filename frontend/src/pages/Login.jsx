@@ -17,33 +17,23 @@ function LoginPage() {
   */
   async function authenticateUserHandler(userLogInData) {
     try {
-      const response = await fetch("http://localhost:8018/api/users");
+      const response = await fetch("http://localhost:8018/api/user/login", {
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json", // Ensure the server knows you're sending JSON data
+        },
+        body: JSON.stringify({
+          username: userLogInData.username,
+          password: userLogInData.password
+        })
+      });
       const users = await response.json();
 
-      //Find a matching user
-      const matchedUser = users.find(
-        (user) =>
-          user.username === userLogInData.username &&
-          user.pass === userLogInData.password
-      );
 
-      if (matchedUser) {
-        //Store user data in localStorage
-        localStorage.setItem(
-          "userData",
-          JSON.stringify({
-            fName: matchedUser.f_name,
-            lName: matchedUser.l_name,
-            username: matchedUser.username,
-            userId: matchedUser.user_id,
-          })
-        );
 
-        //Navigate to dashboard
-        navigate("/dashboard", { replace: true });
-      } else {
-        alert("Invalid username or password.");
-      }
+      //Navigate to dashboard
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       console.error("Error fetching users:", error);
     }

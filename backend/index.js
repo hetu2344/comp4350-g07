@@ -1,17 +1,23 @@
 const express = require("express");
 const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
+const cookieParser = require('cookie-parser');
 
 const cors = require("cors");
 const pool = require("./db/db");
 
 const app = express();
 
-const PORT = 8080;
+const PORT = 8018;
 
 // middleware
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+  origin: 'http://localhost:5174',
+  credentials: true,
+}));
 
 // Routes
 app.use("/api/user", userManagementRoutes);

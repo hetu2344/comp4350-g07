@@ -13,6 +13,7 @@ exports.login = async (req, res) => {
     if (!username || !password) throw new ValidationError("Username and password are required");
 
     const user = await userModel.getUserByUsername(username);
+    // console.log(user);
     const validPassword = await bcrypt.compare(password, user.password_hash);
 
     if (!validPassword) return res.status(401).json({ error: "Invalid credentials" });
@@ -27,8 +28,8 @@ exports.login = async (req, res) => {
     // Store JWT in HTTP-Only Cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // Set to true in production
-      sameSite: "Strict",
+      secure: false, // Set to true in production
+      sameSite: 'Lax',
       maxAge: 2 * 60 * 60 * 1000, // 2 hours
     });
 
@@ -47,12 +48,12 @@ exports.logout = (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 };
 
-// 🟢 **Get Logged-In User (Requires Authentication)**
+//**Get Logged-In User (Requires Authentication)**
 exports.getCurrentUser = [authenticateToken, (req, res) => {
   res.status(200).json({ user: req.user });
 }];
 
-// 🟢 **User Signup (Requires Authentication & Only Store Owners & Managers)**
+//**User Signup (Requires Authentication & Only Store Owners & Managers)**
 exports.signup = [authenticateToken, authorizeRoles, async (req, res) => {
   try {
     const { username, firstName, lastName, password, storeId, type } = req.body;
