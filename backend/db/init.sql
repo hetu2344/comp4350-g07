@@ -1,12 +1,3 @@
-CREATE TABLE users
-(
-    user_id SERIAL PRIMARY KEY,
-    f_name VARCHAR(255),
-    l_name VARCHAR(255),
-    pass VARCHAR(255),
-    username VARCHAR(255)
-);
-
 CREATE TABLE menu_categories
 (
     id SERIAL PRIMARY KEY,
@@ -41,25 +32,66 @@ CREATE TABLE menu_item_allergens
     PRIMARY KEY (menu_item_id, allergen_id)
 );
 
-INSERT INTO users
-    (f_name, l_name, pass, username)
-VALUES('Het', 'Patel', 'h1234', 'hetu2344');
-INSERT INTO users
-    (f_name, l_name, pass, username)
-VALUES('Divy', 'Patel', 'd1234', 'divy63');
-INSERT INTO users
-    (f_name, l_name, pass, username)
-VALUES('Aswin', 'Manoj', 'a1234', 'aswinm');
-INSERT INTO users
-    (f_name, l_name, pass, username)
-VALUES('Risham', 'Singh', 'r1234', 'rishams');
-INSERT INTO users
-    (f_name, l_name, pass, username)
-VALUES('Seyi', 'Asoga', 'a1234', 'seyia');
-INSERT INTO users
-    (f_name, l_name, pass, username)
-VALUES('Aidan', 'Labossiere', 'a1234', 'aidanl');
+-- Create the Users Table
+CREATE TABLE users (
+    username VARCHAR(50) PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    password_hash TEXT NOT NULL,
+    type CHAR(1) CHECK (type IN ('S', 'M', 'E')), -- 'S' = Store Owner, 'M' = Manager, 'E' = Employee
+    store_id INTEGER NULL -- Nullable, user can exist without a store
+);
 
+-- Create the Stores Table
+CREATE TABLE stores (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) UNIQUE NOT NULL,
+    owner_username VARCHAR(50) NOT NULL,
+    CONSTRAINT fk_owner FOREIGN KEY (owner_username) REFERENCES users(username) ON DELETE CASCADE
+);
+
+ALTER TABLE users 
+ADD CONSTRAINT fk_store FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE SET NULL;
+
+--Insert Store Owners (Type: 'S')
+INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
+VALUES 
+    ('owner_john', 'John', 'Doe', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'S', NULL),
+    ('owner_alice', 'Alice', 'Johnson', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'S', NULL),
+    ('owner_mark', 'Mark', 'Williams', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'S', NULL);
+
+--Insert Stores (Each store must have an owner)
+INSERT INTO stores (name, owner_username)
+VALUES 
+    ('SuperMart', 'owner_john'),
+    ('TechGear', 'owner_alice'),
+    ('FreshFoods', 'owner_mark');
+
+--Assign Store Owners to Their Stores
+UPDATE users SET store_id = (SELECT id FROM stores WHERE owner_username = 'owner_john') WHERE username = 'owner_john';
+UPDATE users SET store_id = (SELECT id FROM stores WHERE owner_username = 'owner_alice') WHERE username = 'owner_alice';
+UPDATE users SET store_id = (SELECT id FROM stores WHERE owner_username = 'owner_mark') WHERE username = 'owner_mark';
+
+--Insert Managers (Type: 'M') Assigned to Stores
+INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
+VALUES 
+    ('manager_bob', 'Bob', 'Brown', '$2a$10$hashedpassword111', 'M', (SELECT id FROM stores WHERE name = 'SuperMart')),
+    ('manager_susan', 'Susan', 'Clark', '$2a$10$hashedpassword222', 'M', (SELECT id FROM stores WHERE name = 'TechGear')),
+    ('manager_mike', 'Mike', 'Davis', '$2a$10$hashedpassword333', 'M', (SELECT id FROM stores WHERE name = 'FreshFoods'));
+
+--Insert Employees (Type: 'E') Assigned to Stores
+INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
+VALUES 
+    ('employee_emma', 'Emma', 'Jones', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'SuperMart')),
+    ('employee_david', 'David', 'Moore', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'TechGear')),
+    ('employee_lisa', 'Lisa', 'Taylor', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'FreshFoods')),
+    ('employee_chris', 'Chris', 'Anderson', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', (SELECT id FROM stores WHERE name = 'FreshFoods'));
+
+--Insert Users Without a Store (Type: 'M' and 'E' but no store)
+INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
+VALUES 
+    ('user_no_store1', 'James', 'Harris', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'M', NULL),
+    ('user_no_store2', 'Natalie', 'Martinez', '$2a$10$4A9tz4m/Nd2R.dC8M4kIuOK3Ug0vMZwV2HSkRS9u18E0/BihOL0yW', 'E', NULL);
 INSERT INTO menu_categories
     (name)
 VALUES

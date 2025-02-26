@@ -1,8 +1,8 @@
-const userModel = require("../models/userModel");
+const userModel = require("../models/userManagementModels");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const { authenticateToken, authorizeRoles } = require("../middleware/authMiddleware");
-const { UserNotExistError, ValidationError, ConflictError } = require("../exceptions");
+const { authenticateToken, authorizeRoles } = require("./authController");
+const { UserNotExistError, ValidationError, ConflictError } = require("../exceptions/exceptions");
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret"; // Use a strong secret in production
 
@@ -13,7 +13,7 @@ exports.login = async (req, res) => {
     if (!username || !password) throw new ValidationError("Username and password are required");
 
     const user = await userModel.getUserByUsername(username);
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await bcrypt.compare(password, user.password_hash);
 
     if (!validPassword) return res.status(401).json({ error: "Invalid credentials" });
 
@@ -37,6 +37,7 @@ exports.login = async (req, res) => {
     if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
     if (error instanceof ValidationError) return res.status(400).json({ error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
+    console.log(error);
   }
 };
 
@@ -73,6 +74,7 @@ exports.signup = [authenticateToken, authorizeRoles, async (req, res) => {
     if (error instanceof ValidationError) return res.status(400).json({ error: error.message });
     if (error instanceof ConflictError) return res.status(409).json({ error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
+    console.log(error);
   }
 }];
 
@@ -94,6 +96,7 @@ exports.updateUser = [authenticateToken, authorizeRoles, async (req, res) => {
   } catch (error) {
     if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
+    console.log(error);
   }
 }];
 
@@ -108,6 +111,7 @@ exports.deleteUser = [authenticateToken, authorizeRoles, async (req, res) => {
   } catch (error) {
     if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
+    console.log(error);
   }
 }];
 
@@ -122,6 +126,7 @@ exports.getUserByUsername = [authenticateToken, async (req, res) => {
   } catch (error) {
     if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
     res.status(500).json({ error: "Internal Server Error" });
+    console.log(error);
   }
 }];
 
@@ -135,6 +140,7 @@ exports.getUsersByStoreId = [authenticateToken, authorizeRoles, async (req, res)
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
+    console.log(error);
   }
 }];
 
