@@ -56,10 +56,11 @@ exports.getCurrentUser = [authenticateToken, (req, res) => {
 //**User Signup (Requires Authentication & Only Store Owners & Managers)**
 exports.signup = [authenticateToken, authorizeRoles, async (req, res) => {
   try {
-    const { username, firstName, lastName, password, storeId, type } = req.body;
+    const { username, firstName, lastName, password, type } = req.body;
 
-    if (!username || !firstName || !lastName || !password || !storeId || !type) {
-      throw new ValidationError("Missing required fields: username, firstName, lastName, password, storeId, type");
+    
+    if (!username || !firstName || !lastName || !password || !type) {
+      throw new ValidationError("Missing required fields: username, firstName, lastName, password, type");
     }
 
     const validTypes = ["S", "E", "M"];
@@ -68,6 +69,8 @@ exports.signup = [authenticateToken, authorizeRoles, async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    // const storeId = req.user.storeId;
+    console.log("StoreId = " + storeId);
     const user = await userModel.addUser(username, firstName, lastName, hashedPassword, storeId, type);
     
     res.status(201).json({ message: "User created successfully", user });

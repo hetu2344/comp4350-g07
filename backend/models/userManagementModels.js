@@ -74,6 +74,7 @@ async function getUserByUsername(username) {
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching user:", error);
+    if (error instanceof UserNotExistError) throw new UserNotExistError(username);
     throw new DBError("Error retrieving user from database");
   }
 }
