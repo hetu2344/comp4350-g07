@@ -9,7 +9,7 @@ async function addUser(username, firstName, lastName, password, storeId, type) {
     await client.query("BEGIN");
 
     const result = await client.query(
-      `INSERT INTO users (username, first_name, last_name, password, store_id, type) 
+      `INSERT INTO users (username, first_name, last_name, password_hash, store_id, type) 
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING username, first_name, last_name, type`,
       [username, firstName, lastName, password, storeId, type]
     );
@@ -70,7 +70,7 @@ async function getUserByUsername(username) {
     if (result.rows.length === 0) {
       throw new UserNotExistError(username);
     }
-    console.log(result.rows[0]);
+    // console.log(result.rows[0]);
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching user:", error);

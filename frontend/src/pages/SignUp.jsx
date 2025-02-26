@@ -14,7 +14,19 @@ function SignUpPage() {
     try {
       console.log("Fetching users..."); //Logging before fetch
 
-      const response = await fetch("http://localhost:8018/api/users");
+      const response = await fetch("http://localhost:8018/api/user/signup",{
+        method: "POST",
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json", // Ensure the server knows you're sending JSON data
+        },
+        body: JSON.stringify({
+          username: userSignUpData.username,
+          password: userSignUpData.password,
+          firstName: userSignUpData.firstName,
+          lastName: userSignUpData.firstName
+        })
+      });
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);

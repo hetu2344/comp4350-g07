@@ -29,7 +29,7 @@ services:
       DB_NAME: restro_sync
       DB_PORT: 5432
     ports:
-      - "8018:8080" # Change based on your app's port
+      - "8018:8018" # Change based on your app's port
     depends_on:
       - db
 
