@@ -30,18 +30,47 @@ async function addUser(username, firstName, lastName, password, storeId, type) {
   }
 }
 
+//**Method: Get Users by Store ID**
+async function getUsersByStoreId(storeId) {
+  let client;
+  try {
+    client = await pool.connect();
+
+    // Validate storeId
+    if (!storeId || isNaN(storeId)) {
+      throw new ValidationError("Invalid store ID provided.");
+    }
+
+    const result = await client.query(
+      `SELECT username, first_name, last_name, type FROM users WHERE store_id = $1`,
+      [storeId]
+    );
+
+    if (result.rows.length === 0) {
+      return []; // Return empty array if no users found
+    }
+
+    return result.rows;
+  } catch (error) {
+    console.error("Error fetching users by store ID:", error);
+    throw new DBError("Error retrieving users from database.");
+  } finally {
+    if (client) client.release();
+  }
+}
+
 // Get a user by username
 async function getUserByUsername(username) {
   try {
     const result = await pool.query(
-      `SELECT username, first_name, last_name, store_id, type FROM users WHERE username = $1`,
+      `SELECT * FROM users WHERE username = $1`,
       [username]
     );
 
     if (result.rows.length === 0) {
       throw new UserNotExistError(username);
     }
-
+    console.log(result.rows[0]);
     return result.rows[0];
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -112,7 +141,7 @@ module.exports = {
   addUser,
   removeUser,
   updateUser,
-  getAllUsers,
   getUserByUsername,
+  getUsersByStoreId
 };
 
