@@ -2,6 +2,7 @@ const express = require("express");
 const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 
 const cors = require("cors");
 const pool = require("./db/db");
@@ -15,7 +16,7 @@ const PORT = 8018;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }));
 
