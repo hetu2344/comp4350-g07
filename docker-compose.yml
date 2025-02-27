@@ -6,6 +6,7 @@ services:
     container_name: restro_sync_db
     restart: always
     environment:
+      DB_HOST: db
       POSTGRES_USER: restro_usr
       POSTGRES_PASSWORD: cs4350
       POSTGRES_DB: restro_sync
