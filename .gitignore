@@ -31,7 +31,7 @@ postgres-data/
 # Docker
 docker-compose.override.yml
 .dockerignore
-Dockerfile*
+# Dockerfile*
 docker-entrypoint-initdb.d/
 
 # IDE / Editor settings
