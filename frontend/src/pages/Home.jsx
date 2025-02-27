@@ -45,7 +45,7 @@ function HomePage() {
           <ul style={{ listStyle: "none", padding: 0, maxWidth: "800px", width: "100%" }}>
           {menu.map((item, index) => (
             <li
-              key={item.id || index}  // ✅ Ensures a unique key using `item.id` (fallback to `index` if needed)
+              key={item.id || index}  
               style={{
                 background: "#f9f9f9",
                 padding: "15px",
