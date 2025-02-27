@@ -29,8 +29,6 @@ Handles log in input
   }
 
   return (
-    //Below I enclosed the whole form within the Card Component
-    //to apply the properties of the card to the form
     <Card>
       <form className={classes.form} onSubmit={submitHandler}>
         <div className={classes.title}>Staff Login</div>
@@ -42,6 +40,22 @@ Handles log in input
           <label htmlFor="password">Password</label>
           <input type="text" required id="password" ref={passwordInputRef} />
         </div>
+        {props.errorMessage && (
+          <div
+            style={{
+              backgroundColor: "#ffe6e6",
+              color: "#d8000c",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #d8000c",
+              textAlign: "center",
+              fontWeight: "bold",
+              marginBottom: "10px",
+            }}
+          >
+            {props.errorMessage}
+          </div>
+        )}
         <div className={classes.actions}>
           <button>LOG IN</button>
         </div>

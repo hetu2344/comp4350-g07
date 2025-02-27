@@ -69,7 +69,7 @@ exports.signup = [authenticateToken, authorizeRoles, async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    // const storeId = req.user.storeId;
+    const storeId = req.user.storeId;
     console.log("StoreId = " + storeId);
     const user = await userModel.addUser(username, firstName, lastName, hashedPassword, storeId, type);
     

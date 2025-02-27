@@ -1,6 +1,6 @@
 import Card from "../general-ui/Card";
 import classes from "./LogInForm.module.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 /*
 This component renders the Sign Up Form and collects the entered information and forwards it
@@ -12,6 +12,7 @@ function SignUpForm(props) {
   const passwordInputRef = useRef();
   const fnameInputRef = useRef();
   const lnameInputRef = useRef();
+  const [selectedRole, setSelectedRole] = useState("S"); //Default role selection
 
   /*
 Handles Sign up input
@@ -29,8 +30,10 @@ Handles Sign up input
       lName: enteredLastName,
       username: enteredUserId,
       password: enteredPassword,
+      type: selectedRole,
     };
 
+    console.log(userSignUpData);
     props.onSignUp(userSignUpData);
   }
 
@@ -39,7 +42,7 @@ Handles Sign up input
     //to apply the properties of the card to the form
     <Card>
       <form className={classes.form} onSubmit={submitHandler}>
-        <div className={classes.title}>Staff Sign Up</div>
+        <div className={classes.title}>Create Staff Account</div>
         <div className={classes.control}>
           <label htmlFor="fname">First Name</label>
           <input type="text" required id="fname" ref={fnameInputRef} />
@@ -56,6 +59,34 @@ Handles Sign up input
           <label htmlFor="password">Password</label>
           <input type="text" required id="password" ref={passwordInputRef} />
         </div>
+        <div className={classes.control}>
+          <label htmlFor="role">Select Role</label>
+          <select
+            id="role"
+            value={selectedRole}
+            onChange={(event) => setSelectedRole(event.target.value)}
+          >
+            <option value="S">Store Owner</option>
+            <option value="M">Manager</option>
+            <option value="E">Employee</option>
+          </select>
+        </div>
+        {props.errorMessage && (
+          <div
+            style={{
+              backgroundColor: "#ffe6e6",
+              color: "#d8000c",
+              padding: "10px",
+              borderRadius: "5px",
+              border: "1px solid #d8000c",
+              textAlign: "center",
+              fontWeight: "bold",
+              marginBottom: "10px",
+            }}
+          >
+            {props.errorMessage}
+          </div>
+        )}
         <div className={classes.actions}>
           <button>SIGN UP</button>
         </div>

@@ -4,7 +4,7 @@ const path = require("path");
 
 const client = new Client({
     user: "restro_usr",
-    host: "localhost",
+    host: "db",
     database: "restro_sync", // Use default postgres database to create a new one
     password: "cs4350",
     port: 5432, // Default PostgreSQL port

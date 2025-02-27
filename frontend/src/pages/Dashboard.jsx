@@ -9,12 +9,11 @@ function DashboardPage() {
 
   //The way this page is renedered is by first placing the Navigation header on top and then
   //rendering the rest of the page below
+  //Welcome, {userData.fName} {userData.lName}!
   return (
     <div>
       <DashboardNavigation />
-      <h1>
-        Welcome, {userData.fName} {userData.lName}!
-      </h1>
+      <h1>test</h1>
       <h2>
         This is where the rest of the features of the website will be at or
         start at

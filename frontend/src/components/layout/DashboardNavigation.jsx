@@ -27,6 +27,9 @@ function DashboardNavigation() {
       <nav>
         <ul>
           <li>
+            <Link to="/sign-up">Create Staff Account</Link>
+          </li>
+          <li>
             <button onClick={handleLogout} className={classes.logoutButton}>
               Log Out
             </button>
