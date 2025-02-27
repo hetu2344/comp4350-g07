@@ -1,15 +1,15 @@
+require('dotenv').config();
 const express = require("express");
 const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
 
 const cors = require("cors");
 const pool = require("./db/db");
 
 const app = express();
 
-const PORT = 8018;
+const PORT = process.env.SERVER_PORT;
 
 // middleware
 // app.use(cors());
