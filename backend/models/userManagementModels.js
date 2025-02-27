@@ -116,7 +116,7 @@ async function updateUser(username, firstName, lastName, password, storeId, type
     const result = await client.query(
       `UPDATE users SET first_name = COALESCE($2, first_name), 
                         last_name = COALESCE($3, last_name), 
-                        password = COALESCE($4, password), 
+                        password_hash = COALESCE($4, password_hash), 
                         store_id = COALESCE($5, store_id), 
                         type = COALESCE($6, type) 
        WHERE username = $1 RETURNING *`,

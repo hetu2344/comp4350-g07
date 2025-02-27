@@ -70,7 +70,7 @@ exports.signup = [authenticateToken, authorizeRoles, async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const storeId = req.user.storeId;
-    console.log("StoreId = " + storeId);
+    // console.log("StoreId = " + storeId);
     const user = await userModel.addUser(username, firstName, lastName, hashedPassword, storeId, type);
     
     res.status(201).json({ message: "User created successfully", user });
@@ -88,17 +88,19 @@ exports.updateUser = [authenticateToken, authorizeRoles, async (req, res) => {
     const { username } = req.params;
     const { firstName, lastName, password, storeId, type } = req.body;
 
-    if (!username) throw new ValidationError("Username is required");
+    // if (!username) throw new ValidationError("Username is required");
     if (!firstName && !lastName && !password && !storeId && !type) {
       throw new ValidationError("At least one field must be provided for update");
     }
 
+    console.log(password);
     const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
     const updatedUser = await userModel.updateUser(username, firstName, lastName, hashedPassword, storeId, type);
-    
+    console.log("after updateuser");
     res.status(200).json({ message: "User updated successfully", updatedUser });
   } catch (error) {
-    if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
+    // if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
+    if (error instanceof ValidationError) return res.status(400).json({error: error.message});
     res.status(500).json({ error: "Internal Server Error" });
     console.log(error);
   }
@@ -108,12 +110,13 @@ exports.updateUser = [authenticateToken, authorizeRoles, async (req, res) => {
 exports.deleteUser = [authenticateToken, authorizeRoles, async (req, res) => {
   try {
     const { username } = req.params;
-    if (!username) throw new ValidationError("Username is required");
+    // if (!username) throw new ValidationError("Username is required");
 
     await userModel.removeUser(username);
     res.status(200).json({ message: "User deleted successfully" });
   } catch (error) {
-    if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
+    // if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
+    // if (error instanceof ValidationError) return res.status(400).json({error: error.message});
     res.status(500).json({ error: "Internal Server Error" });
     console.log(error);
   }
@@ -123,7 +126,7 @@ exports.deleteUser = [authenticateToken, authorizeRoles, async (req, res) => {
 exports.getUserByUsername = [authenticateToken, async (req, res) => {
   try {
     const { username } = req.params;
-    if (!username) throw new ValidationError("Username is required");
+    // if (!username) throw new ValidationError("Username is required");
 
     const user = await userModel.getUserByUsername(username);
     res.status(200).json(user);
@@ -138,7 +141,7 @@ exports.getUserByUsername = [authenticateToken, async (req, res) => {
 exports.getUsersByStoreId = [authenticateToken, authorizeRoles, async (req, res) => {
   try {
     const { storeId } = req.params;
-    if (!storeId) throw new ValidationError("Store ID is required");
+    // if (!storeId) throw new ValidationError("Store ID is required");
 
     const users = await userModel.getUsersByStoreId(storeId);
     res.status(200).json(users);
