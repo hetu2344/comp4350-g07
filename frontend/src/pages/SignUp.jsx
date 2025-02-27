@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import SignUpPageNavigation from "../components/layout/SignUpPageNavigation";
 import SignUpForm from "../components/user-account/SignUpForm";
 import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import RoleProtection from "../components/security/RoleProtection";
 
 /*
@@ -44,8 +46,14 @@ function SignUpPage() {
         throw new Error(errorMessage);
       }
 
-      console.log("User added successfully!");
-      navigate("/dashboard", { replace: true });
+      // console.log("User added successfully!");
+      // navigate("/dashboard", { replace: true });
+      toast.success("Sign-up successful! Redirecting..."); // Show success toast
+      setError(""); // Clear any previous error
+
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 3000);
     } catch (error) {
       setError(error.message);
     }
@@ -55,6 +63,7 @@ function SignUpPage() {
     <div>
       <SignUpPageNavigation />
       <SignUpForm onSignUp={addUserHandler} errorMessage={error} />
+      <ToastContainer position="top-center" />
     </div>
   );
 }
