@@ -1,83 +1,71 @@
 import { useNavigate } from "react-router-dom";
 import SignUpPageNavigation from "../components/layout/SignUpPageNavigation";
 import SignUpForm from "../components/user-account/SignUpForm";
+import { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import RoleProtection from "../components/security/RoleProtection";
 
 /*
 Renders the SignUp Page with header and signupform components
-<For now> it also fetches all users, checks if entered username exists, if not
-adds the user to the database
 */
 function SignUpPage() {
   const navigate = useNavigate();
+  const [error, setError] = useState("");
 
   async function addUserHandler(userSignUpData) {
     try {
-      console.log("Fetching users..."); //Logging before fetch
-
-      const response = await fetch("http://localhost:8018/api/user/signup",{
+      const response = await fetch("http://localhost:8018/api/user/signup", {
         method: "POST",
-        credentials: 'include',
+        credentials: "include",
         headers: {
           "Content-Type": "application/json", // Ensure the server knows you're sending JSON data
         },
         body: JSON.stringify({
           username: userSignUpData.username,
+          firstName: userSignUpData.fName,
+          lastName: userSignUpData.lName,
           password: userSignUpData.password,
-          firstName: userSignUpData.firstName,
-          lastName: userSignUpData.firstName
-        })
+          type: userSignUpData.type,
+        }),
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        const errorData = await response.json();
+        const errorMessage =
+          errorData.error || "An error occurred. Please try again later.";
+        if (response.status === 400) {
+          throw new Error(errorMessage);
+        }
+        if (response.status === 409) {
+          throw new Error(errorMessage);
+        }
+        if (response.status === 500) {
+          throw new Error("Internal Server Error. Please try again later.");
+        }
+        throw new Error(errorMessage);
       }
 
-      const users = await response.json(); //Convert response to JSON
+      // console.log("User added successfully!");
+      // navigate("/dashboard", { replace: true });
+      toast.success("Sign-up successful! Redirecting..."); // Show success toast
+      setError(""); // Clear any previous error
 
-      console.log("Fetched users:", users); //Logging the fetched users
-
-      const usernameExists = users.some(
-        (user) =>
-          user.username &&
-          userSignUpData.username &&
-          user.username.toLowerCase() === userSignUpData.username.toLowerCase()
-      );
-
-      if (usernameExists) {
-        console.log("Username already taken!");
-        alert("This username is already taken. Please choose another one.");
-        return; //Stop execution if username exists
-      }
-
-      //If username is unique, proceed with POST request and add user to database
-      console.log("Username is unique, creating user...");
-      const postResponse = await fetch("http://localhost:8018/api/user", {
-        method: "POST",
-        body: JSON.stringify(userSignUpData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!postResponse.ok) {
-        throw new Error(`Failed to add user! Status: ${postResponse.status}`);
-      }
-
-      console.log("User added successfully!");
-      alert("Account created successfully! Redirecting to login...");
-      navigate("/log-in", { replace: true });
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 3000);
     } catch (error) {
-      console.error("Error:", error);
-      alert("An error occurred. Please try again.");
+      setError(error.message);
     }
   }
 
   return (
     <div>
       <SignUpPageNavigation />
-      <SignUpForm onSignUp={addUserHandler} />
+      <SignUpForm onSignUp={addUserHandler} errorMessage={error} />
+      <ToastContainer position="top-center" />
     </div>
   );
 }
 
-export default SignUpPage;
+export default RoleProtection(SignUpPage, ["S", "M"]);

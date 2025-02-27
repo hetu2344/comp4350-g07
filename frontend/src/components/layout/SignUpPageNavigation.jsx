@@ -12,10 +12,7 @@ function SignUpPageNavigation() {
       <nav>
         <ul>
           <li>
-            <Link to="/log-in">Log In</Link>
-          </li>
-          <li>
-            <Link to="/">Home</Link>
+            <Link to="/dashboard">To Dashboard</Link>
           </li>
         </ul>
       </nav>

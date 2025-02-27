@@ -3,11 +3,11 @@ const fs = require("fs");
 const path = require("path");
 
 const client = new Client({
-    user: "restro_usr",
-    host: "localhost",
-    database: "restro_sync", // Use default postgres database to create a new one
-    password: "cs4350",
-    port: 5432, // Default PostgreSQL port
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_DATABASE,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 });
 
 async function setupDatabase() {

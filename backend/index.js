@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
@@ -8,14 +9,14 @@ const pool = require("./db/db");
 
 const app = express();
 
-const PORT = 8018;
+const PORT = process.env.SERVER_PORT;
 
 // middleware
 // app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_URL,
   credentials: true,
 }));
 
