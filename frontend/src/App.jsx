@@ -1,12 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/Home";
-import LoginPage from "./pages/LogIn";
 import SignUpPage from "./pages/SignUp";
 import DashboardPage from "./pages/Dashboard";
-import ProtectedRoute from "./components/security/ProtectedRoute";
 import LogInPage from "./pages/LogIn";
-import SignUpPage from "./pages/SignUp";
-import DashboardPage from "./pages/Dashboard";
 
 /*
 This function is used for adding routes to the website. Whenever you add a new page
