@@ -2,11 +2,10 @@ import { useNavigate } from "react-router-dom";
 import SignUpPageNavigation from "../components/layout/SignUpPageNavigation";
 import SignUpForm from "../components/user-account/SignUpForm";
 import { useState } from "react";
+import RoleProtection from "../components/security/RoleProtection";
 
 /*
 Renders the SignUp Page with header and signupform components
-<For now> it also fetches all users, checks if entered username exists, if not
-adds the user to the database
 */
 function SignUpPage() {
   const navigate = useNavigate();
@@ -14,8 +13,6 @@ function SignUpPage() {
 
   async function addUserHandler(userSignUpData) {
     try {
-      console.log("Fetching users..."); //Logging before fetch
-
       const response = await fetch("http://localhost:8018/api/user/signup", {
         method: "POST",
         credentials: "include",
@@ -62,4 +59,4 @@ function SignUpPage() {
   );
 }
 
-export default SignUpPage;
+export default RoleProtection(SignUpPage, ["S", "M"]);

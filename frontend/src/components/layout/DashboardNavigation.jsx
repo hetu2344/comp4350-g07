@@ -14,13 +14,27 @@ function DashboardNavigation() {
     This function handles logout by clearing local storage and 
     redirecting user to home page
     */
-  function handleLogout() {
-    // Clear localStorage
-    localStorage.removeItem("userData");
+  const logoutHandler = async () => {
+    try {
+      const response = await fetch("http://localhost:8018/api/user/logout", {
+        method: "POST",
+        credentials: "include",
+      });
 
-    // Navigate to home page
-    navigate("/", { replace: true });
-  }
+      if (!response.ok) {
+        throw new Error("Failed to log out. Please try again.");
+      }
+
+      const data = await response.json();
+      console.log(data.message); // Log the success message
+
+      // Redirect to the login page or another appropriate page
+      navigate("/", { replace: true });
+    } catch (error) {
+      console.error("Error logging out:", error.message);
+    }
+  };
+
   return (
     <header className={classes.header}>
       <div className={classes.logo}>RestroSync</div>
@@ -30,7 +44,7 @@ function DashboardNavigation() {
             <Link to="/sign-up">Create Staff Account</Link>
           </li>
           <li>
-            <button onClick={handleLogout} className={classes.logoutButton}>
+            <button onClick={logoutHandler} className={classes.logoutButton}>
               Log Out
             </button>
           </li>
