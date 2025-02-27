@@ -3,6 +3,8 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/LogIn";
 import SignUpPage from "./pages/SignUp";
 import DashboardPage from "./pages/Dashboard";
+import TableManagement from "./pages/TableManagement"; 
+import Reservation from "./pages/Reservation";
 import ProtectedRoute from "./components/security/ProtectedRoute";
 
 /*
@@ -31,6 +33,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+        {/* Add the TableManagement route */}
+        <Route
+          path="/table-management"
+          element={
+            <ProtectedRoute>
+              <TableManagement />
+            </ProtectedRoute>
+          }
+        />
+         <Route path="/reservation" element={<Reservation />} />
       </Routes>
     </div>
   );
