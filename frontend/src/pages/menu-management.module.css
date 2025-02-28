@@ -1,0 +1,102 @@
+.container {
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin: auto;
+  }
+  
+  /* Title */
+  .title {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #ccc;
+  }
+  
+  /* Menu List */
+  .menuList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Individual Menu Card */
+  .menuCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .menuCard:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Menu Content */
+  .menuContent {
+    text-align: left;
+    flex: 1;
+  }
+  
+  .category {
+    font-style: italic;
+    color: gray;
+  }
+  
+  .price {
+    font-weight: bold;
+    color: #28a745;
+  }
+  
+  /* Buttons */
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .editBtn,
+  .deleteBtn {
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .editBtn {
+    background: #007bff;
+    color: white;
+  }
+  
+  .editBtn:hover {
+    background: #0056b3;
+  }
+  
+  .deleteBtn {
+    background: #dc3545;
+    color: white;
+  }
+  
+  .deleteBtn:hover {
+    background: #c82333;
+  }
+  
+  /* No Items Message */
+  .noItems {
+    font-size: 1.2rem;
+    color: gray;
+    text-align: center;
+  }
+  
