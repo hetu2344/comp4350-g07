@@ -10,7 +10,7 @@ RestroSync is a restaurant management system designed to streamline daily operat
 2. Run the following command in the terminal to start the application
    
 ```{bash}
-make up build
+make up-build
 ```
 
 3. Go to the following link :
