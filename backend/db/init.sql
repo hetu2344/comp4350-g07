@@ -50,6 +50,26 @@ CREATE TABLE stores (
     CONSTRAINT fk_owner FOREIGN KEY (owner_username) REFERENCES users(username) ON DELETE CASCADE
 );
 
+
+-- Create the Tables Table
+CREATE TABLE tables
+(
+    table_num SERIAL PRIMARY KEY,
+    num_seats INT NOT NULL,
+    table_status BOOLEAN DEFAULT TRUE
+);
+
+
+-- Create the Reservations Table
+CREATE TABLE reservations
+(
+    reservation_id SERIAL PRIMARY KEY,
+    table_num INT REFERENCES tables(table_num) ON DELETE CASCADE,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    reservation_time TIMESTAMP NOT NULL,
+    party_size INT NOT NULL
+);
+
 ALTER TABLE users 
 ADD CONSTRAINT fk_store FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE SET NULL;
 
@@ -160,4 +180,42 @@ VALUES('Cheesecake', 'Rich and creamy cheesecake topped with strawberries.', 6.4
         WHERE name = 'Dessert'), TRUE, TRUE, FALSE, FALSE);
 
 
+INSERT INTO tables
+    (num_seats)
+VALUES(2)
 
+INSERT INTO tables
+    (num_seats)
+VALUES(2)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8)
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8)
