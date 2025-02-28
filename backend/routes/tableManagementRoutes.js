@@ -14,17 +14,17 @@ const {
 
 const router = express.Router();
 
-router.get("/tables", getAllTables);
+router.get("/", getAllTables);
 
-router.post("/tables/:id", updateTable);
+router.post("/", updateTable);
 
 router.post("/reservation", addReservation);
 
-router.get("/reservation/table/:id", getReservationsByTable);
+router.get("/reservation/table", getReservationsByTable);
 
-router.get("/reservation/user/:id", getReservationsByUser);
+router.get("/reservation/user", getReservationsByUser);
 
-router.delete("/reservation/:id", deleteReservation);
+router.delete("/reservation", deleteReservation);
 
 
 module.exports = router;
