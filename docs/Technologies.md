@@ -2,7 +2,7 @@
 
 ## Block Diagram
 
-![Block Diagram](https://github.com/hetu2344/comp4350-g07/blob/main/Architecture_Diagram_v1.jpeg)
+![Block Diagram](https://github.com/hetu2344/comp4350-g07/blob/main/docs/Architecture_Diagram_v1.jpeg)
 
 ## Tech Stack
 This project follows a three-tier architecture, consisting of a Client Tier (View), Business Logic Tier (Controller), and Database Tier (Model). The frontend is built using ReactJS with HTML, CSS, and JavaScript, ensuring a responsive and interactive user experience. The backend is powered by Node.js and Express.js, serving as the application server to handle HTTP requests and process business logic. Data is stored and managed in a PostgreSQL database, which efficiently handles relational data storage.
