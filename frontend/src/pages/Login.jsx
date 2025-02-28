@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 /*
-This page is used to render the full Log In Page including header and form
+This page is used to render the full Log In Page including header and form (test comment)
 <For now> It also takes user log in data, autheticates it and logs in the user
 */
 
