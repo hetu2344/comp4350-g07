@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.SERVER_PORT;
 
 // middleware
-// app.use(cors());
+//app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({

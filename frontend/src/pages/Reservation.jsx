@@ -1,27 +1,69 @@
 // src/components/pages/Reservation.jsx
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../components/layout/Reservation.css';
+import { addReservation, deleteReservation, getReservationsByCustomer } from '../services/api';
 
 const Reservation = () => {
   const [reservations, setReservations] = useState([]);
   const [formData, setFormData] = useState({ name: '', partySize: '', time: '' });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  const handleReserve = () => {
+  // Fetch reservations for the logged-in customer
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const customerName = localStorage.getItem('username'); // Example: Get customer name from localStorage
+        const data = await getReservationsByCustomer(customerName);
+        setReservations(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReservations();
+  }, []);
+
+  // Add a new reservation
+  const handleReserve = async () => {
     if (!formData.name || !formData.partySize || !formData.time) {
       alert('Please fill out all fields.');
       return;
     }
 
-    const newReservation = { ...formData, id: Date.now() };
-    setReservations((prev) => [...prev, newReservation]);
-    setFormData({ name: '', partySize: '', time: '' });
+    try {
+      await addReservation(formData.name, formData.tableNum, formData.partySize, formData.time);
+      // Refresh the reservation list after adding
+      const updatedReservations = await getReservationsByCustomer(formData.name);
+      setReservations(updatedReservations);
+      setFormData({ name: '', partySize: '', time: '' }); // Clear the form
+      alert('Reservation added successfully!');
+    } catch (err) {
+      setError(err.message);
+      alert('Failed to add reservation.');
+    }
   };
 
-  const handleCancel = (id) => {
-    setReservations((prev) => prev.filter((res) => res.id !== id));
+  // Delete a reservation
+  const handleCancel = async (reservationID) => {
+    try {
+      await deleteReservation(reservationID);
+      // Refresh the reservation list after deleting
+      const updatedReservations = await getReservationsByCustomer(formData.name);
+      setReservations(updatedReservations);
+      alert('Reservation deleted successfully!');
+    } catch (err) {
+      setError(err.message);
+      alert('Failed to delete reservation.');
+    }
   };
+
+  if (loading) return <p>Loading reservations...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="reservation">
@@ -52,12 +94,12 @@ const Reservation = () => {
       <div className="reservation-list">
         <h3>My Reservations</h3>
         {reservations.map((res) => (
-          <div key={res.id} className="reservation-card">
-            <p>Name: {res.name}</p>
-            <p>Party Size: {res.partySize}</p>
-            <p>Time: {new Date(res.time).toLocaleString()}</p>
+          <div key={res.reservation_id} className="reservation-card">
+            <p>Name: {res.customer_name}</p>
+            <p>Party Size: {res.party_size}</p>
+            <p>Time: {new Date(res.reservation_time).toLocaleString()}</p>
             <button
-              onClick={() => handleCancel(res.id)}
+              onClick={() => handleCancel(res.reservation_id)}
               className="cancel-button"
             >
               Cancel

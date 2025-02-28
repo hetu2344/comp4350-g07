@@ -43,15 +43,13 @@ async function getAllTablesInfo() {
         client = await pool.connect();
         await client.query("BEGIN");
 
-
         const result = await client.query('SELECT table_num, num_seats, table_status FROM tables');
-
 
         if (result.rowCount === 0) {
             throw new Error(`No tables found.`);
         }
 
-        return result;
+        return result.rows;  // Return the rows from the query result
 
     } catch (error) {
         if (client) {
