@@ -1,3 +1,6 @@
+// Things that might need to be changed:
+// I just chose names for 
+
 
 const express = require("express");
 
@@ -14,7 +17,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", getAllTables); // Returns all tables, including table num, status, and number of seats 
+router.get("/", getAllTables); // Returns all tables, including table num, status, and number of seats
 
 router.post("/", updateTable); // Change status of the table, new status in body json with isOpen as title
 

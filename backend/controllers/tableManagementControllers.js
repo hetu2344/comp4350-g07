@@ -13,9 +13,9 @@ const {
 
 async function addReservation(req, res) {
     try {
-        const { customerName, tableNum, partySize, time } = req.body;
+        const { name, tableNum, partySize, time } = req.body;
 
-        if (!customerName || !tableNum || partySize < 1 || !time) {
+        if (!name || !tableNum || partySize < 1 || !time) {
             return res.status(400).json({ error: "Invalid input provided." });
         }
 
@@ -107,9 +107,9 @@ async function updateTable(req, res) {
 
 
     try {
-        const { tableID, isOpen } = req.body; // NEEDS TO CHANGE DEPENDING ON THE FORM OF THE MESSAGE BODY
+        const { tableNum, isOpen } = req.body; // NEEDS TO CHANGE DEPENDING ON THE FORM OF THE MESSAGE BODY
 
-        if (!tableID || typeof isOpen !== "boolean") {
+        if (!tableNum || typeof isOpen !== "boolean") {
             return res.status(400).json({ error: "Invalid input provided." });
         }
 
