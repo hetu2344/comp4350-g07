@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "./pages/Home";
-import SignUpPage from "./pages/SignUp";
+import LogInPage from "./pages/Login";
+import SignUpPage from "./pages/Signup";
 import DashboardPage from "./pages/Dashboard";
-import LogInPage from "./pages/LogIn";
 import MenuManagement from "./pages/MenuManagement";
 import EditMenuItem from "./pages/edit-menu-item";
 import AddMenuItem from "./pages/add-menu-item";
