@@ -7,22 +7,22 @@ const {
     getAllTables,
     updateTable,
     getReservationsByTable,
-    getReservationsByUser
+    getReservationsByCustomer
 
 } = require("../controllers/tableManagementControllers");
 
 
 const router = express.Router();
 
-router.get("/", getAllTables);
+router.get("/", getAllTables); // Returns all tables, including table num, status, and number of seats 
 
-router.post("/", updateTable);
+router.post("/", updateTable); // Change status of the table, new status in body json with isOpen as title
 
-router.post("/reservation", addReservation);
+router.post("/reservation", addReservation); // Adds a reservation, user
 
 router.get("/reservation/table", getReservationsByTable);
 
-router.get("/reservation/user", getReservationsByUser);
+router.get("/reservation/customer", getReservationsByCustomer);
 
 router.delete("/reservation", deleteReservation);
 

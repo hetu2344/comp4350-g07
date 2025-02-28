@@ -3,7 +3,7 @@
 const {
     updateTableStatus,
     getAllTablesInfo,
-    getReservationsByUserID,
+    getReservationsByCustomerName,
     getFutureReservationsByTableNum,
     createReservation,
     deleteReservationByID,
@@ -13,9 +13,9 @@ const {
 
 async function addReservation(req, res) {
     try {
-        const { userID, tableNum, partySize, time } = req.body;
+        const { customerName, tableNum, partySize, time } = req.body;
 
-        if (!userID || !tableNum || partySize < 1 || !time) {
+        if (!customerName || !tableNum || partySize < 1 || !time) {
             return res.status(400).json({ error: "Invalid input provided." });
         }
 
@@ -44,7 +44,7 @@ async function addReservation(req, res) {
             return res.status(400).json({ error: "Reservation is unavailable for this table at the give time" });
         }
 
-        const result = await createReservation(userID, tableNum, partySize, time);
+        const result = await createReservation(customerName, tableNum, partySize, time);
 
         return result;
 
@@ -154,22 +154,22 @@ async function getReservationsByTable(req, res) {
 }
 
 
-async function getReservationsByUser(req, res) {
+async function getReservationsByCustomer(req, res) {
     try {
-        const { userID } = req.body; // NEEDS TO CHANGE DEPENDING ON THE FORM OF THE MESSAGE BODY
+        const { customerName } = req.body; // NEEDS TO CHANGE DEPENDING ON THE FORM OF THE MESSAGE BODY
 
-        if (!userID) {
+        if (!customerName) {
             return res.status(400).json({ error: "Invalid input provided." });
         }
 
-        const result = await getReservationsByUserID(userID);
+        const result = await getReservationsByCustomerName(customerName);
 
         return result;
 
     } catch (err) {
         console.error("Error while updating:", err.message);
         if (err.message.includes("no reservation")) {
-            return res.status(404).json({ error: "No reservations found for user." });
+            return res.status(404).json({ error: "No reservations found for customer." });
         }
         res
             .status(500)
@@ -184,6 +184,6 @@ module.exports = {
     getAllTables,
     updateTable,
     getReservationsByTable,
-    getReservationsByUser
+    getReservationsByCustomer
 
 }

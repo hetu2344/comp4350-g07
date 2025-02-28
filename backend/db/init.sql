@@ -65,7 +65,7 @@ CREATE TABLE reservations
 (
     reservation_id SERIAL PRIMARY KEY,
     table_num INT REFERENCES tables(table_num) ON DELETE CASCADE,
-    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    customer_name VARCHAR(50) NOT NULL,
     reservation_time TIMESTAMP NOT NULL,
     party_size INT NOT NULL
 );

@@ -75,7 +75,7 @@ async function getAllReservations() {
         await client.query("BEGIN");
 
 
-        const result = await client.query('SELECT reservation_id, table_num, user_id, reservation_time, party_size FROM reservations');
+        const result = await client.query('SELECT reservation_id, table_num, customer_name, reservation_time, party_size FROM reservations');
 
 
         if (result.rowCount === 0) {
@@ -106,7 +106,7 @@ async function getAllFutureReservations() {
         await client.query("BEGIN");
 
 
-        const result = await client.query('SELECT reservation_id, table_num, user_id, reservation_time, party_size FROM reservations WHERE reservation_time > CURRENT_TIMESTAMP');
+        const result = await client.query('SELECT reservation_id, table_num, customer_name, reservation_time, party_size FROM reservations WHERE reservation_time > CURRENT_TIMESTAMP');
 
 
         if (result.rowCount === 0) {
@@ -128,8 +128,8 @@ async function getAllFutureReservations() {
     }
 }
 
-async function getReservationsByUserID(userID) {
-    console.log("Retrieving all reservations for user id: ", userID);
+async function getReservationsByCustomerName(customerName) {
+    console.log("Retrieving all reservations for: ", customerName);
 
     let client;
     try {
@@ -137,13 +137,13 @@ async function getReservationsByUserID(userID) {
         await client.query("BEGIN");
 
 
-        const result = await client.query('SELECT reservation_id, table_num, reservation_time, party_size FROM reservations WHERE userID=$1',
-            [userID]
+        const result = await client.query('SELECT reservation_id, table_num, reservation_time, party_size FROM reservations WHERE customer_name=$1',
+            [customerName]
         );
 
 
         if (result.rowCount === 0) {
-            throw new Error(`User has no reservations.`);
+            throw new Error(`Customer has no reservations.`);
         }
 
         return result;
@@ -170,7 +170,7 @@ async function getReservationsByTableNum(tableNum) {
         await client.query("BEGIN");
 
 
-        const result = await client.query('SELECT reservation_id, user_id, reservation_time, party_size FROM reservations WHERE table_num=$1',
+        const result = await client.query('SELECT reservation_id, customer_name, reservation_time, party_size FROM reservations WHERE table_num=$1',
             [tableNum]
         );
 
@@ -198,7 +198,7 @@ async function getFutureReservationsByTableNum(tableNum) {
         await client.query("BEGIN");
 
 
-        const result = await client.query('SELECT reservation_id, user_id, reservation_time, party_size FROM reservations WHERE table_num=$1 AND reservation_time > CURRENT_TIMESTAMP',
+        const result = await client.query('SELECT reservation_id, customer_name, reservation_time, party_size FROM reservations WHERE table_num=$1 AND reservation_time > CURRENT_TIMESTAMP',
             [tableNum]
         );
 
@@ -217,9 +217,9 @@ async function getFutureReservationsByTableNum(tableNum) {
     }
 }
 
-async function createReservation(userID, tableNum, partySize, time) {
+async function createReservation(customerName, tableNum, partySize, time) {
     console.log("Creating reservation");
-    console.log("User ID: ", userID);
+    console.log("Customer: ", customerName);
     console.log("Table Number: ", tableNum);
     console.log("Party size: ", partySize);
     console.log("Time: ", time);
@@ -230,8 +230,8 @@ async function createReservation(userID, tableNum, partySize, time) {
         await client.query("BEGIN");
 
 
-        const result = await client.query('INSERT INTO reservations (table_num, user_id, reservation_time, party_size) VALUES ($1, $2, $3, $4',
-            [tableNum, userID, time, partySize]);
+        const result = await client.query('INSERT INTO reservations (table_num, customer_name, reservation_time, party_size) VALUES ($1, $2, $3, $4',
+            [tableNum, customerName, time, partySize]);
 
         await client.query("COMMIT");
 
@@ -296,7 +296,7 @@ async function getTableByNum(tableNum) {
 module.exports = {
     updateTableStatus,
     getAllTablesInfo,
-    getReservationsByUserID,
+    getReservationsByCustomerName,
     getFutureReservationsByTableNum,
     createReservation,
     deleteReservationByID,
