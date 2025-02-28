@@ -4,6 +4,7 @@ RestroSync is a restaurant management system designed to streamline daily operat
 # Running the application
 ***Note: Make sure 'Docker' application is running in the background before starting step 1 and stays on until you use close the application.***
 1. In the terminal, make sure to stay in the parent directory so that you are able to see the following directories if you do 'ls'
+
 ![ls pictures](docs/ls.png)
 2. Run the following command in the terminal to start the application
 ```{bash}
