@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
+const tableManagementRoutes = require("./routes/tableManagementRoutes");
 const cookieParser = require('cookie-parser');
 
 const cors = require("cors");
@@ -23,12 +24,13 @@ app.use(cors({
 // Routes
 app.use("/api/user", userManagementRoutes);
 app.use("/api/menu", menuManagementRoutes);
+app.use("/api/tables", tableManagementRoutes);
 
-if(require.main===module){
-// get all menu items
-app.listen(PORT,"0.0.0.0" , () => {
-  console.log(`Backend server has started at port ${PORT}`);
-});
+if (require.main === module) {
+  // get all menu items
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Backend server has started at port ${PORT}`);
+  });
 }
 
-module.exports= app;
+module.exports = app;
