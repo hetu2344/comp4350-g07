@@ -1,0 +1,54 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Restro Sync CI
+
+on:
+  push:
+    branches: [ "dev" ]
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: List frontend directory contents
+        working-directory: frontend
+        run: ls -la
+      - name: Install dependencies (frontend)
+        working-directory: frontend
+        run: npm ci
+      - name: Build (frontend)
+        working-directory: frontend
+        run: npm run build --if-present
+      - name: Test (frontend)
+        working-directory: frontend
+        run: npm test --if-present
+
+  build-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install dependencies (backend)
+        working-directory: backend
+        run: npm ci
+      - name: Build (backend)
+        working-directory: backend
+        run: npm run build --if-present
+      - name: Test (backend)
+        working-directory: backend
+        run: npm test
