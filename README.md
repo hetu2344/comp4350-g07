@@ -10,7 +10,7 @@ RestroSync is a restaurant management system designed to streamline daily operat
 2. Run the following command in the terminal to start the application
    
 ```{bash}
-make up build
+make up-build
 ```
 
 3. Go to the following link :
@@ -25,26 +25,19 @@ make up build
 make down-volumes
 ```
 
-# Vision Statement
+# Link to documents
 [Vision Statement](docs/Vision_Statement.md#vision-statement)
 
-# Core Feature
 [Core Feeatures](docs/Core_Features.md#core-features)
 
-# User Stories
 [User Stories](docs/User_Stories.md#user-stories)
 
-# Tools and Technologies
 [Tools and Technologies](docs/Technologies.md#technologies)
 
-# Architecture Diagram
 [Architecture Diagram](docs/Architecture_Diagram_v1.jpeg)
 
-# Branching and Commiting Strategy
 [Branching and Commiting Strategy](docs/Branching-and-Commiting-strategy.md#branching)
 
-# Test Plan
 [Test Plan](docs/RestroSync_Test_Plan.pdf)
 
-# Our Contributors
 [Our Contributors](docs/contributing.md)
