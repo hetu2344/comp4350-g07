@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: '16'
           cache: npm
+      - name: List frontend directory contents
+        working-directory: frontend
+        run: ls -la
       - name: Install dependencies (frontend)
         working-directory: frontend
         run: npm ci
