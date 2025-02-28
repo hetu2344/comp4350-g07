@@ -6,10 +6,13 @@ RestroSync is a restaurant management system designed to streamline daily operat
 1. In the terminal, make sure to stay in the parent directory so that you are able to see the following directories if you do 'ls'
 
 ![ls pictures](docs/ls.png)
+
 2. Run the following command in the terminal to start the application
+   
 ```{bash}
 make up build
 ```
+
 3. Go to the following link :
 [RestroSync](http://localhost:8017)
 
@@ -18,10 +21,10 @@ make up build
 
 ***Note: These command will also remove docker container and volumes***
 
-
 ```{bash}
 make down-volumes
 ```
+
 # Vision Statement
 [Vision Statement](docs/Vision_Statement.md#vision-statement)
 
