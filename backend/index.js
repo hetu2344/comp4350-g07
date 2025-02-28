@@ -28,6 +28,7 @@ if(require.main===module){
 // get all menu items
 app.listen(PORT,"0.0.0.0" , () => {
   console.log(`Backend server has started at port ${PORT}`);
+  console.log(process.env.CLIENT_URL);
 });
 }
 
