@@ -1,6 +1,7 @@
 // src/pages/TableManagement.jsx
 import React, { useState } from 'react';
 import '../components/layout/TableManagement.css';
+import RoleProtection from '../components/security/RoleProtection';
 
 const TableManagement = () => {
   const [tables, setTables] = useState([
