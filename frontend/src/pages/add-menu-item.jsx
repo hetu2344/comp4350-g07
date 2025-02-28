@@ -42,7 +42,7 @@ function AddMenuItem() {
         body: JSON.stringify(newItem),
       });
 
-      console.log("Sent Payload:", newItem);
+      console.log("Sent Payload:", response.body);
 
       if (!response.ok) throw new Error("Failed to add menu item.");
 
