@@ -10,7 +10,6 @@ const pool = require("./db/db");
 const app = express();
 
 const PORT = process.env.SERVER_PORT;
-
 // middleware
 // app.use(cors());
 app.use(express.json());
@@ -27,7 +26,6 @@ app.use("/api/menu", menuManagementRoutes);
 if(require.main===module){
 // get all menu items
 app.listen(PORT,"0.0.0.0" , () => {
-  console.log(`Backend server has started at port ${PORT}`);
 });
 }
 
