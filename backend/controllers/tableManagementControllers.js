@@ -13,7 +13,7 @@ const {
 
 async function addReservation(req, res) {
     try {
-        const { name, table_num, partySize, time } = req.body;
+        const { name, partySize, time, table_num} = req.body;
 
         if (!name || !table_num || partySize < 1 || !time) {
             return res.status(400).json({ error: "Invalid input provided." });
