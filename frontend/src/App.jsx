@@ -3,6 +3,8 @@ import HomePage from "./pages/Home";
 import LogInPage from "./pages/Login";
 import SignUpPage from "./pages/Signup";
 import DashboardPage from "./pages/Dashboard";
+import TableManagement from "./pages/TableManagement";
+import Reservation from "./pages/Reservation";
 
 /*
 This function is used for adding routes to the website. Whenever you add a new page
@@ -23,6 +25,9 @@ function App() {
         <Route path="/log-in" element={<LogInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/table-management" element={<TableManagement />} /> 
+        <Route path="/reservation" element={<Reservation />} /> 
+            
       </Routes>
     </div>
   );
