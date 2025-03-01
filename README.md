@@ -34,7 +34,7 @@ make down-volumes
 
 [Tools and Technologies](docs/Technologies.md#technologies)
 
-[Architecture Diagram](docs/Architecture_Diagrams/Architecture_Diagram_v2.drawio.html)
+[Architecture Diagram](docs/Architecture_Diagrams/Architecture_Diagram_v2.drawio.svg)
 
 [Branching and Commiting Strategy](docs/Branching-and-Commiting-strategy.md#branching)
 
