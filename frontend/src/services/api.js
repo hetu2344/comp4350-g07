@@ -26,11 +26,16 @@ export const updateTableStatus = async (tableNum, isOpen) => {
   }
 };
 
-export const addReservation = async (name, tableNum, partySize, time) => {
+export const addReservation = async (name, table_num, partySize, time) => {
   try {
+    console.log("Name:",name);
+    console.log("TableNum:", table_num);
+    console.log("partySize:", partySize);
+    console.log("time:", time);
+
     const response = await axios.post(`${API_BASE_URL}/reservation`, {
       name,
-      tableNum,
+      table_num,
       partySize,
       time,
     });

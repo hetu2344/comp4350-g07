@@ -228,7 +228,7 @@ async function createReservation(customerName, tableNum, partySize, time) {
         await client.query("BEGIN");
 
 
-        const result = await client.query('INSERT INTO reservations (table_num, customer_name, reservation_time, party_size) VALUES ($1, $2, $3, $4',
+        const result = await client.query('INSERT INTO reservations (table_num, customer_name, reservation_time, party_size) VALUES ($1, $2, $3, $4);',
             [tableNum, customerName, time, partySize]);
 
         await client.query("COMMIT");

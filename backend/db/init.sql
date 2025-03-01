@@ -182,40 +182,40 @@ VALUES('Cheesecake', 'Rich and creamy cheesecake topped with strawberries.', 6.4
 
 INSERT INTO tables
     (num_seats)
-VALUES(2)
+VALUES(2);
 
 INSERT INTO tables
     (num_seats)
-VALUES(2)
+VALUES(2);
 
 INSERT INTO tables
     (num_seats)
-VALUES(2)
+VALUES(2);
 
 INSERT INTO tables
     (num_seats)
-VALUES(2)
+VALUES(2);
 
 INSERT INTO tables
     (num_seats)
-VALUES(4)
+VALUES(4);
 
 INSERT INTO tables
     (num_seats)
-VALUES(4)
+VALUES(4);
 
 INSERT INTO tables
     (num_seats)
-VALUES(4)
+VALUES(4);
 
 INSERT INTO tables
     (num_seats)
-VALUES(4)
+VALUES(4);
 
 INSERT INTO tables
     (num_seats)
-VALUES(8)
+VALUES(8);
 
 INSERT INTO tables
     (num_seats)
-VALUES(8)
+VALUES(8);

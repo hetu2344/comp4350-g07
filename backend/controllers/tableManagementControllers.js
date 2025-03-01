@@ -14,6 +14,10 @@ const {
 async function addReservation(req, res) {
     try {
         const { name, partySize, time, table_num} = req.body;
+            console.log("Name:", name);
+            console.log("TableNum:", table_num);
+            console.log("partySize:", partySize);
+            console.log("time:", time);
 
         if (!name || !table_num || partySize < 1 || !time) {
             return res.status(400).json({ error: "Invalid input provided." });
@@ -28,9 +32,9 @@ async function addReservation(req, res) {
             return res.status(400).json({ error: "Reservations must be made at least 45 minutes in advance." });
         }
 
-        const table = await getTableByNum(tableNum);
+        const table = await getTableByNum(table_num);
 
-        const allTableReservations = await getFutureReservationsByTableNum(tableNum);
+        const allTableReservations = await getFutureReservationsByTableNum(table_num);
 
         let flag = false;
 
@@ -44,7 +48,7 @@ async function addReservation(req, res) {
             return res.status(400).json({ error: "Reservation is unavailable for this table at the give time" });
         }
 
-        const result = await createReservation(customerName, tableNum, partySize, time);
+        const result = await createReservation(name, table_num, partySize, time);
 
         return result;
 
