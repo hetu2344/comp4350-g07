@@ -40,4 +40,4 @@ make down-volumes
 
 [Test Plan](docs/RestroSync_Test_Plan.pdf)
 
-[Our Contributors](docs/contributing.md)
+[Our Contributors](docs/Contributors.md)
