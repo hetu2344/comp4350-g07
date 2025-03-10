@@ -47,12 +47,12 @@ async function createMenuItem(req, res) {
     });
   } catch (err) {
     console.log(err.message);
-    if (err.message.includes("not found")){
-      return res.status(404).json({error:err.message});
+    if (err.message.includes("not found")) {
+      return res.status(404).json({ error: err.message });
     }
-      res
-        .status(500)
-        .json({ error: "Server Error : Unable to add item to the menu." });
+    res
+      .status(500)
+      .json({ error: "Server Error : Unable to add item to the menu." });
   }
 }
 
@@ -73,8 +73,8 @@ async function updateMenuItem(req, res) {
       allergens,
     } = req.body;
 
-    if(!id || isNaN(id)){
-      return res.status(400).json({error:"Invalid item ID"});
+    if (!id || isNaN(id)) {
+      return res.status(400).json({ error: "Invalid item ID" });
     }
     if (
       !itemName ||
@@ -84,63 +84,66 @@ async function updateMenuItem(req, res) {
       typeof isAvailable !== "boolean" ||
       typeof isVegetarian !== "boolean" ||
       typeof isVegan !== "boolean" ||
-      typeof isGlutenFree !== "boolean") {
-        console.log(!itemName);
-        console.log(!itemDescription);
-        console.log(!category);
-        console.log(price<=0);
-        console.log(typeof isAvailable !== "boolean");
-        console.log(typeof isVegetarian !== "boolean");
-        console.log(typeof isVegan !== "boolean");
-        console.log(typeof isGlutenFree !== "boolean");
+      typeof isGlutenFree !== "boolean"
+    ) {
+      console.log(!itemName);
+      console.log(!itemDescription);
+      console.log(!category);
+      console.log(price <= 0);
+      console.log(typeof isAvailable !== "boolean");
+      console.log(typeof isVegetarian !== "boolean");
+      console.log(typeof isVegan !== "boolean");
+      console.log(typeof isGlutenFree !== "boolean");
 
-        console.log("BOOL");
+      console.log("BOOL");
       return res.status(400).json({ error: "Invalid input provided." });
     }
 
-    console.log("ID is ",id);
+    console.log("ID is ", id);
     const itemExist = await checkItemExist(id);
-    
+
     console.log(itemExist);
 
     // if(!itemExist || itemExist.length === 0 ){
     //   return res.status(404).json({error:`Menu item with ID ${id} not found.`});
     // }
 
-     const updatedItem= await updateItem(
-        id,
-        itemName,
-        itemDescription,
-        price,
-        category,
-        isAvailable,
-        isVegetarian,
-        isVegan,
-        isGlutenFree,
-      );
+    const updatedItem = await updateItem(
+      id,
+      itemName,
+      itemDescription,
+      price,
+      category,
+      isAvailable,
+      isVegetarian,
+      isVegan,
+      isGlutenFree
+    );
 
-      console.log("UPDATE ITEM",updatedItem)
-      if(updatedItem.rowCount===0){
-        return res.status(404).json({error:"Menu item not found."});
-      }
+    console.log("UPDATE ITEM", updatedItem);
+    if (updatedItem.rowCount === 0) {
+      return res.status(404).json({ error: "Menu item not found." });
+    }
 
-      console.log("ALLERGENS", allergens);
-
+    console.log("ALLERGENS", allergens);
 
     await removeAllAllergens(id);
     if (allergens && allergens.length > 0) {
       await insertAllergens(id, allergens);
     }
 
-    res.json({ message: `${itemName} updated successfully`,item_id:id });
+    res.json({ message: `${itemName} updated successfully`, item_id: id });
   } catch (err) {
-    console.error("Error while updating:",err.message);
-    if (err.message.includes("No menu item found")|| err.message.includes("not found")){
+    console.error("Error while updating:", err.message);
+    if (
+      err.message.includes("No menu item found") ||
+      err.message.includes("not found")
+    ) {
       return res.status(404).json({ error: "Menu item not found." });
     }
-      res
-        .status(500)
-        .json({ error: "Server Error : Unable to update the menu item." });
+    res
+      .status(500)
+      .json({ error: "Server Error : Unable to update the menu item." });
   }
 }
 
@@ -150,20 +153,20 @@ async function removeMenuItem(req, res) {
   try {
     const { id } = req.params;
 
-      if (!id || isNaN(id)) {
-          return res.status(400).json({ error: "Invalid item ID." });
-        }
+    if (!id || isNaN(id)) {
+      return res.status(400).json({ error: "Invalid item ID." });
+    }
 
     const removedItem = await removeItem(id);
 
     res.json({
       message: `${removedItem.rows[0].item_name} deleted successfully from menu!`,
-      item_id:removedItem.rows[0].item_id
+      item_id: removedItem.rows[0].item_id,
     });
   } catch (err) {
     // console.error(err.message);
-    if(err.message.includes("not found")){
-     return res.status(404).json({ message: "Menu item not found." });
+    if (err.message.includes("not found")) {
+      return res.status(404).json({ message: "Menu item not found." });
     }
     res
       .status(500)
@@ -211,7 +214,7 @@ async function getAnyOneItemByID(req, res) {
 }
 
 async function getAllAllergen(req, res) {
-      console.log("Getting allergens 1");
+  console.log("Getting allergens 1");
   try {
     console.log("Getting allergens");
     const allAllergens = await getAllAllergens();
@@ -219,11 +222,7 @@ async function getAllAllergen(req, res) {
     res.json(allAllergens);
   } catch (err) {
     console.log(err);
-
-    if (err.message.includes("No allergens found.")) {
-      return res.status(404).json({ error: err.message });
-    }
-    res.status(500).json({ error: "Server Error: Unable to fetch allergen item." });
+    res.status(500).json({ error: "Server Error: Unable to fetch allergens." });
   }
 }
 
