@@ -298,6 +298,24 @@ async function getAnItemById(id) {
   }
 }
 
+
+async function getAllAllergens() {
+  try {
+    // SELECT Query
+    const result = await pool.query("SELECT * FROM menu_allergens");
+    console.log("Result:",result);
+    if (!result &&result.rows.length === 0) {
+      console.log("No allergens found.");
+      throw new Error(`No allergens found.`);
+    }
+    console.log("Allergens:",result.rows);
+    return result.rows;
+  } catch (err) {
+    console.error("Error fetching allergens:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   insertAllergens,
   removeAllAllergens,
@@ -307,4 +325,5 @@ module.exports = {
   removeItem,
   getAnItemById,
   checkItemExist,
+  getAllAllergens,
 };

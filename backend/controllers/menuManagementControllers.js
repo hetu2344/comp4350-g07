@@ -7,10 +7,12 @@ const {
   removeItem,
   getAnItemById,
   checkItemExist,
+  getAllAllergens,
 } = require("../models/menuManagementModel");
 
 // Method that creates new MenuItem
 async function createMenuItem(req, res) {
+  console.log("Creating menu item");
   try {
     const {
       itemName,
@@ -46,7 +48,6 @@ async function createMenuItem(req, res) {
   } catch (err) {
     console.log(err.message);
     if (err.message.includes("not found")){
-      console.log("HIIII returnning 404")
       return res.status(404).json({error:err.message});
     }
       res
@@ -57,6 +58,7 @@ async function createMenuItem(req, res) {
 
 // Function that updates menu items
 async function updateMenuItem(req, res) {
+  console.log("Updating menu item");
   try {
     const { id } = req.params;
     const {
@@ -144,6 +146,7 @@ async function updateMenuItem(req, res) {
 
 // Method that removes a menu item
 async function removeMenuItem(req, res) {
+  console.log("Removing menu item");
   try {
     const { id } = req.params;
 
@@ -170,6 +173,7 @@ async function removeMenuItem(req, res) {
 
 // Method that gets all items in menu
 async function getAllMenuItems(req, res) {
+  console.log("Getting all items");
   try {
     const allItems = await getAllItems();
     res.json(allItems);
@@ -185,6 +189,7 @@ async function getAllMenuItems(req, res) {
 
 // Method that gets any one item in menu by id
 async function getAnyOneItemByID(req, res) {
+  console.log("Getting item by ID");
   try {
     const { id } = req.params;
 
@@ -205,10 +210,28 @@ async function getAnyOneItemByID(req, res) {
   }
 }
 
+async function getAllAllergen(req, res) {
+      console.log("Getting allergens 1");
+  try {
+    console.log("Getting allergens");
+    const allAllergens = await getAllAllergens();
+    console.log("Allergens", allAllergens);
+    res.json(allAllergens);
+  } catch (err) {
+    console.log(err);
+
+    if (err.message.includes("No allergens found.")) {
+      return res.status(404).json({ error: err.message });
+    }
+    res.status(500).json({ error: "Server Error: Unable to fetch allergen item." });
+  }
+}
+
 module.exports = {
   createMenuItem,
   updateMenuItem,
   getAllMenuItems,
   removeMenuItem,
   getAnyOneItemByID,
+  getAllAllergen,
 };
