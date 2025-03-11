@@ -1,0 +1,46 @@
+/* src/components/layout/TableManagement.css */
+.table-management {
+    padding: 1rem;
+    background-color: #FFB563; /* Light orange */
+    min-height: 100vh;
+  }
+  
+  .table-management h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .table-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  
+  .table-card {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+  }
+  
+  .table-card.open {
+    background-color: #C1E1C1; /* Light green for open tables */
+  }
+  
+  .table-card.taken {
+    background-color: #FFCCCB; /* Light red for taken tables */
+  }
+  
+  .action-button {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background-color: #FF8C42; /* Dark orange */
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  
+  .action-button:hover {
+    background-color: #e67e3d; /* Slightly darker orange on hover */
+  }

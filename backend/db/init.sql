@@ -240,6 +240,9 @@ VALUES
     (2, 'Dine-In', 5, NULL, 'Active', 37.80, 'manager_susan'),
     (3, 'Dine-In', 7, NULL, 'Completed', 22.25, 'employee_lisa');
 
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
 
 INSERT INTO order_items
     (order_id, menu_item_id, quantity, price, created_by)
