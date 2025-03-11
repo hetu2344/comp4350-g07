@@ -59,6 +59,17 @@ CREATE TABLE tables
     is_available BOOLEAN DEFAULT TRUE
 );
 
+-- Create the Reservations Table
+CREATE TABLE reservations
+(
+    reservation_id SERIAL PRIMARY KEY,
+    table_num INT REFERENCES tables(table_num) ON DELETE CASCADE,
+    customer_name VARCHAR(50) NOT NULL,
+    reservation_time TIMESTAMP NOT NULL,
+    party_size INT NOT NULL
+);
+
+
 CREATE SEQUENCE order_serial_seq START WITH 100001 INCREMENT BY 1;
 
 CREATE TABLE orders (
@@ -227,6 +238,47 @@ VALUES('Cheesecake', 'Rich and creamy cheesecake topped with strawberries.', 6.4
         (SELECT id
         FROM menu_categories
         WHERE name = 'Dessert'), TRUE, TRUE, FALSE, FALSE);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8);
+
 
 INSERT INTO orders
     (store_id, order_type, table_id, customer_name, order_status, total_price, created_by)
