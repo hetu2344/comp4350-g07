@@ -42,4 +42,4 @@ make down-volumes
 
 [Our Contributors](docs/Contributors.md)
 
-[Sequence Diagrams](docs/Sequence&#32Diagrams/SequenceDiagrams.md)
+[Sequence Diagrams](docs/Sequence%20Diagrams/SequenceDiagrams.md)
