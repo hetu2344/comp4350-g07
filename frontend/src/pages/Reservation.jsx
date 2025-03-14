@@ -1,13 +1,30 @@
 // src/pages/Reservation.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { addReservation, getReservationsByCustomer, deleteReservation } from "../services/api";
 import "../components/layout/Reservation.css";
 
 const Reservation = () => {
-  const [formData, setFormData] = useState({ name: "", partySize: "", time: "", tableNum: "" });
+  const [formData, setFormData] = useState({ name: "", partySize: "", time: "" });
   const [reservations, setReservations] = useState([]);
-  const [message, setMessage] = useState(null); // Success/Error messages
+  const [message, setMessage] = useState(null);
   const [error, setError] = useState(null);
+
+  // Fetch reservations for the logged-in customer
+  useEffect(() => {
+    const fetchReservations = async () => {
+      const customerName = localStorage.getItem("username"); // Get from localStorage
+      if (!customerName) return;
+
+      try {
+        const data = await getReservationsByCustomer(customerName);
+        setReservations(data);
+      } catch (err) {
+        setError("Failed to load reservations.");
+      }
+    };
+
+    fetchReservations();
+  }, []);
 
   // Handle form input changes
   const handleChange = (e) => {
@@ -16,48 +33,53 @@ const Reservation = () => {
 
   // Handle reservation submission
   const handleReserve = async () => {
-    const { name, partySize, time, tableNum } = formData;
-
-    // Validate input fields
-    if (!name || !partySize || !time || !tableNum) {
+    if (!formData.name || !formData.partySize || !formData.time) {
       setError("Please fill out all fields.");
       return;
     }
-
+  
+    console.log("Original Time from Form:", formData.time);
+  
+    // ✅ Convert time into ISO format before sending to backend
+    const formattedTime = new Date(formData.time).toISOString();
+    console.log("Formatted Time for Backend:", formattedTime);
+  
     try {
-      await addReservation(name, tableNum, partySize, time);
-      setMessage("Reservation added successfully!");
-      setError(null);
-
-      // Fetch reservations after successful submission
-      const updatedReservations = await getReservationsByCustomer(name);
-      setReservations(updatedReservations);
-
-      // Reset form
-      setFormData({ name: "", partySize: "", time: "", tableNum: "" });
+      await addReservation(formData.name, null, formData.partySize, formattedTime);
+  
+      // Refresh tables
+      const updatedTables = await getAllTables();
+      console.log("Updated tables after reservation:", updatedTables);
+      setTables(updatedTables);
+  
+      setSelectedTable(null);
+      setFormData({ name: "", partySize: "", time: "" });
     } catch (err) {
       console.error("Error making reservation:", err);
       setError("Failed to add reservation.");
-      setMessage(null);
     }
   };
 
   // Handle reservation deletion
   const handleCancel = async (reservationID) => {
     try {
-      await deleteReservation(reservationID);
-      setMessage("Reservation deleted successfully!");
-      setError(null);
+        await deleteReservation(reservationID);
 
-      // Refresh reservations list
-      const updatedReservations = await getReservationsByCustomer(formData.name);
-      setReservations(updatedReservations);
+        // Remove reservation from local state immediately
+        setReservations(reservations.filter(res => res.reservation_id !== reservationID));
+
+        // Refresh table list to reflect status change
+        const updatedTables = await getAllTables();
+        setTables(updatedTables); // Ensure this is updating correctly
+
+        setMessage("Reservation deleted successfully.");
+        setError(null);
     } catch (err) {
-      console.error("Error deleting reservation:", err);
-      setError("Failed to delete reservation.");
-      setMessage(null);
+        console.error("Error deleting reservation:", err);
+        setError("Failed to delete reservation.");
+        setMessage(null);
     }
-  };
+};
 
   return (
     <div className="reservation">
@@ -71,7 +93,6 @@ const Reservation = () => {
         <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
         <input type="number" name="partySize" placeholder="Party Size" value={formData.partySize} onChange={handleChange} />
         <input type="datetime-local" name="time" value={formData.time} onChange={handleChange} />
-        <input type="number" name="tableNum" placeholder="Table Number" value={formData.tableNum} onChange={handleChange} />
         <button onClick={handleReserve} className="action-button">Reserve</button>
       </div>
 
@@ -98,3 +119,4 @@ const Reservation = () => {
 };
 
 export default Reservation;
+

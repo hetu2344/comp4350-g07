@@ -73,6 +73,7 @@ CREATE TABLE reservations
 ALTER TABLE users 
 ADD CONSTRAINT fk_store FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE SET NULL;
 
+
 --Insert Store Owners (Type: 'S')
 INSERT INTO users (username, first_name, last_name, password_hash, type, store_id)
 VALUES 

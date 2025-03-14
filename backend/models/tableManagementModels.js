@@ -36,21 +36,42 @@ async function updateTableStatus(tableNum, isOpen) {
 }
 
 async function getAllTablesInfo() {
-    console.log("Retrieving all tables");
+    console.log("Retrieving all tables with reservations");
 
     let client;
     try {
         client = await pool.connect();
         await client.query("BEGIN");
 
-        const result = await client.query('SELECT table_num, num_seats, table_status FROM tables');
+        // Fetch all tables along with their current reservations
+        const result = await client.query(`
+            SELECT t.table_num, 
+       t.num_seats, 
+       t.table_status, 
+       COALESCE(json_agg(
+            CASE 
+                WHEN r.reservation_id IS NOT NULL THEN 
+                    json_build_object(
+                        'reservation_id', r.reservation_id, 
+                        'customer_name', r.customer_name, 
+                        'reservation_time', r.reservation_time, 
+                        'party_size', r.party_size
+                    )
+                ELSE NULL 
+            END
+        ) FILTER (WHERE r.reservation_id IS NOT NULL), '[]') AS reservations
+FROM tables t
+LEFT JOIN reservations r ON t.table_num = r.table_num
+GROUP BY t.table_num, t.num_seats, t.table_status;
+        `);
+        
+        
 
         if (result.rowCount === 0) {
             throw new Error(`No tables found.`);
         }
 
-        return result.rows;  // Return the rows from the query result
-
+        return result.rows; // Directly return rows
     } catch (error) {
         if (client) {
             await client.query("ROLLBACK");
@@ -228,9 +249,17 @@ async function createReservation(customerName, tableNum, partySize, time) {
         await client.query("BEGIN");
 
 
-        const result = await client.query('INSERT INTO reservations (table_num, customer_name, reservation_time, party_size) VALUES ($1, $2, $3, $4);',
-            [tableNum, customerName, time, partySize]);
-
+        const result = await client.query(
+            'INSERT INTO reservations (table_num, customer_name, reservation_time, party_size) VALUES ($1, $2, $3, $4) RETURNING reservation_id',
+            [tableNum, customerName, time, partySize]
+        );
+        
+        const reservationID = result.rows[0].reservation_id;
+        
+        await client.query(
+            'UPDATE tables SET reservation_id = $1, table_status = FALSE WHERE table_num = $2',
+            [reservationID, tableNum]
+        );
         await client.query("COMMIT");
 
         return result;
@@ -254,9 +283,18 @@ async function deleteReservationByID(reservationID) {
         await client.query("BEGIN");
 
         const result = await client.query(
-            "DELETE FROM reservations WHERE reservation_id=$1 RETURNING *",
+            "DELETE FROM reservations WHERE reservation_id=$1 RETURNING table_num",
             [reservationID]
         );
+        
+        if (result.rowCount > 0) {
+            const tableNum = result.rows[0].table_num;
+            await client.query(
+                "UPDATE tables SET reservation_id = NULL, table_status = TRUE WHERE table_num = $1",
+                [tableNum]
+            );
+        }
+        
         if (result.rows.length === 0) {
             throw new Error(`Reservation with id = ${reservationID} not found.`);
         }
