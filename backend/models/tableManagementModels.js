@@ -43,35 +43,43 @@ async function getAllTablesInfo() {
         client = await pool.connect();
         await client.query("BEGIN");
 
-        // Fetch all tables along with their current reservations
+        // ✅ Step 1: Reset table_status for tables with NO future reservations
+        await client.query(`
+            UPDATE tables 
+            SET table_status = TRUE 
+            WHERE table_num IN (
+                SELECT t.table_num FROM tables t
+                LEFT JOIN reservations r 
+                ON t.table_num = r.table_num 
+                WHERE r.reservation_id IS NULL OR r.reservation_time < NOW()
+            )
+        `);
+
+        // ✅ Step 2: Fetch updated table data
         const result = await client.query(`
             SELECT t.table_num, 
-       t.num_seats, 
-       t.table_status, 
-       COALESCE(json_agg(
-            CASE 
-                WHEN r.reservation_id IS NOT NULL THEN 
-                    json_build_object(
-                        'reservation_id', r.reservation_id, 
-                        'customer_name', r.customer_name, 
-                        'reservation_time', r.reservation_time, 
-                        'party_size', r.party_size
-                    )
-                ELSE NULL 
-            END
-        ) FILTER (WHERE r.reservation_id IS NOT NULL), '[]') AS reservations
-FROM tables t
-LEFT JOIN reservations r ON t.table_num = r.table_num
-GROUP BY t.table_num, t.num_seats, t.table_status;
+                   t.num_seats, 
+                   t.table_status, 
+                   COALESCE(json_agg(
+                        CASE 
+                            WHEN r.reservation_id IS NOT NULL AND r.reservation_time >= NOW() THEN 
+                                json_build_object(
+                                    'reservation_id', r.reservation_id, 
+                                    'customer_name', r.customer_name, 
+                                    'reservation_time', r.reservation_time, 
+                                    'party_size', r.party_size
+                                )
+                            ELSE NULL 
+                        END
+                    ) FILTER (WHERE r.reservation_id IS NOT NULL AND r.reservation_time >= NOW()), '[]') AS reservations
+            FROM tables t
+            LEFT JOIN reservations r ON t.table_num = r.table_num
+            GROUP BY t.table_num, t.num_seats, t.table_status;
         `);
         
-        
+        await client.query("COMMIT");
+        return result.rows; // ✅ Updated data
 
-        if (result.rowCount === 0) {
-            throw new Error(`No tables found.`);
-        }
-
-        return result.rows; // Directly return rows
     } catch (error) {
         if (client) {
             await client.query("ROLLBACK");
@@ -84,6 +92,7 @@ GROUP BY t.table_num, t.num_seats, t.table_status;
         }
     }
 }
+
 
 async function getAllReservations() {
     console.log("Retrieving all reservations");

@@ -72,6 +72,8 @@ CREATE TABLE reservations
 
 ALTER TABLE users 
 ADD CONSTRAINT fk_store FOREIGN KEY (store_id) REFERENCES stores(id) ON DELETE SET NULL;
+DELETE FROM reservations WHERE reservation_time < NOW();
+
 
 
 --Insert Store Owners (Type: 'S')
