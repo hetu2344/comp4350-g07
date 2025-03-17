@@ -5,6 +5,7 @@ const {
   getOrderByNumber,
   updateOrder,
   updateOrderStatus,
+  addItemToOrder,
 } = require("../models/orderManagementModel");
 // Method that creates new MenuItem
 async function createNewOrder (req, res){
@@ -202,6 +203,38 @@ async function handleUpdateOrderStatus(req, res) {
   }
 }
 
+async function handleAddItemToOrder(req, res) {
+  try{
+    const orderNumber=req.params.orderNumber;
+    const {menuItemId,quantity,createdBy}=req.body;
+    const regex=/^(TAKE|DINE)-\d+$/;
+    if(!orderNumber){
+      return res.status(400).json({error:"Order Number is required"});
+    }
+
+    if (!regex.test(orderNumber)) {
+            return res.status(400).json({ error: "Invalid order number format" });
+    }
+
+    if(quantity<=0){
+      return res.status(400).json({error:"Quantity should be greater than 0"});
+    }
+
+    if(!menuItemId || !quantity|| !createdBy){
+      return res.status(400).json({error:"Missing required details: menu_item_id, quantity, createdBy"});
+    }
+
+    const result=await addItemToOrder(orderNumber,menuItemId,quantity,createdBy);
+    res.status(201).json({message:"Item added successfully",order:result});
+  }catch(error){
+    console.log(error.message);
+    if(error.message.toLowerCase().includes("not found")){
+      return res.status(404).json({error:error.message});
+    }
+    res.status(500).json({error:error.message});
+  }
+}
+
 
 
 
@@ -212,4 +245,5 @@ module.exports = {
   handleGetOrderByNumber,
   handleUpdateOrder,
   handleUpdateOrderStatus,
+  handleAddItemToOrder,
 };
