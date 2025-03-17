@@ -78,8 +78,9 @@ CREATE TABLE orders (
     order_type VARCHAR(10) NOT NULL CHECK(order_type IN ('Dine-In', 'Take-Out')),
     table_num INTEGER REFERENCES tables(table_num) ON DELETE CASCADE,
     customer_name VARCHAR(255),
-    order_status VARCHAR(50) DEFAULT 'Active' CHECK(order_status IN ('Active', 'Completed', 'Canceled')),
+    order_status VARCHAR(50) DEFAULT 'Active' CHECK(order_status IN ('Active', 'Completed', 'Cancelled')),
     order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    special_instructions TEXT DEFAULT NULL,
     total_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     created_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL
 );
@@ -279,21 +280,23 @@ INSERT INTO tables
     (num_seats)
 VALUES(8);
 
-INSERT INTO orders
-    (store_id, order_type, table_num, customer_name, order_status, total_price, created_by)
-VALUES
-    (1, 'Take-Out', NULL, 'Sarah Smith', 'Active', 15.99, 'employee_david'),
-    (1, 'Take-Out', NULL, 'James Anderson', 'Completed', 23.45, 'manager_susan'),
-    (2, 'Take-Out', NULL, 'Olivia Brown', 'Active', 12.75, 'employee_lisa'),
-
-    (1, 'Dine-In', 1, NULL, 'Active', 29.97, 'employee_emma'),
-    (1, 'Dine-In', 2, NULL, 'Completed', 45.50, 'manager_bob'),
-    (2, 'Dine-In', 5, NULL, 'Active', 37.80, 'manager_susan'),
-    (3, 'Dine-In', 7, NULL, 'Completed', 22.25, 'employee_lisa');
-
 INSERT INTO tables
     (num_seats)
 VALUES(2);
+
+INSERT INTO orders
+    (store_id, order_type, table_num, customer_name, order_status,special_instructions,total_price, created_by)
+VALUES
+    (1, 'Take-Out', NULL, 'Sarah Smith', 'Active','Light Cheese', 15.99, 'employee_david'),
+    (1, 'Take-Out', NULL, 'James Anderson', 'Completed','Extra Ketchup', 23.45, 'manager_susan'),
+    (1, 'Take-Out', NULL, 'Olivia Brown', 'Active',NULL, 12.75, 'employee_lisa'),
+
+    (1, 'Dine-In', 1, NULL, 'Active','No Cheese in Vegan Bowl', 29.97, 'employee_emma'),
+    (1, 'Dine-In', 2, NULL, 'Completed',NULL, 45.50, 'manager_bob'),
+    (1, 'Dine-In', 5, NULL, 'Active',NULL, 37.80, 'manager_susan'),
+    (1, 'Dine-In', 7, NULL, 'Completed',NULL, 22.25, 'employee_lisa');
+
+
 
 INSERT INTO order_items
     (order_id, menu_item_id, quantity, item_price, created_by)
@@ -311,7 +314,14 @@ VALUES
     (4, 3, 1, 3.99, 'manager_susan'),
 
     (5, 3, 1, 6.50, 'employee_lisa'),
-    (5, 1, 1, 6.25, 'employee_lisa');
+    (5, 1, 1, 6.25, 'employee_lisa'),
+
+    
+    (6, 1, 1, 12.99, 'manager_susan'),
+    (6, 2, 2, 4.99, 'manager_susan'),
+
+    (7, 3, 1, 3.99, 'employee_lisa'),
+    (7, 1, 1, 6.25, 'employee_lisa');
 
 
 COMMIT;
@@ -325,6 +335,7 @@ SELECT
     o.customer_name,
     o.order_status,
     o.order_time,
+    o.special_instructions,
 
     SUM(oi.quantity * oi.item_price) AS item_total,
 

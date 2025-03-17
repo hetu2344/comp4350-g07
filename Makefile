@@ -71,6 +71,9 @@ run-all-tests:
 	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
 	$(DOCKER_COMPOSE) down
 
+test-file:
+	$(DOCKER_COMPOSE) run --rm test npm test -- backend/tests/unit/$(FILE) --coverage --detectOpenHandles
+
 # Help command to show available commands
 help:
 	@echo "Available commands:"
@@ -91,3 +94,4 @@ help:
 	@echo "  make test            - Run Jest tests inside the Docker container"
 	@echo "  make run-all-tests   - Run API and tests simultaneously"
 	@echo "  make test-coverage   - Opens test coverage."
+	@echo "  make test-file FILE  - Run a specific test file"

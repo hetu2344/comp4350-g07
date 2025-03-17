@@ -3,10 +3,11 @@ const express = require("express");
 const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
 const tableManagementRoutes = require("./routes/tableManagementRoutes");
+const orderManagementRoutes = require("./routes/orderManagementRoutes");
 const cookieParser = require('cookie-parser');
 
 const cors = require("cors");
-const pool = require("./db/db");
+// const pool = require("../backend/db/db");
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(cors({
 app.use("/api/user", userManagementRoutes);
 app.use("/api/menu", menuManagementRoutes);
 app.use("/api/tables", tableManagementRoutes);
-
+app.use("/api/orders", orderManagementRoutes);
 if(require.main===module){
 // get all menu items
 app.listen(PORT,"0.0.0.0" , () => {
