@@ -34,10 +34,10 @@ make down-volumes
 
 [Tools and Technologies](docs/Technologies.md#technologies)
 
-[Architecture Diagram](docs/Architecture_Diagrams/Architecture_Diagram_v2.drawio.svg)
+[Architecture Diagram](docs/Architecture_Diagrams/Architecture_Diagram_v2.png)
 
 [Branching and Commiting Strategy](docs/Branching-and-Commiting-strategy.md#branching)
 
 [Test Plan](docs/RestroSync_Test_Plan.pdf)
 
-[Our Contributors](docs/contributing.md)
+[Our Contributors](docs/Contributors.md)
