@@ -27,7 +27,7 @@ router.get("/reservation/table", getReservationsByTable);
 
 router.get("/reservation/customer", getReservationsByCustomer);
 
-router.delete("/reservation", deleteReservation);
+router.delete("/reservation/:reservationId", deleteReservation);
 
 
 module.exports = router;

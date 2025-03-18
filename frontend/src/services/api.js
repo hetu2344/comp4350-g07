@@ -74,12 +74,15 @@ export const getReservationsByCustomer = async (customerName) => {
 // Delete reservation
 export const deleteReservation = async (reservationID) => {
     try {
-        const response = await axios.delete(`${API_BASE_URL}/reservation`, {
-            data: { reservationID },
-        });
+        console.log(`🛠 Sending DELETE request to: ${API_BASE_URL}/reservation/${reservationID}`);
+
+        const response = await axios.delete(`${API_BASE_URL}/reservation/${reservationID}`);
+
+        console.log(`✅ Successfully deleted reservation ID: ${reservationID}`);
         return response.data;
     } catch (error) {
-        console.error('Error deleting reservation:', error);
+        console.error("❌ Error deleting reservation:", error.response?.data || error.message);
         throw error;
     }
 };
+

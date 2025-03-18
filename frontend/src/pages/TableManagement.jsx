@@ -39,29 +39,35 @@ const TableManagement = () => {
 
   // Handle reservation creation
   const handleReserve = async () => {
+    console.log("Current formData before sending:", formData); // ✅ Debugging Output
+
     if (!formData.name || !formData.partySize || !formData.time) {
         setError("Please fill out all fields.");
         return;
     }
 
-    // Ensure time is in the correct format
-let selectedTime = new Date(`${formData.time}:00`);
+    let selectedTime = new Date(formData.time);
+    if (isNaN(selectedTime.getTime())) {
+        setError("Invalid date selected.");
+        return;
+    }
 
-// Validate if selectedTime is a valid date
-if (isNaN(selectedTime.getTime())) {
-    setError("Invalid date selected.");
-    return;
-}
-
-// Convert to ISO 8601 format, adjusting for timezones
-const formattedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezoneOffset() * 60000)).toISOString();
-
+    const formattedTime = selectedTime.toISOString();
     
-    console.log("Formatted Reservation Time:", formattedTime);
+    console.log("Formatted Reservation Time:", formattedTime); // ✅ Debugging output
+
+    // Log parameters just before calling addReservation
+    console.log("Calling addReservation with:", {
+        name: formData.name,
+        tableNum: selectedTable.table_num,
+        partySize: formData.partySize,
+        time: formattedTime
+    });
 
     try {
-        await addReservation(formData.name, selectedTable.table_num, formData.partySize, formattedTime);
-        
+        await addReservation(formData.name, formData.partySize, formattedTime);
+        console.log("Reservation request sent!");
+
         // Refresh tables
         const updatedTables = await getAllTables();
         setTables(updatedTables);
@@ -75,12 +81,31 @@ const formattedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezon
 };
 
 
+
+
+
   // Handle reservation deletion
   const handleCancelReservation = async () => {
-    if (!selectedTable || !selectedTable.reservation_id) return;
+    console.log("🛠 Cancel Reservation Clicked");
+    console.log("Selected Table:", selectedTable);
+
+    if (!selectedTable || !selectedTable.reservations || selectedTable.reservations.length === 0) {
+        console.error("⚠️ No reservation found to cancel.");
+        return;
+    }
+
+    const reservationId = selectedTable.reservations[0].reservation_id;
+    console.log("Reservation ID:", reservationId);
+
+    if (!reservationId) {
+        console.error("⚠️ Reservation ID is undefined.");
+        return;
+    }
 
     try {
-      await deleteReservation(selectedTable.reservation_id);
+      console.log("🛠 Calling deleteReservation with:", reservationId);
+      await deleteReservation(reservationId);
+      console.log("✅ Reservation Deleted");
       setSelectedTable(null);
 
       // Update table status to available
@@ -150,10 +175,24 @@ const formattedTime = new Date(selectedTime.getTime() - (selectedTime.getTimezon
       ) : (
         <>
           <h3>Make a Reservation</h3>
-          <input type="text" placeholder="Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
-          <input type="number" placeholder="Party Size" value={formData.partySize} onChange={(e) => setFormData({ ...formData, partySize: e.target.value })} />
-          <input type="datetime-local" value={formData.time} onChange={(e) => setFormData({ ...formData, time: e.target.value })} />
-          <button onClick={handleReserve} className="action-button">Reserve</button>
+<input
+  type="text"
+  placeholder="Name"
+  value={formData.name}
+  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+/>
+<input
+  type="number"
+  placeholder="Party Size"
+  value={formData.partySize}
+  onChange={(e) => setFormData({ ...formData, partySize: Number(e.target.value) })} // ✅ Ensure numeric value
+/>
+<input
+  type="datetime-local"
+  value={formData.time}
+  onChange={(e) => setFormData({ ...formData, time: e.target.value })} // ✅ Ensure proper date format
+/>
+<button onClick={handleReserve} className="action-button">Reserve</button>
         </>
       )}
       <button onClick={() => setSelectedTable(null)} className="close-button">Close</button>
