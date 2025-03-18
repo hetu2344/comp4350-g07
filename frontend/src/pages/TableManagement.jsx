@@ -39,7 +39,7 @@ const TableManagement = () => {
 
   // Handle reservation creation
   const handleReserve = async () => {
-    console.log("Current formData before sending:", formData); // ✅ Debugging Output
+    console.log("Current formData before sending:", formData); //  Debugging Output
 
     if (!formData.name || !formData.partySize || !formData.time) {
         setError("Please fill out all fields.");
@@ -54,7 +54,7 @@ const TableManagement = () => {
 
     const formattedTime = selectedTime.toISOString();
     
-    console.log("Formatted Reservation Time:", formattedTime); // ✅ Debugging output
+    console.log("Formatted Reservation Time:", formattedTime); //  Debugging output
 
     // Log parameters just before calling addReservation
     console.log("Calling addReservation with:", {
@@ -71,6 +71,7 @@ const TableManagement = () => {
         // Refresh tables
         const updatedTables = await getAllTables();
         setTables(updatedTables);
+        console.log("Updated Tables after Reservation:", updatedTables);
 
         setSelectedTable(null);
         setFormData({ name: "", partySize: "", time: "" });
@@ -86,11 +87,9 @@ const TableManagement = () => {
 
   // Handle reservation deletion
   const handleCancelReservation = async () => {
-    console.log("🛠 Cancel Reservation Clicked");
-    console.log("Selected Table:", selectedTable);
 
     if (!selectedTable || !selectedTable.reservations || selectedTable.reservations.length === 0) {
-        console.error("⚠️ No reservation found to cancel.");
+        console.error("No reservation found to cancel.");
         return;
     }
 

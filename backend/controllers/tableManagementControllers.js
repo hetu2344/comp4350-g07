@@ -23,12 +23,12 @@ async function addReservation(req, res) {
         const currentTime = new Date();
         const futureTime = new Date(currentTime.getTime() + 45 * 60 * 1000); // 45 min from now
 
-        // ✅ Convert incoming time string to Date object
+        //  Convert incoming time string to Date object
         const reservationTime = new Date(time);
 
-        console.log("🕒 Current Time:", currentTime.toISOString());
-        console.log("🕒 Future Allowed Time:", futureTime.toISOString());
-        console.log("🕒 Selected Reservation Time:", reservationTime.toISOString());
+        console.log(" Current Time:", currentTime.toISOString());
+        console.log(" Future Allowed Time:", futureTime.toISOString());
+        console.log(" Selected Reservation Time:", reservationTime.toISOString());
 
         if (isNaN(reservationTime.getTime())) {
             return res.status(400).json({ error: "Invalid date format provided." });
@@ -38,7 +38,7 @@ async function addReservation(req, res) {
             return res.status(400).json({ error: "Reservations must be at least 45 minutes in advance." });
         }
 
-        // ✅ Find an available table for the party size
+        //  Find an available table for the party size
         const tableQuery = `
             SELECT table_num FROM tables 
             WHERE table_status = TRUE AND num_seats >= $1 
@@ -52,25 +52,30 @@ async function addReservation(req, res) {
 
         const tableNum = rows[0].table_num;
 
-        // ✅ Create the reservation
+        // Create the reservation
         const insertQuery = `
             INSERT INTO reservations (table_num, customer_name, reservation_time, party_size)
             VALUES ($1, $2, $3, $4) RETURNING *
         `;
         const result = await pool.query(insertQuery, [tableNum, name, reservationTime, partySize]);
 
-        // ✅ Update the table status to RESERVED (false)
+        // Update the table status to RESERVED (false)
         const updatedTable = await pool.query(
             "UPDATE tables SET table_status = false WHERE table_num = $1 RETURNING *",
             [tableNum]
         );
 
-        console.log("✅ Updated Table Status:", updatedTable.rows[0]);
+        console.log("Updated Table Status:", updatedTable);
+
+        const checkTable = await pool.query(
+            "SELECT table_num, table_status FROM tables ORDER BY table_num"
+        );
+        console.log(" Table Status after Reservation:", checkTable.rows);
 
         res.json({ 
             message: "Reservation successfully added!", 
             reservation: result.rows[0], 
-            updatedTable: updatedTable.rows[0]  // ✅ Send updated table data
+            updatedTable: updatedTable.rows[0]  //  Send updated table data
         });
 
     } catch (err) {

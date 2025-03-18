@@ -43,19 +43,24 @@ async function getAllTablesInfo() {
         client = await pool.connect();
         await client.query("BEGIN");
 
-        // ✅ Step 1: Reset table_status for tables with NO future reservations
-        await client.query(`
+        //  Reset table_status for tables with NO future reservations
+        // This query is causing issues with the frontend right now, will fix later,
+        // but it's not necessary for the current functionality.
+        // It's just a nice-to-have feature to reset the table status if there are no future reservations.
+        // We can just make sure to cancel any reservation that is past the current time manually
+      /*  await client.query(`
             UPDATE tables 
-            SET table_status = TRUE 
-            WHERE table_num IN (
-                SELECT t.table_num FROM tables t
-                LEFT JOIN reservations r 
+                SET table_status = TRUE 
+                WHERE table_num IN (
+                 SELECT t.table_num FROM tables t
+                    LEFT JOIN reservations r 
                 ON t.table_num = r.table_num 
-                WHERE r.reservation_id IS NULL OR r.reservation_time < NOW()
-            )
-        `);
+                WHERE r.reservation_id IS NULL 
+                OR (r.reservation_time < NOW() AND r.reservation_time IS NOT NULL)
+);
+        `); */
 
-        // ✅ Step 2: Fetch updated table data
+        // Fetch updated table data
         const result = await client.query(`
             SELECT t.table_num, 
                    t.num_seats, 
