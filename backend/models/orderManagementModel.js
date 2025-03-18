@@ -411,6 +411,40 @@ async function removeItemFromOrder(orderNumber, itemId, removedBy) {
   }
 }
 
+async function deleteOrder(orderNumber) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const orderResult = await client.query(
+      `SELECT order_id FROM orders WHERE order_number=$1`,
+      [orderNumber]
+    );
+
+    if (orderResult.rows.length === 0) {
+      throw new Error(`Order with number ${orderNumber} not found`);
+    }
+
+    const order = orderResult.rows[0];
+
+    await client.query(`DELETE FROM order_items WHERE order_id=$1`, [
+      order.order_id,
+    ]);
+
+    await client.query(`DELETE FROM orders WHERE order_id=$1`, [
+      order.order_id,
+    ]);
+
+    await client.query("COMMIT");
+    return { message: "Order deleted successfully" };
+  } catch (error) {
+    client.query("ROLLBACK");
+    console.log(error.message);
+    throw new Error(error.message);
+  }finally{
+  client.release();
+}
+}
+
 module.exports = {
   createNewOrderWithItems,
   getAllOrders,
@@ -420,4 +454,5 @@ module.exports = {
   addItemToOrder,
   updateAnItemInOrder,
   removeItemFromOrder,
+  deleteOrder,
 };

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const {
-  createNewOrder,
+  handleCreateNewOrder,
   handleGetAllOrders,
   handleGetOrderByNumber,
   handleUpdateOrder,
@@ -9,18 +9,36 @@ const {
   handleAddItemToOrder,
   handleUpdateAnItemInOrder,
   handleRemoveItemFromOrder,
+  // handleDeleteOrder,
+  protectedDeleteOrder,
 } = require("../controllers/orderManagementControllers");
 
-router.post("/", createNewOrder); // Create new order
-router.get("/", handleGetAllOrders); // Get all orders
-router.get("/:orderNumber",handleGetOrderByNumber); // Get order by ID
-router.put("/:orderNumber", handleUpdateOrder); // Update order
-router.put("/:orderNumber/status",handleUpdateOrderStatus);// Update order Status
-router.post("/:orderNumber/items",handleAddItemToOrder);// Add item to order
-console.log("ADDING ITEM TO ORDER");
-router.put("/:orderNumber/items/:itemId",handleUpdateAnItemInOrder);// Update item in order
-router.delete("/:orderNumber/items/:itemId",handleRemoveItemFromOrder);// Remove item from order
-// router.delete("/:orderId",orderController.deleteOrder);// Delete order
+// Create new order
+router.post("/", handleCreateNewOrder); 
+
+ // Get all orders
+router.get("/", handleGetAllOrders);
+
+ // Get order by ID
+router.get("/:orderNumber",handleGetOrderByNumber);
+
+ // Update order
+router.put("/:orderNumber", handleUpdateOrder);
+
+// Update order Status
+router.put("/:orderNumber/status",handleUpdateOrderStatus);
+
+// Add item to order
+router.post("/:orderNumber/items",handleAddItemToOrder);
+
+// Update item in order
+router.put("/:orderNumber/items/:itemId",handleUpdateAnItemInOrder);
+
+// Remove item from order
+router.delete("/:orderNumber/items/:itemId",handleRemoveItemFromOrder);
+
+// Delete order
+router.delete("/:orderNumber",protectedDeleteOrder);
 
 module.exports = router;
 
