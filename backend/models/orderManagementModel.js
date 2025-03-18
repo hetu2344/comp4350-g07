@@ -272,7 +272,6 @@ async function addItemToOrder(orderNumber, menuItemId, quantity, createdBy) {
         [order.order_id, menuItemId, quantity, menuItem.price, createdBy]
       );
       newTotal += menuItem.price * quantity;
-
     }
 
     console.log(
@@ -300,6 +299,118 @@ async function addItemToOrder(orderNumber, menuItemId, quantity, createdBy) {
   }
 }
 
+async function updateAnItemInOrder(orderNumber, itemId, quantity, newPrice) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const orderResult = await client.query(
+      `SELECT order_id,total_price FROM orders WHERE order_number=$1`,
+      [orderNumber]
+    );
+    if (orderResult.rows.length === 0) {
+      throw new Error(`Order with number ${orderNumber} not found`);
+    }
+    const order = orderResult.rows[0];
+
+    const itemResult = await client.query(
+      `SELECT order_item_id,quantity,item_price FROM order_items WHERE order_id=$1 AND menu_item_id=$2`,
+      [order.order_id, itemId]
+    );
+
+    const existingItem = itemResult.rows[0];
+
+    if (!existingItem) {
+      throw new Error(`Item with ID ${itemId} not found in order`);
+    }
+
+    const oldItemTotal = existingItem.quantity * existingItem.item_price;
+    const newItemTotal = quantity * newPrice;
+    const priceDiff = newItemTotal - oldItemTotal;
+    const newTotal = order.total_price + priceDiff;
+
+    await client.query(
+      `UPDATE order_items SET quantity=$1,item_price=$2 WHERE order_item_id=$3`,
+      [quantity, newPrice, existingItem.order_item_id]
+    );
+
+    await client.query(`UPDATE orders SET total_price=$1 WHERE order_id=$2`, [
+      newTotal,
+      order.order_id,
+    ]);
+
+    await client.query("COMMIT");
+
+    return { orderNumber, itemId, quantity, newPrice, totalprice: newTotal };
+  } catch (error) {
+    client.query("ROLLBACK");
+    console.log(error.message);
+    throw new Error(error.message);
+  } finally {
+    client.release();
+  }
+}
+
+async function removeItemFromOrder(orderNumber, itemId, removedBy) {
+  const client = await pool.connect();
+  try {
+    await client.query("BEGIN");
+    const orderResult = await client.query(
+      `SELECT order_id,total_price FROM orders WHERE order_number=$1`,
+      [orderNumber]
+    );
+
+    if (orderResult.rows.length === 0) {
+      throw new Error(`Order with number ${orderNumber} not found`);
+    }
+
+    const order = orderResult.rows[0];
+
+    const itemResult = await client.query(
+      `SELECT order_item_id,quantity,item_price FROM order_items WHERE order_id=$1 AND menu_item_id=$2`,
+      [order.order_id, itemId]
+    );
+
+    if (itemResult.rows.length === 0) {
+      throw new Error(`Item with ID ${itemId} not found in order`);
+    }
+
+    const existingItem = itemResult.rows[0];
+    const itemTotal = existingItem.quantity * existingItem.item_price;
+    const newTotal = order.total_price - itemTotal;
+
+    await client.query(
+      `DELETE FROM order_items WHERE order_item_id=$1 AND order_id=$2`,
+      [existingItem.order_item_id, order.order_id]
+    );
+
+    const remainingItemsResult = await client.query(
+      `SELECT * FROM order_items WHERE order_id=$1`,
+      [order.order_id]
+    );
+
+    if (parseInt(remainingItemsResult.rowCount) === 0) {
+      await client.query(
+        `UPDATE orders SET total_price = $1 WHERE order_id = $2`,
+        [newTotal, order.order_id]
+      );
+    } else {
+      await client.query(`UPDATE orders SET total_price=$1 WHERE order_id=$2`, [
+        newTotal,
+        order.order_id,
+      ]);
+    }
+
+    await client.query("COMMIT");
+    return { orderNumber, itemId, totalprice: newTotal };
+  } catch (error) {
+    client.query("ROLLBACK");
+    console.log(error.message);
+    throw new Error(error.message);
+  } finally {
+    client.release();
+  }
+}
+
 module.exports = {
   createNewOrderWithItems,
   getAllOrders,
@@ -307,4 +418,6 @@ module.exports = {
   updateOrder,
   updateOrderStatus,
   addItemToOrder,
+  updateAnItemInOrder,
+  removeItemFromOrder,
 };

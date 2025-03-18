@@ -6,6 +6,8 @@ const {
   updateOrder,
   updateOrderStatus,
   addItemToOrder,
+  updateAnItemInOrder,
+  removeItemFromOrder,
 } = require("../models/orderManagementModel");
 // Method that creates new MenuItem
 async function createNewOrder (req, res){
@@ -235,6 +237,69 @@ async function handleAddItemToOrder(req, res) {
   }
 }
 
+async function handleUpdateAnItemInOrder(req,res){
+  console.log("Updating Item in Order");
+  try{
+    const {orderNumber,itemId}=req.params;
+    console.log("orderNumber",orderNumber);
+    console.log("itemId",itemId);
+    const {quantity,newPrice}=req.body;
+    const regex=/^(TAKE|DINE)-\d+$/;
+    if(!orderNumber){
+      return res.status(400).json({error:"Order Number is required"});
+    }
+    if(!regex.test(orderNumber)){
+      return res.status(400).json({error:"Invalid Order Number"});
+    }
+
+    
+    if (quantity <= 0) {
+      return res.status(400).json({error:"Quantity should be greater than 0"});
+    }
+
+    if(!itemId || !quantity || !newPrice ){
+      return res.status(400).json({error:"Missing required details: itemId, quantity, newPrice"});
+    }
+
+    const updatedOrder=await updateAnItemInOrder(orderNumber,itemId,quantity,newPrice);
+    res.status(200).json({message:"Item updated successfully",order:updatedOrder});
+
+  }catch(error){
+    console.log(error.message);
+    if(error.message.toLowerCase().includes("not found")){
+      return res.status(404).json({error:error.message});
+    }
+    res.status(500).json({error:error});
+  }
+}
+
+async function handleRemoveItemFromOrder(req,res){
+  try{
+    const {orderNumber,itemId}=req.params;
+    const {removedBy}=req.body;
+    const regex=/^(TAKE|DINE)-\d+$/;
+    if(!orderNumber){
+      return res.status(400).json({error:"Order Number is required"});
+    }
+    if(!regex.test(orderNumber)){
+      return res.status(400).json({error:"Invalid Order Number"});
+    }
+    if(!itemId||!removedBy){
+      return res.status(400).json({error:"Missing required details: itemId, removedBy"});
+    }
+
+    const updatedOrder=await removeItemFromOrder(orderNumber,itemId,removedBy);
+    res.status(200).json({message:"Item removed successfully",order:updatedOrder});
+
+  }catch(error){
+    console.log(error.message);
+    if(error.message.toLowerCase().includes("not found")){
+      return res.status(404).json({error:error.message});
+    }
+    res.status(500).json({error:error});
+  }
+
+}
 
 
 
@@ -246,4 +311,6 @@ module.exports = {
   handleUpdateOrder,
   handleUpdateOrderStatus,
   handleAddItemToOrder,
+  handleUpdateAnItemInOrder,
+  handleRemoveItemFromOrder,
 };

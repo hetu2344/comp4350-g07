@@ -287,14 +287,14 @@ VALUES(2);
 INSERT INTO orders
     (store_id, order_type, table_num, customer_name, order_status,special_instructions,total_price, created_by)
 VALUES
-    (1, 'Take-Out', NULL, 'Sarah Smith', 'Active','Light Cheese', 15.99, 'employee_david'),
-    (1, 'Take-Out', NULL, 'James Anderson', 'Completed','Extra Ketchup', 23.45, 'manager_susan'),
-    (1, 'Take-Out', NULL, 'Olivia Brown', 'Active',NULL, 12.75, 'employee_lisa'),
+    (1, 'Take-Out', NULL, 'Sarah Smith', 'Active','Light Cheese', 32.47, 'employee_david'),
+    (1, 'Take-Out', NULL, 'James Anderson', 'Completed','Extra Ketchup', 18.48, 'manager_susan'),
+    (1, 'Take-Out', NULL, 'Olivia Brown', 'Active',NULL, 24.98, 'employee_lisa'),
 
-    (1, 'Dine-In', 1, NULL, 'Active','No Cheese in Vegan Bowl', 29.97, 'employee_emma'),
-    (1, 'Dine-In', 2, NULL, 'Completed',NULL, 45.50, 'manager_bob'),
-    (1, 'Dine-In', 5, NULL, 'Active',NULL, 37.80, 'manager_susan'),
-    (1, 'Dine-In', 7, NULL, 'Completed',NULL, 22.25, 'employee_lisa');
+    (1, 'Dine-In', 1, NULL, 'Active','No Cheese in Vegan Bowl', 18.48, 'employee_emma'),
+    (1, 'Dine-In', 2, NULL, 'Completed',NULL, 19.48, 'manager_bob'),
+    (1, 'Dine-In', 5, NULL, 'Active',NULL, 36.97, 'manager_susan'),
+    (1, 'Dine-In', 7, NULL, 'Completed',NULL, 19.48, 'employee_lisa');
 
 
 
@@ -302,26 +302,26 @@ INSERT INTO order_items
     (order_id, menu_item_id, quantity, item_price, created_by)
 VALUES
     (1, 1, 2, 12.99, 'employee_emma'),
-    (1, 3, 1, 3.99, 'employee_emma'),
+    (1, 3, 1, 6.49, 'employee_emma'),
 
-    (2, 2, 1, 10.99, 'manager_bob'),
-    (2, 3, 1, 6.50, 'manager_bob'),
+    (2, 2, 1, 11.99, 'manager_bob'),
+    (2, 3, 1, 6.49, 'manager_bob'),
 
     (3, 1, 1, 12.99, 'employee_david'),
-    (3, 2, 1, 2.99, 'employee_david'),
+    (3, 2, 1, 11.99, 'employee_david'),
 
-    (4, 2, 1, 10.99, 'manager_susan'),
-    (4, 3, 1, 3.99, 'manager_susan'),
+    (4, 2, 1, 11.99, 'manager_susan'),
+    (4, 3, 1, 6.49, 'manager_susan'),
 
-    (5, 3, 1, 6.50, 'employee_lisa'),
-    (5, 1, 1, 6.25, 'employee_lisa'),
+    (5, 3, 1, 6.49, 'employee_lisa'),
+    (5, 1, 1, 12.99, 'employee_lisa'),
 
     
     (6, 1, 1, 12.99, 'manager_susan'),
-    (6, 2, 2, 4.99, 'manager_susan'),
+    (6, 2, 2, 11.99, 'manager_susan'),
 
-    (7, 3, 1, 3.99, 'employee_lisa'),
-    (7, 1, 1, 6.25, 'employee_lisa');
+    (7, 3, 1, 6.49, 'employee_lisa'),
+    (7, 1, 1, 12.99, 'employee_lisa');
 
 
 COMMIT;
