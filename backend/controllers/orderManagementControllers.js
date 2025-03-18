@@ -106,11 +106,9 @@ async function handleGetOrderByNumber(req, res) {
   try {
     const orderNumber = req.params.orderNumber;
     const regex = /^(TAKE|DINE)-\d+$/;
-    if (!orderNumber) {
-      return res.status(400).json({ error: "Order Number is required" });
-    }
 
     if (!regex.test(orderNumber)) {
+      console.log("Invalid Order Number");
       return res.status(400).json({ error: "Invalid Order Number" });
     }
 
@@ -130,9 +128,7 @@ async function handleUpdateOrder(req, res) {
     const orderNumber = req.params.orderNumber;
     const { table_num, customer_name, specialInstructions } = req.body;
     const regex = /^(TAKE|DINE)-\d+$/;
-    if (!orderNumber) {
-      return res.status(400).json({ error: "Order Number is required" });
-    }
+
 
     if (!regex.test(orderNumber)) {
       return res.status(400).json({ error: "Invalid Order Number" });
@@ -146,7 +142,7 @@ async function handleUpdateOrder(req, res) {
 
     const result = await updateOrder(orderNumber, updatedDetails);
     res
-      .status(200)
+      .status(200) 
       .json({ message: "Order updated successfully", order: result });
   } catch (error) {
     console.log(error.message);
@@ -163,9 +159,7 @@ async function handleUpdateOrderStatus(req, res) {
     const { updatedStatus, changedBy } = req.body;
     const validStatus = ["Active", "Completed", "Cancelled"];
     const regex = /^(TAKE|DINE)-\d+$/;
-    if (!orderNumber) {
-      return res.status(400).json({ error: "Order Number is required" });
-    }
+
 
     if (!regex.test(orderNumber)) {
       return res.status(400).json({ error: "Invalid order number format" });
@@ -208,9 +202,6 @@ async function handleAddItemToOrder(req, res) {
     const orderNumber = req.params.orderNumber;
     const { menuItemId, quantity, createdBy } = req.body;
     const regex = /^(TAKE|DINE)-\d+$/;
-    if (!orderNumber) {
-      return res.status(400).json({ error: "Order Number is required" });
-    }
 
     if (!regex.test(orderNumber)) {
       return res.status(400).json({ error: "Invalid order number format" });

@@ -140,6 +140,7 @@ async function updateOrder(orderNumber, orderDetailsUpdated) {
       orderDetailsUpdated.table_num !== undefined &&
       order.order_type === "Dine-In"
     ) {
+      console.log("push table number");
       updatedDetails.push(`table_num=$${i}`);
       updatedValues.push(orderDetailsUpdated.table_num);
       i++;
@@ -149,14 +150,17 @@ async function updateOrder(orderNumber, orderDetailsUpdated) {
       orderDetailsUpdated.customer_name !== undefined &&
       order.order_type === "Take-Out"
     ) {
+      console.log("push customer name");
       updatedDetails.push(`customer_name=$${i}`);
       updatedValues.push(orderDetailsUpdated.customer_name);
       i++;
     }
 
-    if (orderDetailsUpdated.special_instructions !== undefined) {
+    if (orderDetailsUpdated.specialInstructions !== undefined) {
+
+      console.log("push special instructions");
       updatedDetails.push(`special_instructions=$${i}`);
-      updatedValues.push(orderDetailsUpdated.special_instructions);
+      updatedValues.push(orderDetailsUpdated.specialInstructions);
       i++;
     }
 

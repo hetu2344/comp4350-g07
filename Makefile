@@ -74,6 +74,7 @@ run-all-tests:
 test-file:
 	$(DOCKER_COMPOSE) run --rm test npm test -- $(FILE) --coverage --detectOpenHandles
 
+
 # Help command to show available commands
 help:
 	@echo "Available commands:"
