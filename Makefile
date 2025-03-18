@@ -72,7 +72,7 @@ run-all-tests:
 	$(DOCKER_COMPOSE) down
 
 test-file:
-	$(DOCKER_COMPOSE) run --rm test npm test -- backend/tests/unit/$(FILE) --coverage --detectOpenHandles
+	$(DOCKER_COMPOSE) run --rm test npm test -- $(FILE) --coverage --detectOpenHandles
 
 # Help command to show available commands
 help:
