@@ -1,3 +1,5 @@
+-- \connect restro_sync;
+
 CREATE TABLE menu_categories
 (
     id SERIAL PRIMARY KEY,

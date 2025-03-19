@@ -307,6 +307,7 @@ async function updateAnItemInOrder(orderNumber, itemId, quantity, newPrice) {
   const client = await pool.connect();
   try {
     await client.query("BEGIN");
+    console.log(itemId);
     const orderResult = await client.query(
       `SELECT order_id,total_price FROM orders WHERE order_number=$1`,
       [orderNumber]
@@ -344,7 +345,7 @@ async function updateAnItemInOrder(orderNumber, itemId, quantity, newPrice) {
 
     await client.query("COMMIT");
 
-    return { orderNumber, itemId, quantity, newPrice, totalprice: newTotal };
+    return { orderNumber, itemId:Number(itemId), quantity, newPrice, totalprice: newTotal };
   } catch (error) {
     client.query("ROLLBACK");
     console.log(error.message);
@@ -392,17 +393,10 @@ async function removeItemFromOrder(orderNumber, itemId, removedBy) {
       [order.order_id]
     );
 
-    if (parseInt(remainingItemsResult.rowCount) === 0) {
       await client.query(
         `UPDATE orders SET total_price = $1 WHERE order_id = $2`,
         [newTotal, order.order_id]
       );
-    } else {
-      await client.query(`UPDATE orders SET total_price=$1 WHERE order_id=$2`, [
-        newTotal,
-        order.order_id,
-      ]);
-    }
 
     await client.query("COMMIT");
     return { orderNumber, itemId, totalprice: newTotal };
@@ -439,6 +433,7 @@ async function deleteOrder(orderNumber) {
     ]);
 
     await client.query("COMMIT");
+    console.log("Almost Done");
     return { message: "Order deleted successfully" };
   } catch (error) {
     client.query("ROLLBACK");

@@ -244,10 +244,9 @@ async function handleUpdateAnItemInOrder(req, res) {
     console.log("orderNumber", orderNumber);
     console.log("itemId", itemId);
     const { quantity, newPrice } = req.body;
+    const intItemId=Number(itemId);
     const regex = /^(TAKE|DINE)-\d+$/;
-    if (!orderNumber) {
-      return res.status(400).json({ error: "Order Number is required" });
-    }
+  
     if (!regex.test(orderNumber)) {
       return res.status(400).json({ error: "Invalid Order Number" });
     }
@@ -258,7 +257,7 @@ async function handleUpdateAnItemInOrder(req, res) {
         .json({ error: "Quantity should be greater than 0" });
     }
 
-    if (!itemId || !quantity || !newPrice) {
+    if (!intItemId || !quantity || !newPrice) {
       return res
         .status(400)
         .json({
@@ -268,7 +267,7 @@ async function handleUpdateAnItemInOrder(req, res) {
 
     const updatedOrder = await updateAnItemInOrder(
       orderNumber,
-      itemId,
+      intItemId,
       quantity,
       newPrice
     );
@@ -280,7 +279,7 @@ async function handleUpdateAnItemInOrder(req, res) {
     if (error.message.toLowerCase().includes("not found")) {
       return res.status(404).json({ error: error.message });
     }
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 }
 
@@ -289,13 +288,11 @@ async function handleRemoveItemFromOrder(req, res) {
     const { orderNumber, itemId } = req.params;
     const { removedBy } = req.body;
     const regex = /^(TAKE|DINE)-\d+$/;
-    if (!orderNumber) {
-      return res.status(400).json({ error: "Order Number is required" });
-    }
+    const intItemId=Number(itemId);
     if (!regex.test(orderNumber)) {
       return res.status(400).json({ error: "Invalid Order Number" });
     }
-    if (!itemId || !removedBy) {
+    if (!intItemId || !removedBy) {
       return res
         .status(400)
         .json({ error: "Missing required details: itemId, removedBy" });
@@ -303,7 +300,7 @@ async function handleRemoveItemFromOrder(req, res) {
 
     const updatedOrder = await removeItemFromOrder(
       orderNumber,
-      itemId,
+      intItemId,
       removedBy
     );
     res
@@ -314,7 +311,7 @@ async function handleRemoveItemFromOrder(req, res) {
     if (error.message.toLowerCase().includes("not found")) {
       return res.status(404).json({ error: error.message });
     }
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 }
 
@@ -322,21 +319,19 @@ async function handleDeleteOrder(req, res) {
   try{
     const { orderNumber } = req.params;
     const regex = /^(TAKE|DINE)-\d+$/;
-    if (!orderNumber) {
-      return res.status(400).json({ error: "Order Number is required" });
-    }
+
     if (!regex.test(orderNumber)) {
       return res.status(400).json({ error: "Invalid Order Number" });
     }
     const result = await deleteOrder(orderNumber);
-    res.status(200).json({ message: "Order deleted successfully" });
+    res.status(200).json(result);
 
   }catch(error){
     console.log(error.message);
     if (error.message.toLowerCase().includes("not found")) {
       return res.status(404).json({ error: error.message });
     }
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 }
 

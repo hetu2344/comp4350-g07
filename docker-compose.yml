@@ -15,7 +15,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
-
+      - ./backend/db/testDB.sql:/docker-entrypoint-initdb.d/testDB.sql
   backend:
     build:
       context: ./backend
@@ -58,7 +58,7 @@ services:
       DB_HOST: db
       DB_USER: restro_usr
       DB_PASSWORD: cs4350
-      DB_NAME: restro_sync
+      DB_NAME: restro_test
       DB_PORT: 5432
       NODE_ENV: test  # Important for testing environment
     depends_on:

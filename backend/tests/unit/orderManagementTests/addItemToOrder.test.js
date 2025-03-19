@@ -266,6 +266,47 @@ describe("Order Management Adding Item to order TESTS", () => {
     });
   });
 
+  // Test that tries to add item to order but fails due to menu item not found
+  test("should try to add item to order but fails due Server Error", async () => {
+    pool.__mockClient.query.mockImplementation((sql, params) => {
+      if (
+        sql.includes(
+          "SELECT order_id, total_price FROM orders WHERE order_number"
+        )
+      ) {
+        return Promise.reject(new Error("Server Error"));
+      }
+
+      
+
+      if (sql.startsWith("BEGIN")) {
+        return Promise.resolve();
+      }
+      if (sql.startsWith("COMMIT")) {
+        return Promise.resolve();
+      }
+
+      if (sql.startsWith("ROLLBACK")) {
+        return Promise.resolve();
+      }
+    });
+
+    const reqBody = {
+      menuItemId: 1,
+      quantity: 5,
+      createdBy: "employee_emma",
+    };
+
+    const response = await request(app)
+      .post("/api/orders/TAKE-100001/items")
+      .send(reqBody);
+    console.log(response);
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toEqual({
+      error: "Server Error",
+    });
+  });
+
   // Test that tries to add item to order but fails due to invalid order number
   test("should try to add item to order but fails due to invalid order number.", async () => {
     const reqBody = {
