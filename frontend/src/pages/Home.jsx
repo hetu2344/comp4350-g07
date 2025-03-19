@@ -10,14 +10,7 @@ function HomePage() {
   return (
     <div>
       <HomePageNavigation />
-      <h2>
-        This will be the homepage when customer/staff first enters the website
-      </h2>
-      <h2>This page will have a menu displayed</h2>
-
-      <Link to="/reservation">
-        <button style={styles.reservationButton}>Make a Reservation</button>
-      </Link>
+     
     </div>
   );
 }
