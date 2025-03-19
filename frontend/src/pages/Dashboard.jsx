@@ -9,7 +9,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import menuImage from "../assets/menu.png";
 import sales from "../assets/growing.png";
-/* This page is the first page the staff sees when they log in *
+/* This page is the first page the staff sees when they log in */
 
 function DashboardPage({ user }) {
   return (

@@ -40,9 +40,6 @@ function HomePage() {
   return (
     <div>
       <HomePageNavigation />
-<<<<<<< HEAD
-     
-=======
       <div className="home-container">
         <h2>Welcome to RestroSync</h2>
         <h3>Our Delicious Menu</h3>
@@ -95,7 +92,6 @@ function HomePage() {
         </div>
       </div>
 
->>>>>>> 734c28428ea5f7ac0dc317f0dcba9e7193b9880a
     </div>
   );
 }
