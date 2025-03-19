@@ -19,3 +19,21 @@ h2 {
   font-size: 1.5rem;
   color: #2c292b;
 }
+
+.dashboard-grid {
+  display: flex;
+  justify-content: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  padding-left: 20px;  /* Add padding to the left */
+}
+
+.card-title {
+  font-size: 1.2rem; /* Larger font size */
+  font-weight: bold; /* Make the title bold */
+  color: #2d3748; /* Dark color for contrast */
+  text-transform: uppercase; /* Make the title uppercase */
+  letter-spacing: 1px; /* Add some letter spacing */
+  margin-top: 20px; /* Space above the title */
+}
