@@ -27,7 +27,7 @@ export const updateTableStatus = async (tableNum, isOpen) => {
     }
 };
 
-// ✅ FIXED: Removed `table_num` from the request
+
 export const addReservation = async (name, partySize, time) => {
     try {
         console.log("Making reservation:", { name, partySize, time });
@@ -58,7 +58,7 @@ export const getReservationsByTable = async (tableNum) => {
     }
 };
 
-// ✅ FIXED: Changed `customer_name` to `customerName`
+
 export const getReservationsByCustomer = async (customerName) => {
     try {
         const response = await axios.get(`${API_BASE_URL}/reservation/customer`, {
@@ -78,7 +78,7 @@ export const deleteReservation = async (reservationID) => {
 
         const response = await axios.delete(`${API_BASE_URL}/reservation/${reservationID}`);
 
-        console.log(`✅ Successfully deleted reservation ID: ${reservationID}`);
+        console.log(`Successfully deleted reservation ID: ${reservationID}`);
         return response.data;
     } catch (error) {
         console.error("❌ Error deleting reservation:", error.response?.data || error.message);
