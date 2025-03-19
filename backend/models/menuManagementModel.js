@@ -298,6 +298,19 @@ async function getAnItemById(id) {
   }
 }
 
+
+async function getAllAllergens() {
+  try {
+    // SELECT Query
+    const result = await pool.query("SELECT * FROM menu_allergens");
+    console.log("Result:",result);
+    return result.rows;
+  } catch (err) {
+    console.error("Error fetching allergens:", err);
+    throw err;
+  }
+}
+
 module.exports = {
   insertAllergens,
   removeAllAllergens,
@@ -307,4 +320,5 @@ module.exports = {
   removeItem,
   getAnItemById,
   checkItemExist,
+  getAllAllergens,
 };

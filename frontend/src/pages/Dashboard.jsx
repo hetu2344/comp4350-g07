@@ -1,5 +1,6 @@
 import DashboardNavigation from "../components/layout/DashboardNavigation";
 import RoleProtection from "../components/security/RoleProtection";
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import Card from "react-bootstrap/Card";
@@ -63,4 +64,16 @@ const NavigationCard = ({ image, title, navigateTo }) => {
   );
 };
 
+const styles = {
+  reservationButton: {
+    padding: "0.5rem 1rem",
+    backgroundColor: "#FF8C42",
+    color: "white",
+    border: "none",
+    borderRadius: "0.25rem",
+    cursor: "pointer",
+    fontSize: "1rem",
+    marginTop: "1rem",
+  },
+};
 export default RoleProtection(DashboardPage, ["S", "M", "E"]);

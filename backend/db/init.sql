@@ -1,3 +1,5 @@
+-- \connect restro_sync;
+
 CREATE TABLE menu_categories
 (
     id SERIAL PRIMARY KEY,
@@ -48,6 +50,86 @@ CREATE TABLE stores (
     name VARCHAR(255) UNIQUE NOT NULL,
     owner_username VARCHAR(50) NOT NULL,
     CONSTRAINT fk_owner FOREIGN KEY (owner_username) REFERENCES users(username) ON DELETE CASCADE
+);
+
+-- Create the Tables Table
+CREATE TABLE tables
+(
+    table_num SERIAL PRIMARY KEY,
+    num_seats INT NOT NULL,
+    table_status BOOLEAN DEFAULT TRUE
+);
+-- Create the Reservations Table
+CREATE TABLE reservations
+(
+    reservation_id SERIAL PRIMARY KEY,
+    table_num INT REFERENCES tables(table_num) ON DELETE CASCADE,
+    customer_name VARCHAR(50) NOT NULL,
+    reservation_time TIMESTAMP NOT NULL,
+    party_size INT NOT NULL
+);
+
+
+CREATE SEQUENCE order_serial_seq START WITH 100001 INCREMENT BY 1;
+
+
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    order_number VARCHAR(15) UNIQUE,
+    store_id INTEGER REFERENCES stores(id) ON DELETE CASCADE,
+    order_type VARCHAR(10) NOT NULL CHECK(order_type IN ('Dine-In', 'Take-Out')),
+    table_num INTEGER REFERENCES tables(table_num) ON DELETE CASCADE,
+    customer_name VARCHAR(255),
+    order_status VARCHAR(50) DEFAULT 'Active' CHECK(order_status IN ('Active', 'Completed', 'Cancelled')),
+    order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    special_instructions TEXT DEFAULT NULL,
+    total_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    created_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL
+);
+
+CREATE FUNCTION generate_order_number()
+RETURNS TRIGGER AS $$
+DECLARE 
+    new_serial INTEGER;
+    new_order_number VARCHAR(15);
+BEGIN
+    SELECT nextval('order_serial_seq') INTO new_serial;
+    IF NEW.order_type = 'Dine-In' THEN
+        new_order_number := 'DINE-' || LPAD(new_serial::TEXT, 6, '0');
+    ELSE
+        new_order_number := 'TAKE-' || LPAD(new_serial::TEXT, 6, '0');
+    END IF;
+
+    NEW.order_number := new_order_number;
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER trigger_generate_order_number
+BEFORE INSERT ON orders 
+FOR EACH ROW
+EXECUTE FUNCTION generate_order_number();
+    
+
+CREATE TABLE order_items (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INTEGER REFERENCES orders(order_id) ON DELETE CASCADE,
+    menu_item_id INTEGER REFERENCES menu_items(item_id) ON DELETE CASCADE,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    item_price DECIMAL(10,2) NOT NULL,
+    created_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+CREATE TABLE order_status_history
+(
+    id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES orders(order_id) ON DELETE CASCADE,
+    status VARCHAR(50) CHECK (status IN ('Active', 'Completed', 'Cancelled')),
+    changed_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL,
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE users 
@@ -159,5 +241,131 @@ VALUES('Cheesecake', 'Rich and creamy cheesecake topped with strawberries.', 6.4
         FROM menu_categories
         WHERE name = 'Dessert'), TRUE, TRUE, FALSE, FALSE);
 
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES
+(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO orders
+    (store_id, order_type, table_num, customer_name, order_status,special_instructions,total_price, created_by)
+VALUES
+    (1, 'Take-Out', NULL, 'Sarah Smith', 'Active','Light Cheese', 32.47, 'employee_david'),
+    (1, 'Take-Out', NULL, 'James Anderson', 'Completed','Extra Ketchup', 18.48, 'manager_susan'),
+    (1, 'Take-Out', NULL, 'Olivia Brown', 'Active',NULL, 24.98, 'employee_lisa'),
+
+    (1, 'Dine-In', 1, NULL, 'Active','No Cheese in Vegan Bowl', 18.48, 'employee_emma'),
+    (1, 'Dine-In', 2, NULL, 'Completed',NULL, 19.48, 'manager_bob'),
+    (1, 'Dine-In', 5, NULL, 'Active',NULL, 36.97, 'manager_susan'),
+    (1, 'Dine-In', 7, NULL, 'Completed',NULL, 19.48, 'employee_lisa');
 
 
+
+INSERT INTO order_items
+    (order_id, menu_item_id, quantity, item_price, created_by)
+VALUES
+    (1, 1, 2, 12.99, 'employee_emma'),
+    (1, 3, 1, 6.49, 'employee_emma'),
+
+    (2, 2, 1, 11.99, 'manager_bob'),
+    (2, 3, 1, 6.49, 'manager_bob'),
+
+    (3, 1, 1, 12.99, 'employee_david'),
+    (3, 2, 1, 11.99, 'employee_david'),
+
+    (4, 2, 1, 11.99, 'manager_susan'),
+    (4, 3, 1, 6.49, 'manager_susan'),
+
+    (5, 3, 1, 6.49, 'employee_lisa'),
+    (5, 1, 1, 12.99, 'employee_lisa'),
+
+    
+    (6, 1, 1, 12.99, 'manager_susan'),
+    (6, 2, 2, 11.99, 'manager_susan'),
+
+    (7, 3, 1, 6.49, 'employee_lisa'),
+    (7, 1, 1, 12.99, 'employee_lisa');
+
+
+COMMIT;
+
+CREATE VIEW order_summary_view AS
+SELECT
+    o.order_id,
+    o.order_number,
+    o.order_type,
+    COALESCE(t.table_num::TEXT, 'N/A') AS table_number,
+    o.customer_name,
+    o.order_status,
+    o.order_time,
+    o.special_instructions,
+
+    SUM(oi.quantity * oi.item_price) AS item_total,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 0.05, 2) AS service_charge,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 0.05, 2) AS gst,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 0.07, 2) AS pst,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 1.17, 2) AS total_price,
+
+    o.created_by
+FROM orders o
+    LEFT JOIN tables t ON o.table_num = t.table_num 
+    JOIN order_items oi ON o.order_id = oi.order_id
+GROUP BY o.order_id, o.order_number, o.order_type, t.table_num, 
+         o.customer_name, o.order_status, o.order_time, o.created_by;
+
+
+CREATE VIEW order_details_view AS
+SELECT
+    o.order_id,
+    o.order_number,
+    m.item_name,
+    oi.quantity,
+    oi.item_price,
+    (oi.quantity * oi.item_price) AS total_item_price
+FROM orders o
+    JOIN order_items oi ON o.order_id = oi.order_id 
+    JOIN menu_items m ON oi.menu_item_id = m.item_id
+ORDER BY o.order_id, m.item_name;
