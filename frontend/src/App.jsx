@@ -5,7 +5,9 @@ import SignUpPage from "./pages/Signup";
 import DashboardPage from "./pages/Dashboard";
 import TableManagement from "./pages/TableManagement";
 import Reservation from "./pages/Reservation";
-
+import MenuManagement from "./pages/MenuManagement";
+import EditMenuItem from "./pages/edit-menu-item";
+import AddMenuItem from "./pages/add-menu-item";
 /*
 This function is used for adding routes to the website. Whenever you add a new page
 just add the path here along with the page component that will be renedered 
@@ -28,6 +30,11 @@ function App() {
         <Route path="/TableManagement" element={<TableManagement />} /> 
         <Route path="/reservation" element={<Reservation />} /> 
             
+
+        <Route path="/menu-management" element={<MenuManagement />} />
+        <Route path="/edit-menu-item/:id" element={<EditMenuItem />} />
+        <Route path="/add-menu-item" element={<AddMenuItem />} />
+
       </Routes>
     </div>
   );
