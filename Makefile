@@ -82,6 +82,8 @@ ifndef DIR
 endif
 	$(DOCKER_COMPOSE) run --rm test npm test --tests/unit/$(DIR) --coverage --detectOpenHandles
 
+regression-test:
+	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
 # Help command to show available commands
 help:
 	@echo "Available commands:"
