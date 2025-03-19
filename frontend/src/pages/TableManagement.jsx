@@ -184,12 +184,12 @@ const TableManagement = () => {
   type="number"
   placeholder="Party Size"
   value={formData.partySize}
-  onChange={(e) => setFormData({ ...formData, partySize: Number(e.target.value) })} // ✅ Ensure numeric value
+  onChange={(e) => setFormData({ ...formData, partySize: Number(e.target.value) })} // Ensure numeric value
 />
 <input
   type="datetime-local"
   value={formData.time}
-  onChange={(e) => setFormData({ ...formData, time: e.target.value })} // ✅ Ensure proper date format
+  onChange={(e) => setFormData({ ...formData, time: e.target.value })} //  Ensure proper date format
 />
 <button onClick={handleReserve} className="action-button">Reserve</button>
         </>

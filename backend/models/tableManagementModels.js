@@ -83,7 +83,7 @@ async function getAllTablesInfo() {
         `);
         
         await client.query("COMMIT");
-        return result.rows; // ✅ Updated data
+        return result.rows; //  Updated data
 
     } catch (error) {
         if (client) {

@@ -79,7 +79,7 @@ async function addReservation(req, res) {
         });
 
     } catch (err) {
-        console.error("❌ Error while adding reservation:", err.message);
+        console.error(" Error while adding reservation:", err.message);
         res.status(500).json({ error: "Server Error: Unable to add reservation." });
     }
 }
@@ -88,11 +88,11 @@ async function addReservation(req, res) {
 
 async function deleteReservation(req, res) {
     try {
-        const { reservationId } = req.params; // ✅ Get ID from URL
+        const { reservationId } = req.params; // Get ID from URL
         console.log("🛠 Received DELETE request for reservation ID:", reservationId);
 
         if (!reservationId || isNaN(reservationId)) {
-            console.error("⚠️ Invalid reservation ID received:", reservationId);
+            console.error(" Invalid reservation ID received:", reservationId);
             return res.status(400).json({ error: "Invalid input provided." });
         }
 
@@ -122,11 +122,11 @@ async function deleteReservation(req, res) {
         await client.query("COMMIT");
         client.release();
 
-        console.log(`✅ Reservation ${reservationId} deleted. Table ${tableNum} is now available.`);
+        console.log(` Reservation ${reservationId} deleted. Table ${tableNum} is now available.`);
         res.json({ success: true, message: "Reservation deleted. Table is now available." });
 
     } catch (err) {
-        console.error("❌ Error deleting reservation:", err.message);
+        console.error("Error deleting reservation:", err.message);
         res.status(500).json({ error: "Server Error: Unable to delete reservation." });
     }
 }
