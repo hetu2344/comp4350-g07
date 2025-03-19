@@ -57,7 +57,7 @@ Handles Sign up input
         </div>
         <div className={classes.control}>
           <label htmlFor="password">Password</label>
-          <input type="text" required id="password" ref={passwordInputRef} />
+          <input type="password" required id="password" ref={passwordInputRef} autocomplete="off"/>
         </div>
         <div className={classes.control}>
           <label htmlFor="role">Select Role</label>

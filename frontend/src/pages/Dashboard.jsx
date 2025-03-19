@@ -4,27 +4,44 @@ import { Link } from "react-router-dom";
 
 /*This page is the first page the staff is going to see when they log in
  */
+import { useNavigate } from "react-router-dom";
+import React from "react";
+import Card from "react-bootstrap/Card";
+import menuImage from "../assets/menu.png";
+import sales from "../assets/growing.png";
+/* This page is the first page the staff sees when they log in *
 
 function DashboardPage({ user }) {
-  //The way this page is renedered is by first placing the Navigation header on top and then
-  //rendering the rest of the page below
-
   return (
-    <div>
+    <div className="p-6 min-h-screen bg-gray-100 flex flex-col items-center">
       <DashboardNavigation />
+
       <h1>Welcome {user.username}</h1>
-      <h2>
-        This is where the rest of the features of the website will be at or
-        start at, please modify the layout according to your implementation wish
-        -- maybe buttons to your features, etc
-        
-      </h2>
+      
       <Link to="/TableManagement">
                 <button style={styles.reservationButton}>Manage tables</button>
               </Link>
+      <h1 className="text-3xl font-semibold text-gray-800 text-center mt-6">
+        {user?.username || "Staff"}'s Dashboard
+      </h1>
+      {/* Add appropriate cards below */}
+      <div className="dashboard-grid">
+        <NavigationCard
+          image={menuImage}
+          title="Menu Management"
+          navigateTo="/menu-management"
+        />
+        <NavigationCard
+          image={sales}
+          title="Sales Analysis"
+          navigateTo="/dashboard"
+        />
+      </div>
+
     </div>
   );
 }
+
 
 const styles = {
   reservationButton: {
@@ -38,4 +55,37 @@ const styles = {
     marginTop: "1rem",
   },
 };
+
+/* Reusable Navigation Card Component */
+const NavigationCard = ({ image, title, navigateTo }) => {
+  const navigate = useNavigate();
+
+  return (
+    <Card
+      style={{
+        width: "18rem",
+        cursor: "pointer",
+        textAlign: "center",
+        marginBottom: "20px",
+        padding: "10px" /* Add some padding inside the card */,
+        border: "1px solid #e2e8f0" /* Subtle border */,
+        borderRadius: "8px" /* Rounded corners */,
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)" /* Soft shadow */,
+        backgroundColor: "#fff" /* Add this line to set a white background */,
+      }}
+      className="mt-5 shadow-lg"
+      onClick={() => navigate(navigateTo)}
+    >
+      <Card.Img
+        variant="top"
+        src={image}
+        style={{ width: "250px", height: "250px", objectFit: "contain" }}
+      />
+      <Card.Body>
+        <Card.Text className="card-title">{title}</Card.Text>
+      </Card.Body>
+    </Card>
+  );
+};
+
 export default RoleProtection(DashboardPage, ["S", "M", "E"]);
