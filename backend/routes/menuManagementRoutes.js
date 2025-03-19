@@ -16,7 +16,6 @@ router.get("/", getAllMenuItems);
 // Create a Menu Item
 router.post("/", createMenuItem);
 
-console.log("Getting allergens 0");
 // Get all allergens
 router.get("/allergens", getAllAllergen);
 

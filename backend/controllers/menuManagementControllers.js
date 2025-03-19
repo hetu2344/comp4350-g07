@@ -121,9 +121,9 @@ async function updateMenuItem(req, res) {
     );
 
     console.log("UPDATE ITEM", updatedItem);
-    if (updatedItem.rowCount === 0) {
-      return res.status(404).json({ error: "Menu item not found." });
-    }
+    // if (updatedItem.rowCount === 0) {
+    //   return res.status(404).json({ error: "Menu item not found." });
+    // }
 
     console.log("ALLERGENS", allergens);
 
