@@ -72,4 +72,21 @@ describe("Menu Management DELETE API", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body).toEqual(errorMsg);
   });
+
+
+    // Test that fails to get any one specified menu item and retun 400
+  test("should fail to remove a menu item with a specific id and return 500", async () => {
+
+    pool.query.mockRejectedValue(new Error("Server Error"));
+
+    const res = await request(app).delete("/api/menu/1");
+
+    const errorMsg = {
+      error: "Server Error: Unable to remove menu item.",
+    };
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toEqual(errorMsg);
+  });
+
 });
