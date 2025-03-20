@@ -1,9 +1,18 @@
 # Sales Analysis API Endpoints
 
 ### 1. `/api/sales/totalRevenue`
-Returns total revenue from completed orders within a specified date range. If date range is not provided then provide the analysis for today.
 
-```
+**Description:** Retrieves the total revenue and order details for a specified date range. If no date range is provided, it defaults to today's data.
+
+**Response:**
+
+* Provides a breakdown of revenue and order counts categorized by `order_status` (e.g., "Active", "Completed").
+* Includes overall totals for orders and revenue within the specified date range.
+* Returns the `startDate` and `endDate` used for the query.
+
+**Example Response:**
+
+```json
 {
     "startDate": "2025-03-20",
     "endDate": "2025-03-20",
@@ -28,9 +37,16 @@ Returns total revenue from completed orders within a specified date range. If da
 }
 ```
 
-### 2. `/api/sales/topMenuItems`
-Returns the top-selling menu items ordered by quantity within a specified date range. If date range is not provided then provide the analysis for today.
-```
+### 2. /api/sales/topMenuItems
+Description: Returns a list of the top-selling menu items, ranked by the quantity sold, within a specified date range. If no date range is provided, it defaults to today's data.
+
+Response:
+
+Lists item_id, item_name, and quantity_sold for each top-selling item.
+Items are ordered by quantity_sold in descending order.
+Returns the startDate and endDate used for the query.
+Example Response:
+```json
 {
     "startDate": "2025-03-20",
     "endDate": "2025-03-20",
@@ -54,9 +70,17 @@ Returns the top-selling menu items ordered by quantity within a specified date r
 }
 ```
 
-### 3. `/api/sales/revenueByCategory`
-Provides revenue generated per category within a specified date range. If data range is not provided then provide the analysis for today.
-```
+### 3. /api/sales/revenueByCategory
+Description: Provides a breakdown of revenue generated for each menu item category within a specified date range. If no date range is provided, it defaults to today's data.
+
+Response:
+
+Lists each category and its total revenue.
+Includes a detailed itemssold array for each category, showing the itemName, itemPrice, and quantitySold for each item contributing to the category's revenue.
+Returns the startDate and endDate used for the query.
+Example Response:
+
+```json
 {
     "startDate": "2025-03-20",
     "endDate": "2025-03-20",
@@ -107,49 +131,17 @@ Provides revenue generated per category within a specified date range. If data r
 }
 ```
 
-### 4. `/api/sales/averageOrderValue`
-Calculates average value per completed order within a specified date range. If data range is not provided then provide the analysis for today.
-```
-{
-    "startDate": "2025-03-20",
-    "endDate": "2025-03-20",
-    "averageOrderValue": 19.14666666666667
-}
-```
+### 4. /api/sales/weeklySales
+Description: Returns the daily revenue for the current week, along with the total revenue for the week.
 
-### 5. `/api/sales/dailyTrend`
-Provides daily revenue totals within a specified date range. If data range is not provided then provide the analysis for today.
+Response:
 
-### 6. `/api/sales/dinevstake`
-Provides daily revenue of dine and take out orders within a specified date range. If the data range is not provided then provide the analysis for today
-```
-{
-    "startDate": "2025-03-20",
-    "endDate": "2025-03-20",
-    "dineVsTakeDetails": {
-        "byOrderType": [
-            {
-                "order_type": "Dine-In",
-                "total_orders": "2",
-                "total_revenue": 38.96
-            },
-            {
-                "order_type": "Take-Out",
-                "total_orders": "1",
-                "total_revenue": 18.48
-            }
-        ],
-        "overallTotal": {
-            "total_orders": "3",
-            "total_revenue": 57.44
-        }
-    }
-}
-```
+Provides an array of dailySales, each containing the day_name, date, and daily_revenue.
+Includes weeklyTotal representing the sum of daily_revenue for the week.
+The date range is automatically the current week.
+Example Response:
 
-### 7 `/api/sales/weeklySales`
-Provides daily revenue for the sales of current week.
-```
+```json
 {
     "weeklySalesData": {
         "dailySales": [
@@ -175,6 +167,42 @@ Provides daily revenue for the sales of current week.
             }
         ],
         "weeklyTotal": 517.44
+    }
+}
+```
+
+
+### 5. /api/sales/dinevstake
+Description: Provides a breakdown of revenue and order counts for "Dine-In" and "Take-Out" order types within a specified date range. If no date range is provided, it defaults to today's data.
+
+Response:
+
+Provides a breakdown of revenue and order counts categorized by order_type ("Dine-In", "Take-Out").
+Includes overall totals for orders and revenue within the specified date range.
+Returns the startDate and endDate used for the query.
+Example Response:
+
+```json
+{
+    "startDate": "2025-03-20",
+    "endDate": "2025-03-20",
+    "dineVsTakeDetails": {
+        "byOrderType": [
+            {
+                "order_type": "Dine-In",
+                "total_orders": "2",
+                "total_revenue": 38.96
+            },
+            {
+                "order_type": "Take-Out",
+                "total_orders": "1",
+                "total_revenue": 18.48
+            }
+        ],
+        "overallTotal": {
+            "total_orders": "3",
+            "total_revenue": 57.44
+        }
     }
 }
 ```
