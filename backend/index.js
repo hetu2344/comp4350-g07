@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require("express");
 const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
+const tableManagementRoutes = require("./routes/tableManagementRoutes");
 const cookieParser = require('cookie-parser');
 
 const cors = require("cors");
@@ -22,6 +23,8 @@ app.use(cors({
 // Routes
 app.use("/api/user", userManagementRoutes);
 app.use("/api/menu", menuManagementRoutes);
+app.use("/api/tables", tableManagementRoutes);
+
 
 if(require.main===module){
 // get all menu items

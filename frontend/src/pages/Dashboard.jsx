@@ -5,6 +5,7 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import menuImage from "../assets/menu.png";
 import sales from "../assets/growing.png";
+import tableImage from "../../public/table.png";
 /* This page is the first page the staff sees when they log in */
 
 function DashboardPage({ user }) {
@@ -25,6 +26,11 @@ function DashboardPage({ user }) {
           image={sales}
           title="Sales Analysis"
           navigateTo="/dashboard"
+        />
+        <NavigationCard
+          image={tableImage}
+          title="Table Management"
+          navigateTo="/TableManagement"
         />
       </div>
     </div>

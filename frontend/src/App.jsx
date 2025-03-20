@@ -3,6 +3,7 @@ import HomePage from "./pages/Home";
 import LogInPage from "./pages/Login";
 import SignUpPage from "./pages/Signup";
 import DashboardPage from "./pages/Dashboard";
+import TableManagement from "./pages/TableManagement";
 import MenuManagement from "./pages/MenuManagement";
 import EditMenuItem from "./pages/edit-menu-item";
 import AddMenuItem from "./pages/add-menu-item";
@@ -25,9 +26,13 @@ function App() {
         <Route path="/log-in" element={<LogInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/TableManagement" element={<TableManagement />} /> 
+            
+
         <Route path="/menu-management" element={<MenuManagement />} />
         <Route path="/edit-menu-item/:id" element={<EditMenuItem />} />
         <Route path="/add-menu-item" element={<AddMenuItem />} />
+
       </Routes>
     </div>
   );
