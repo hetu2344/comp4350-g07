@@ -37,9 +37,7 @@ async function createMenuItem(req, res) {
       isGlutenFree
     );
 
-    if (allergens && allergens.length > 0) {
       await insertAllergens(menuItemId, allergens);
-    }
     res.status(201);
     res.json({
       message: `${menuItemName} added successfully.`,
@@ -104,10 +102,6 @@ async function updateMenuItem(req, res) {
 
     console.log(itemExist);
 
-    // if(!itemExist || itemExist.length === 0 ){
-    //   return res.status(404).json({error:`Menu item with ID ${id} not found.`});
-    // }
-
     const updatedItem = await updateItem(
       id,
       itemName,
@@ -126,9 +120,7 @@ async function updateMenuItem(req, res) {
     console.log("ALLERGENS", allergens);
 
     await removeAllAllergens(id);
-    if (allergens && allergens.length > 0) {
       await insertAllergens(id, allergens);
-    }
 
     res.json({ message: `${itemName} updated successfully`, item_id: id });
   } catch (err) {
