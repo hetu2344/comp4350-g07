@@ -1,6 +1,6 @@
-import Card from "react-bootstrap/Card";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Card from "react-bootstrap/Card";
 import classes from "./edit-menu-item.module.css";
 
 // Categories available for selection
@@ -8,7 +8,7 @@ const categories = ["Appetizer", "Main Course", "Dessert", "Beverage"];
 
 function AddMenuItem() {
   const navigate = useNavigate();
-
+  const [allergens, setAllergens] = useState([]); // Store fetched allergens
   const [itemData, setItemData] = useState({
     itemName: "",
     itemDescription: "",
@@ -18,20 +18,31 @@ function AddMenuItem() {
     isVegetarian: false,
     isVegan: false,
     isGlutenFree: false,
-    allergens: "",
+    allergens: [], // Now an array for checkboxes
     createdAt: new Date().toISOString(), // Ensure createdAt is always present
   });
-
   const [error, setError] = useState(null);
+
+  // Fetch allergens from API
+  useEffect(() => {
+    async function fetchAllergens() {
+      try {
+        const response = await fetch("http://localhost:8018/api/menu/allergens");
+        if (!response.ok) throw new Error("Failed to fetch allergens.");
+        const data = await response.json();
+        setAllergens(data); // Set allergens from API
+      } catch (err) {
+        console.error("Error fetching allergens:", err.message);
+      }
+    }
+    fetchAllergens();
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Convert allergens string to an array
     const newItem = {
       ...itemData,
-      allergens: itemData.allergens ? itemData.allergens.split(",").map((a) => a.trim()) : [],
       price: parseFloat(itemData.price), // Ensure price is stored as a number
     };
 
@@ -41,8 +52,6 @@ function AddMenuItem() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newItem),
       });
-
-      console.log("Sent Payload:", response.body);
 
       if (!response.ok) throw new Error("Failed to add menu item.");
 
@@ -60,6 +69,17 @@ function AddMenuItem() {
     setItemData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  // Handle allergen checkbox change
+  const handleAllergenChange = (event) => {
+    const { value, checked } = event.target;
+    setItemData((prevData) => ({
+      ...prevData,
+      allergens: checked
+        ? [...prevData.allergens, value] // Add allergen if checked
+        : prevData.allergens.filter((allergen) => allergen !== value), // Remove if unchecked
     }));
   };
 
@@ -89,10 +109,24 @@ function AddMenuItem() {
               ))}
             </select>
           </div>
+
+          {/* Allergen checkboxes */}
           <div className={classes.control}>
-            <label>Allergens (comma-separated):</label>
-            <input type="text" name="allergens" value={itemData.allergens} onChange={handleChange} />
+            <label>Allergens:</label>
+            <div className={classes.checkboxGroup}>
+              {allergens.map((allergen) => (
+                <label key={allergen}>
+                  <input
+                    type="checkbox"
+                    value={allergen}
+                    checked={itemData.allergens.includes(allergen)}
+                    onChange={handleAllergenChange}
+                  /> {allergen}
+                </label>
+              ))}
+            </div>
           </div>
+
           <div className={classes.checkboxGroup}>
             <label><input type="checkbox" name="isAvailable" checked={itemData.isAvailable} onChange={handleChange} /> Available</label>
             <label><input type="checkbox" name="isVegetarian" checked={itemData.isVegetarian} onChange={handleChange} /> Vegetarian</label>
