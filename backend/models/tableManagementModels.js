@@ -269,6 +269,7 @@ async function createReservation(customerName, tableNum, partySize, time) {
         );
         
         const reservationID = result.rows[0].reservation_id;
+        console.log("Booking table:", tableNum);
         
         await client.query(
             'UPDATE tables SET reservation_id = $1, table_status = FALSE WHERE table_num = $2',
