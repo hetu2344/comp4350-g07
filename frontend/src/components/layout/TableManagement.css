@@ -1,0 +1,62 @@
+/* src/components/layout/TableManagement.css */
+.table-management {
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .table-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .table-card {
+    background: #f0f0f0;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-align: center;
+  }
+  
+  .table-card.reserved {
+    background: #4caf50; /* Green for reserved tables */
+    color: white;
+  }
+  
+  .table-card.available {
+    background: #f0f0f0;
+    color: black;
+  }
+  
+  .table-image {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .reservation-form {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 8px;
+  }
+  
+  .action-button {
+    background: #007bff;
+    color: white;
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+  
+  .cancel-button {
+    background: #dc3545;
+    color: white;
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
