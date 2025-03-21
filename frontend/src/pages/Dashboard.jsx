@@ -5,7 +5,8 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import menuImage from "../assets/menu.png";
 import orderImage from "../assets/order.png";
-
+import ticket from "../assets/ticket.png";
+import orderHistory from"../assets/orderhistory.png";
 function DashboardPage({ user }) {
   return (
     <div className="p-6 min-h-screen bg-gray-100 flex flex-col items-center">
@@ -25,6 +26,16 @@ function DashboardPage({ user }) {
           image={orderImage}
           title="Order Management"
           navigateTo="/add-order"
+        />
+        <NavigationCard
+          image={ticket}
+          title="Active Orders"
+          navigateTo="/active-orders"
+        />
+        <NavigationCard
+          image={orderHistory}
+          title="Order History"
+          navigateTo="/order-history"
         />
       </div>
     </div>

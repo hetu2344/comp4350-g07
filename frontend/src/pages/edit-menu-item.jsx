@@ -2,6 +2,8 @@ import Card from "react-bootstrap/Card";
 import classes from "./edit-menu-item.module.css";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const categories = ["Appetizer", "Main Course", "Dessert", "Beverage"];
 
@@ -23,7 +25,7 @@ function EditMenuItem() {
     createdAt: "",
   });
 
-  const [allergensList, setAllergensList] = useState([]); // List of available allergens from API
+  const [allergensList, setAllergensList] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -64,6 +66,7 @@ function EditMenuItem() {
       } catch (err) {
         console.error("Error fetching menu item:", err.message);
         setError("Failed to load menu item.");
+        toast.error("Failed to load menu item.");
       }
     }
 
@@ -88,11 +91,14 @@ function EditMenuItem() {
 
       if (!response.ok) throw new Error("Failed to update menu item.");
 
-      alert("Menu item updated successfully!");
-      navigate("/menu-management");
+      toast.success("Menu item updated successfully!");
+      setTimeout(() => {
+        navigate("/menu-management");
+      }, 3000);
     } catch (err) {
       console.error("Error updating menu item:", err.message);
       setError("Failed to update item. Try again.");
+      toast.error("Failed to update item. Try again.");
     }
   };
 
@@ -119,7 +125,6 @@ function EditMenuItem() {
 
   return (
     <>
-      {/* Dashboard Button */}
       <div style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }}>
         <button onClick={() => navigate("/dashboard")} style={{
           backgroundColor: "#007bff",
@@ -158,7 +163,6 @@ function EditMenuItem() {
               </select>
             </div>
 
-            {/* Allergens Checkboxes */}
             <div className={classes.control}>
               <label>Allergens:</label>
               <div className={classes.checkboxGroup}>
@@ -189,6 +193,8 @@ function EditMenuItem() {
           </form>
         </div>
       </Card>
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </>
   );
 }

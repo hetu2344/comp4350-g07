@@ -9,7 +9,10 @@ import AddMenuItem from "./pages/add-menu-item";
 import TableManagement from "./pages/TableManagement";
 import Reservation from "./pages/Reservation";
 import AddOrder from "./pages/add-order";
-
+import ActiveOrders from "./pages/active-orders";
+import EditOrder from "./pages/edit-order";
+import orderHistory from "./pages/order-history";
+import OrderHistory from "./pages/order-history";
 /*
 This function is used for adding routes to the website. Whenever you add a new page
 just add the path here along with the page component that will be renedered 
@@ -34,7 +37,10 @@ function App() {
         <Route path="/add-menu-item" element={<AddMenuItem />} />
         <Route path="/TableManagement" element={<TableManagement />} /> 
         <Route path="/reservation" element={<Reservation />} /> 
-        <Route path="/add-order" element={<AddOrder  />} />     
+        <Route path="/add-order" element={<AddOrder  />} />
+        <Route path="/active-orders" element={<ActiveOrders  />} />
+        <Route path="/order-history" element={<OrderHistory  />} />
+        <Route path="/edit-order/:order_number" element={<EditOrder  />} />     
       </Routes>
     </div>
   );

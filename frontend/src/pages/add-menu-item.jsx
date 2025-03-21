@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import classes from "./edit-menu-item.module.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const categories = ["Appetizer", "Main Course", "Dessert", "Beverage"];
 
@@ -51,9 +53,10 @@ function AddMenuItem() {
       });
 
       if (!response.ok) throw new Error("Failed to add menu item.");
-
-      alert("Menu item added successfully!");
-      navigate("/menu-management");
+      toast.success("Menu item added successfully!");
+      setTimeout(() => {
+        navigate("/menu-management", { replace: true });
+      }, 3000);
     } catch (err) {
       console.error("Error adding menu item:", err.message);
       setError("Failed to add item. Try again.");
@@ -148,6 +151,8 @@ function AddMenuItem() {
           </form>
         </div>
       </Card>
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </>
   );
 }
