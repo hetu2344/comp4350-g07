@@ -43,10 +43,10 @@ const TableManagement = () => {
 
   // Handle reservation creation
   const handleReserve = async () => {
-    console.log("Current formData before sending:", formData); //  Debugging Output
+    console.log("Current formData before sending:", formData);
 
-    if (!formData.name || !formData.partySize || !formData.time) {
-        setError("Please fill out all fields.");
+    if (!formData.name || !formData.partySize || !formData.time || !selectedTable) {
+        setError("Please fill out all fields and select a table.");
         return;
     }
 
@@ -57,25 +57,26 @@ const TableManagement = () => {
     }
 
     const formattedTime = selectedTime.toISOString();
-    
-    console.log("Formatted Reservation Time:", formattedTime); //  Debugging output
 
-    // Log parameters just before calling addReservation
     console.log("Calling addReservation with:", {
         name: formData.name,
-        tableNum: selectedTable.table_num,
+        tableNum: selectedTable.table_num, // Ensure the selected table number is sent
         partySize: formData.partySize,
         time: formattedTime
     });
 
     try {
-        await addReservation(formData.name, formData.partySize, formattedTime);
+        await addReservation(
+            formData.name,
+            selectedTable.table_num, // Ensure tableNum is included
+            formData.partySize,
+            formattedTime
+        );
         console.log("Reservation request sent!");
 
         // Refresh tables
         const updatedTables = await getAllTables();
         setTables(updatedTables);
-        console.log("Updated Tables after Reservation:", updatedTables);
 
         setSelectedTable(null);
         setFormData({ name: "", partySize: "", time: "" });
@@ -84,6 +85,9 @@ const TableManagement = () => {
         setError("Failed to add reservation.");
     }
 };
+
+
+
 
 
 
@@ -101,7 +105,7 @@ const TableManagement = () => {
     console.log("Reservation ID:", reservationId);
 
     if (!reservationId) {
-        console.error("⚠️ Reservation ID is undefined.");
+        console.error(" Reservation ID is undefined.");
         return;
     }
 
