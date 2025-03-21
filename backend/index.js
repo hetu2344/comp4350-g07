@@ -28,6 +28,7 @@ app.use("/api/menu", menuManagementRoutes);
 app.use("/api/tables", tableManagementRoutes);
 app.use("/api/orders", orderManagementRoutes);
 app.use("/api/sales", salesManagementRoutes);
+
 if(require.main===module){
 // get all menu items
 app.listen(PORT,"0.0.0.0" , () => {

@@ -44,6 +44,25 @@ CREATE TABLE users (
     store_id INTEGER NULL -- Nullable, user can exist without a store
 );
 
+-- Create the Tables Table
+CREATE TABLE tables
+(
+    table_num SERIAL PRIMARY KEY,
+    num_seats INT NOT NULL,
+    table_status BOOLEAN DEFAULT TRUE
+);
+
+
+-- Create the Reservations Table
+CREATE TABLE reservations
+(
+    reservation_id SERIAL PRIMARY KEY,
+    table_num INT REFERENCES tables(table_num) ON DELETE CASCADE,
+    customer_name VARCHAR(50) NOT NULL,
+    reservation_time TIMESTAMP NOT NULL,
+    party_size INT NOT NULL
+);
+
 -- Create the Stores Table
 CREATE TABLE stores (
     id SERIAL PRIMARY KEY,
