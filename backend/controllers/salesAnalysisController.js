@@ -1,11 +1,26 @@
 const salesModel = require('../models/salesAnalysisModel');
 
+// const parseDatesOrToday = (req) => {
+//     let { startDate, endDate } = req.query;
+//     if (!startDate || !endDate) {
+//         const today = new Date().toISOString().split('T')[0];
+//         startDate = endDate = today;
+//     }
+//     return { startDate, endDate };
+// };
+
 const parseDatesOrToday = (req) => {
     let { startDate, endDate } = req.query;
+
     if (!startDate || !endDate) {
-        const today = new Date().toISOString().split('T')[0];
-        startDate = endDate = today;
+        const today = new Date();
+        const offset = today.getTimezoneOffset();
+        const localDate = new Date(today.getTime() - (offset * 60000));
+        const localISODate = localDate.toISOString().split('T')[0];
+
+        startDate = endDate = localISODate;
     }
+
     return { startDate, endDate };
 };
 

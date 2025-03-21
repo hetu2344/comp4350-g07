@@ -58,40 +58,11 @@
   cursor: not-allowed;
 }
 
-/* Add styles for the date changed warning */
-.dateChangedWarning {
-  background-color: #fff3cd;
-  color: #856404;
-  padding: 10px 15px;
-  border-radius: 5px;
-  border: 1px solid #ffeeba;
-  margin-bottom: 20px;
-  text-align: center;
-  font-weight: bold;
-}
-
 .dashboardGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
   margin-bottom: 30px;
-}
-
-/* Add styles for outdated data */
-.dataOutdated {
-  position: relative;
-}
-
-.dataOutdated::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
-  z-index: 5;
-  pointer-events: none;
 }
 
 .detailedGrid {

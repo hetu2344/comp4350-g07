@@ -62,12 +62,21 @@ function SalesAnalysisPage({ user }) {
 
   // Handle date input changes
   const handleDateChange = (setter, value) => {
+    // Update the state
     setter(value)
 
     // Check if the dates are different from the applied dates
-    setTimeout(() => {
-      setDatesChanged(startDate !== appliedStartDate.current || endDate !== appliedEndDate.current)
-    }, 0)
+    // Use the new value directly instead of relying on state
+    if (setter === setStartDate) {
+      setDatesChanged(value !== appliedStartDate.current || endDate !== appliedEndDate.current)
+    } else {
+      setDatesChanged(startDate !== appliedStartDate.current || value !== appliedEndDate.current)
+    }
+  }
+
+  // Check if both dates are selected
+  const areDatesSelected = () => {
+    return startDate && endDate
   }
 
   // Check if user has access to this feature
@@ -129,7 +138,7 @@ function SalesAnalysisPage({ user }) {
 
   // Prepare chart data for weekly sales
   const getWeeklySalesChartData = () => {
-    if (!weeklySales) return null
+    if (!weeklySales || !weeklySales.weeklySalesData || !weeklySales.weeklySalesData.dailySales) return null
 
     return {
       labels: weeklySales.weeklySalesData.dailySales.map((day) => day.day_name),
@@ -147,7 +156,7 @@ function SalesAnalysisPage({ user }) {
 
   // Prepare chart data for dine-in vs take-out
   const getDineVsTakeChartData = () => {
-    if (!dineVsTake) return null
+    if (!dineVsTake || !dineVsTake.dineVsTakeDetails || !dineVsTake.dineVsTakeDetails.byOrderType) return null
 
     return {
       labels: dineVsTake.dineVsTakeDetails.byOrderType.map((type) => type.order_type),
@@ -165,7 +174,7 @@ function SalesAnalysisPage({ user }) {
 
   // Prepare chart data for revenue by category
   const getRevenueByCategoryChartData = () => {
-    if (!revenueByCategory) return null
+    if (!revenueByCategory || !revenueByCategory.categories) return null
 
     return {
       labels: revenueByCategory.categories.map((category) => category.category),
@@ -195,7 +204,7 @@ function SalesAnalysisPage({ user }) {
 
   // Prepare chart data for top menu items
   const getTopMenuItemsChartData = () => {
-    if (!topMenuItems) return null
+    if (!topMenuItems || !topMenuItems.items) return null
 
     return {
       labels: topMenuItems.items.map((item) => item.item_name),
@@ -253,7 +262,11 @@ function SalesAnalysisPage({ user }) {
           <button className={styles.todayButton} onClick={handleSetToday} disabled={!hasAccess}>
             Today
           </button>
-          <button className={styles.applyButton} onClick={handleApplyDateRange} disabled={!hasAccess || !datesChanged}>
+          <button
+            className={styles.applyButton}
+            onClick={handleApplyDateRange}
+            disabled={!hasAccess || !areDatesSelected()}
+          >
             Apply
           </button>
         </div>
@@ -278,7 +291,7 @@ function SalesAnalysisPage({ user }) {
                 {/* Total Revenue Card */}
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Revenue Overview</h2>
-                  {totalRevenue && (
+                  {totalRevenue && totalRevenue.revenueDetails && totalRevenue.revenueDetails.total ? (
                     <>
                       <div className={styles.statContainer}>
                         <span className={styles.statLabel}>Total Revenue:</span>
@@ -290,69 +303,78 @@ function SalesAnalysisPage({ user }) {
                         <span className={styles.statLabel}>Total Orders:</span>
                         <span className={styles.statValue}>{totalRevenue.revenueDetails.total.total_orders}</span>
                       </div>
-                      <div className={styles.tableContainer}>
-                        <table className={styles.table}>
-                          <thead>
-                            <tr>
-                              <th>Order Status</th>
-                              <th>Orders</th>
-                              <th>Revenue</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {totalRevenue.revenueDetails.byStatus.map((status, index) => (
-                              <tr key={index}>
-                                <td>{status.order_status}</td>
-                                <td>{status.total_orders}</td>
-                                <td>{formatCurrency(status.total_revenue)}</td>
+                      {totalRevenue.revenueDetails.byStatus && totalRevenue.revenueDetails.byStatus.length > 0 && (
+                        <div className={styles.tableContainer}>
+                          <table className={styles.table}>
+                            <thead>
+                              <tr>
+                                <th>Order Status</th>
+                                <th>Orders</th>
+                                <th>Revenue</th>
                               </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                            </thead>
+                            <tbody>
+                              {totalRevenue.revenueDetails.byStatus.map((status, index) => (
+                                <tr key={index}>
+                                  <td>{status.order_status}</td>
+                                  <td>{status.total_orders}</td>
+                                  <td>{formatCurrency(status.total_revenue)}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </>
+                  ) : (
+                    <p>No revenue data available for the selected period.</p>
                   )}
                 </div>
 
                 {/* Dine-In vs Take-Out Card */}
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Dine-In vs Take-Out</h2>
-                  {dineVsTake && (
+                  {dineVsTake && dineVsTake.dineVsTakeDetails ? (
                     <>
                       <div className={styles.chartContainer}>
-                        <SalesChart type="pie" data={getDineVsTakeChartData()} />
+                        {getDineVsTakeChartData() && <SalesChart type="pie" data={getDineVsTakeChartData()} />}
                       </div>
-                      <div className={styles.tableContainer}>
-                        <table className={styles.table}>
-                          <thead>
-                            <tr>
-                              <th>Order Type</th>
-                              <th>Orders</th>
-                              <th>Revenue</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {dineVsTake.dineVsTakeDetails.byOrderType.map((type, index) => (
-                              <tr key={index}>
-                                <td>{type.order_type}</td>
-                                <td>{type.total_orders}</td>
-                                <td>{formatCurrency(type.total_revenue)}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
+                      {dineVsTake.dineVsTakeDetails.byOrderType &&
+                        dineVsTake.dineVsTakeDetails.byOrderType.length > 0 && (
+                          <div className={styles.tableContainer}>
+                            <table className={styles.table}>
+                              <thead>
+                                <tr>
+                                  <th>Order Type</th>
+                                  <th>Orders</th>
+                                  <th>Revenue</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {dineVsTake.dineVsTakeDetails.byOrderType.map((type, index) => (
+                                  <tr key={index}>
+                                    <td>{type.order_type}</td>
+                                    <td>{type.total_orders}</td>
+                                    <td>{formatCurrency(type.total_revenue)}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        )}
                     </>
+                  ) : (
+                    <p>No dine-in vs take-out data available for the selected period.</p>
                   )}
                 </div>
 
                 {/* Weekly Sales Card */}
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Weekly Sales</h2>
-                  {weeklySales && (
+                  {weeklySales && weeklySales.weeklySalesData ? (
                     <>
                       <div className={styles.chartContainer}>
-                        <SalesChart type="bar" data={getWeeklySalesChartData()} />
+                        {getWeeklySalesChartData() && <SalesChart type="bar" data={getWeeklySalesChartData()} />}
                       </div>
                       <div className={styles.statContainer}>
                         <span className={styles.statLabel}>Weekly Total:</span>
@@ -361,16 +383,18 @@ function SalesAnalysisPage({ user }) {
                         </span>
                       </div>
                     </>
+                  ) : (
+                    <p>No weekly sales data available.</p>
                   )}
                 </div>
 
                 {/* Top Menu Items */}
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Top Selling Items</h2>
-                  {topMenuItems && (
+                  {topMenuItems && topMenuItems.items && topMenuItems.items.length > 0 ? (
                     <>
                       <div className={styles.chartContainer}>
-                        <SalesChart type="bar" data={getTopMenuItemsChartData()} />
+                        {getTopMenuItemsChartData() && <SalesChart type="bar" data={getTopMenuItemsChartData()} />}
                       </div>
                       <div className={styles.tableContainer}>
                         <table className={styles.table}>
@@ -391,16 +415,20 @@ function SalesAnalysisPage({ user }) {
                         </table>
                       </div>
                     </>
+                  ) : (
+                    <p>No top selling items data available for the selected period.</p>
                   )}
                 </div>
 
                 {/* Revenue by Category */}
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Revenue by Category</h2>
-                  {revenueByCategory && (
+                  {revenueByCategory && revenueByCategory.categories && revenueByCategory.categories.length > 0 ? (
                     <>
                       <div className={styles.chartContainer}>
-                        <SalesChart type="pie" data={getRevenueByCategoryChartData()} />
+                        {getRevenueByCategoryChartData() && (
+                          <SalesChart type="pie" data={getRevenueByCategoryChartData()} />
+                        )}
                       </div>
                       <div className={styles.tableContainer}>
                         <table className={styles.table}>
@@ -421,6 +449,8 @@ function SalesAnalysisPage({ user }) {
                         </table>
                       </div>
                     </>
+                  ) : (
+                    <p>No revenue by category data available for the selected period.</p>
                   )}
                 </div>
               </div>
@@ -429,35 +459,53 @@ function SalesAnalysisPage({ user }) {
               <div className={`${styles.detailedGrid} ${datesChanged ? styles.dataOutdated : ""}`}>
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Detailed Category Breakdown</h2>
-                  {revenueByCategory && (
+                  {revenueByCategory && revenueByCategory.categories && revenueByCategory.categories.length > 0 ? (
                     <div className={styles.tableContainer}>
                       <table className={styles.table}>
                         <thead>
                           <tr>
                             <th>Category</th>
+                            <th>Category Revenue</th>
                             <th>Item</th>
                             <th>Price</th>
                             <th>Quantity</th>
-                            <th>Total</th>
+                            <th>Item Revenue</th>
                           </tr>
                         </thead>
                         <tbody>
-                          {revenueByCategory.categories.map((category) =>
-                            category.itemssold.map((item, itemIndex) => (
-                              <tr key={`${category.category}-${itemIndex}`}>
-                                {itemIndex === 0 ? (
-                                  <td rowSpan={category.itemssold.length}>{category.category}</td>
-                                ) : null}
-                                <td>{item.itemName}</td>
-                                <td>{formatCurrency(item.itemPrice)}</td>
-                                <td>{item.quantitySold}</td>
-                                <td>{formatCurrency(item.itemPrice * item.quantitySold)}</td>
-                              </tr>
-                            )),
-                          )}
+                          {revenueByCategory.categories.map((category, catIndex) => {
+                            // If itemssold exists and has items, show detailed breakdown
+                            if (category.itemssold && category.itemssold.length > 0) {
+                              return category.itemssold.map((item, itemIndex) => (
+                                <tr key={`${category.category}-${itemIndex}`}>
+                                  {itemIndex === 0 ? (
+                                    <td rowSpan={category.itemssold.length}>{category.category}</td>
+                                  ) : null}
+                                  {itemIndex === 0 ? (
+                                    <td rowSpan={category.itemssold.length}>{formatCurrency(category.revenue)}</td>
+                                  ) : null}
+                                  <td>{item.itemName}</td>
+                                  <td>{formatCurrency(item.itemPrice)}</td>
+                                  <td>{item.quantitySold}</td>
+                                  <td>{formatCurrency(item.totalRevenue || item.itemPrice * item.quantitySold)}</td>
+                                </tr>
+                              ))
+                            } else {
+                              // If no itemssold array or it's empty, just show the category and revenue
+                              return (
+                                <tr key={`${category.category}-${catIndex}`}>
+                                  <td>{category.category}</td>
+                                  <td>{formatCurrency(category.revenue)}</td>
+                                  <td colSpan="4">Item details not available</td>
+                                </tr>
+                              )
+                            }
+                          })}
                         </tbody>
                       </table>
                     </div>
+                  ) : (
+                    <p>No detailed category data available for the selected period.</p>
                   )}
                 </div>
               </div>

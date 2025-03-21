@@ -286,44 +286,83 @@ INSERT INTO tables
     (num_seats)
 VALUES(2);
 
-INSERT INTO orders
-    (store_id, order_type, table_num, customer_name, order_status,special_instructions,total_price, created_by)
+-- Clear existing data first (optional for clarity if re-running script)
+DELETE FROM order_items;
+DELETE FROM orders;
+
+-- Insert Orders (Clearly structured and consistent)
+-- Orders for March 17, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
+VALUES 
+(1, 'Dine-In', 5, NULL, 'Completed', 'Extra cheese', 45.00, 'employee_lisa', '2025-03-17 13:15:00'), -- order_id: 1
+(1, 'Take-Out', NULL, 'Jane Smith', 'Completed', NULL, 30.00, 'employee_lisa', '2025-03-17 16:45:00'), -- order_id: 2
+(1, 'Dine-In', 2, NULL, 'Completed', NULL, 80.00, 'employee_lisa', '2025-03-17 19:20:00'); -- order_id: 3
+
+-- Orders for March 18, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
+VALUES 
+(1, 'Take-Out', NULL, 'Mike Tyson', 'Completed', 'No onions', 25.00, 'employee_lisa', '2025-03-18 12:30:00'), -- order_id: 4
+(1, 'Dine-In', 4, NULL, 'Completed', 'Gluten-free', 60.00, 'employee_lisa', '2025-03-18 14:00:00'), -- order_id: 5
+(1, 'Take-Out', NULL, 'Sarah Connor', 'Completed', 'Extra spicy', 40.00, 'employee_lisa', '2025-03-18 18:45:00'); -- order_id: 6
+
+-- Orders for March 19, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
+VALUES 
+(1, 'Dine-In', 1, NULL, 'Completed', NULL, 55.00, 'employee_lisa', '2025-03-19 11:00:00'), -- order_id: 7
+(1, 'Take-Out', NULL, 'Peter Parker', 'Completed', NULL, 35.00, 'employee_lisa', '2025-03-19 15:30:00'), -- order_id: 8
+(1, 'Dine-In', 3, NULL, 'Completed', 'Extra napkins', 90.00, 'employee_lisa', '2025-03-19 20:10:00'); -- order_id: 9
+
+-- Orders for March 20, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
 VALUES
-    (1, 'Take-Out', NULL, 'Sarah Smith', 'Active','Light Cheese', 32.47, 'employee_david'),
-    (1, 'Take-Out', NULL, 'James Anderson', 'Completed','Extra Ketchup', 18.48, 'manager_susan'),
-    (1, 'Take-Out', NULL, 'Olivia Brown', 'Active',NULL, 24.98, 'employee_lisa'),
+(1, 'Take-Out', NULL, 'Sarah Smith', 'Active', 'Light Cheese', 32.47, 'employee_david', '2025-03-20 13:15:00'), -- order_id: 10
+(1, 'Take-Out', NULL, 'James Anderson', 'Completed', 'Extra Ketchup', 18.48, 'manager_susan', '2025-03-20 13:15:00'), -- order_id: 11
+(1, 'Dine-In', 1, NULL, 'Active', 'No Cheese in Vegan Bowl', 18.48, 'employee_emma', '2025-03-20 13:15:00'), -- order_id: 12
+(1, 'Dine-In', 2, NULL, 'Completed', NULL, 19.48, 'manager_bob', '2025-03-20 13:15:00'); -- order_id: 13
 
-    (1, 'Dine-In', 1, NULL, 'Active','No Cheese in Vegan Bowl', 18.48, 'employee_emma'),
-    (1, 'Dine-In', 2, NULL, 'Completed',NULL, 19.48, 'manager_bob'),
-    (1, 'Dine-In', 5, NULL, 'Active',NULL, 36.97, 'manager_susan'),
-    (1, 'Dine-In', 7, NULL, 'Completed',NULL, 19.48, 'employee_lisa');
-
-
-
-INSERT INTO order_items
-    (order_id, menu_item_id, quantity, item_price, created_by)
+-- Insert consistent order_items for orders
+INSERT INTO order_items (order_id, menu_item_id, quantity, item_price, created_by)
 VALUES
-    (1, 1, 2, 12.99, 'employee_emma'),
-    (1, 3, 1, 6.49, 'employee_emma'),
+-- March 17
+(1, 1, 2, 12.99, 'employee_lisa'), -- Margherita Pizza (25.98)
+(1, 3, 1, 6.49, 'employee_lisa'), -- Cheesecake (6.49), total = 32.47
 
-    (2, 2, 1, 11.99, 'manager_bob'),
-    (2, 3, 1, 6.49, 'manager_bob'),
+(2, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 23.98
 
-    (3, 1, 1, 12.99, 'employee_david'),
-    (3, 2, 1, 11.99, 'employee_david'),
+(3, 1, 3, 12.99, 'employee_lisa'), -- Margherita Pizza (38.97)
+(3, 2, 3, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (35.97), total = 74.94
 
-    (4, 2, 1, 11.99, 'manager_susan'),
-    (4, 3, 1, 6.49, 'manager_susan'),
+-- March 18
+(4, 2, 1, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (11.99), total = 11.99
 
-    (5, 3, 1, 6.49, 'employee_lisa'),
-    (5, 1, 1, 12.99, 'employee_lisa'),
+(5, 2, 3, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (35.97)
+(5, 3, 3, 6.49, 'employee_lisa'), -- Cheesecake (19.47), total = 55.44
 
-    
-    (6, 1, 1, 12.99, 'manager_susan'),
-    (6, 2, 2, 11.99, 'manager_susan'),
+(6, 1, 2, 12.99, 'employee_lisa'), -- Margherita Pizza (25.98)
+(6, 3, 2, 6.49, 'employee_lisa'), -- Cheesecake (12.98), total = 38.96
 
-    (7, 3, 1, 6.49, 'employee_lisa'),
-    (7, 1, 1, 12.99, 'employee_lisa');
+-- March 19
+(7, 1, 2, 12.99, 'employee_lisa'), -- Margherita Pizza (25.98)
+(7, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 49.96
+
+(8, 3, 2, 6.49, 'employee_lisa'), -- Cheesecake (12.98)
+(8, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 36.96
+
+(9, 1, 4, 12.99, 'employee_lisa'), -- Margherita Pizza (51.96)
+(9, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 75.94
+
+-- March 20
+(10, 1, 2, 12.99, 'employee_david'), -- Margherita Pizza (25.98)
+(10, 3, 1, 6.49, 'employee_david'), -- Cheesecake (6.49), total = 32.47
+
+(11, 2, 1, 11.99, 'manager_susan'), -- Vegan Buddha Bowl (11.99)
+(11, 3, 1, 6.49, 'manager_susan'), -- Cheesecake (6.49), total = 18.48
+
+(12, 2, 1, 11.99, 'employee_emma'), -- Vegan Buddha Bowl (11.99)
+(12, 3, 1, 6.49, 'employee_emma'), -- Cheesecake (6.49), total = 18.48
+
+(13, 1, 1, 12.99, 'manager_bob'), -- Margherita Pizza (12.99)
+(13, 3, 1, 6.49, 'manager_bob'); -- Cheesecake (6.49), total = 19.48
 
 
 COMMIT;
