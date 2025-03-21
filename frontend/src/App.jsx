@@ -13,6 +13,8 @@ import ActiveOrders from "./pages/active-orders";
 import EditOrder from "./pages/edit-order";
 import orderHistory from "./pages/order-history";
 import OrderHistory from "./pages/order-history";
+import SalesAnalysis from "./pages/SalesAnalysis"
+
 /*
 This function is used for adding routes to the website. Whenever you add a new page
 just add the path here along with the page component that will be renedered 
@@ -32,6 +34,9 @@ function App() {
         <Route path="/log-in" element={<LogInPage />} />
         <Route path="/sign-up" element={<SignUpPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/TableManagement" element={<TableManagement />} /> 
+            
+
         <Route path="/menu-management" element={<MenuManagement />} />
         <Route path="/edit-menu-item/:id" element={<EditMenuItem />} />
         <Route path="/add-menu-item" element={<AddMenuItem />} />
@@ -41,6 +46,7 @@ function App() {
         <Route path="/active-orders" element={<ActiveOrders  />} />
         <Route path="/order-history" element={<OrderHistory  />} />
         <Route path="/edit-order/:order_number" element={<EditOrder  />} />     
+        <Route path="/sales-analysis" element={<SalesAnalysis />} />
       </Routes>
     </div>
   );

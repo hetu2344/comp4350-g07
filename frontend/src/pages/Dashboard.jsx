@@ -7,6 +7,10 @@ import menuImage from "../assets/menu.png";
 import orderImage from "../assets/order.png";
 import ticket from "../assets/ticket.png";
 import orderHistory from"../assets/orderhistory.png";
+import sales from "../assets/growing.png";
+import tableImage from "../../public/table.png";
+/* This page is the first page the staff sees when they log in */
+
 function DashboardPage({ user }) {
   return (
     <div className="p-6 min-h-screen bg-gray-100 flex flex-col items-center">
@@ -36,6 +40,15 @@ function DashboardPage({ user }) {
           image={orderHistory}
           title="Order History"
           navigateTo="/order-history"
+
+          image={sales}
+          title="Sales Analysis"
+          navigateTo="/sales-analysis"
+        />
+        <NavigationCard
+          image={tableImage}
+          title="Table Management"
+          navigateTo="/TableManagement"
         />
       </div>
     </div>

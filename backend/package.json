@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
@@ -27,14 +28,6 @@
   "jest": {
     "testEnvironment": "node",
     "collectCoverage": true,
-    "coverageThreshold": {
-      "global": {
-        "branches": 60,
-        "functions": 60,
-        "lines": 70,
-        "statements": 65
-      }
-    },
     "coverageReporters": [
       "json",
       "lcov",

@@ -2,7 +2,7 @@ const userModel = require("../models/userManagementModels");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { authenticateToken, authorizeRoles } = require("./authController");
-const { UserNotExistError, ValidationError, ConflictError } = require("../exceptions/exceptions");
+const { UserNotExistError, ValidationError, ConflictError, UnauthorizedError } = require("../exceptions/exceptions");
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_jwt_secret"; // Use a strong secret in production
 
@@ -106,22 +106,6 @@ exports.updateUser = [authenticateToken, authorizeRoles, async (req, res) => {
   }
 }];
 
-//**Delete User (Requires Authentication & Only Store Owners & Managers)**
-exports.deleteUser = [authenticateToken, authorizeRoles, async (req, res) => {
-  try {
-    const { username } = req.params;
-    // if (!username) throw new ValidationError("Username is required");
-
-    await userModel.removeUser(username);
-    res.status(200).json({ message: "User deleted successfully" });
-  } catch (error) {
-    // if (error instanceof UserNotExistError) return res.status(404).json({ error: error.message });
-    // if (error instanceof ValidationError) return res.status(400).json({error: error.message});
-    res.status(500).json({ error: "Internal Server Error" });
-    console.log(error);
-  }
-}];
-
 //**Get User by Username (Requires Authentication)**
 exports.getUserByUsername = [authenticateToken, async (req, res) => {
   try {
@@ -151,3 +135,46 @@ exports.getUsersByStoreId = [authenticateToken, authorizeRoles, async (req, res)
   }
 }];
 
+// Delete user with necessary checks
+exports.deleteUserWithChecks = [authenticateToken, authorizeRoles, async (req, res) => {
+  try {
+    const usernameToDelete = req.params.username;
+    const currentUsername = req.user.username;
+    const currentUserType = req.user.type;
+    console.log("Current user type: " + currentUserType);
+    console.log("Username to delete: " + usernameToDelete);
+    console.log("Current username: " + currentUsername);
+
+
+    if (usernameToDelete === currentUsername) {
+      throw new UnauthorizedError("You cannot delete yourself.");
+    }
+
+    const userToDelete = await userModel.getUserByUsername(usernameToDelete);
+
+    if (!userToDelete) {
+      throw new ValidationError("User does not exist.");
+    }
+
+    if (userToDelete.type === "S") {
+      throw new UnauthorizedError("Cannot delete the store owner.");
+    }
+
+    // if (req.user.type === "M" && userModel.type === "M") {
+    //   throw new UnauthorizedError("Managers cannot delete other managers.");
+    // }
+
+    await userModel.removeUser(usernameToDelete);
+    res.status(200).json({ message: "User deleted successfully." });
+
+  } catch (error) {
+    console.error(error.message);
+    if (error instanceof ValidationError) {
+      return res.status(400).json({ error: error.message });
+    }
+    if (error instanceof UnauthorizedError) {
+      return res.status(403).json({ error: error.message });
+    }
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}];

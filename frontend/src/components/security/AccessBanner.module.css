@@ -1,0 +1,45 @@
+.access-denied-container {
+    display: flex;
+    justify-content: flex-start;       /* Align slightly to the left */
+    align-items: center;
+    height: 100vh;
+    background: #f4f4f4;
+    color: #333;
+    padding: 0 5vw;                    /* Add horizontal padding */
+  }
+  
+  .access-denied-box {
+    text-align: center;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 100%;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  /* Adjust heading and text styling */
+  .access-denied-box h1 {
+    font-size: 2rem;
+    color: #ff4d4f;
+  }
+  
+  .access-denied-box p {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #555;
+  }
+  
+  /* Fade-in animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

@@ -67,7 +67,7 @@ test:
 
 # Run API and tests simultaneously
 run-all-tests:
-	$(DOCKER_COMPOSE) up -d --build backend db
+	$(DOCKER_COMPOSE) up -d --build test test-db
 	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
 	$(DOCKER_COMPOSE) down
 

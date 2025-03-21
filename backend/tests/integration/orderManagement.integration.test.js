@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../../index"); // Make sure the path is correct
-const pool = require("../../db/db");
+const pool = require("../../db/test_db"); // Make sure the path is correct
 const { resetTestDatabase } = require("../testHelpers");
 const TIMESTAMP = "2025-03-19T05:20:59.268Z";
 const jwt = require("jsonwebtoken");
