@@ -153,6 +153,7 @@ const TableManagement = () => {
             <img src="/table.png" alt="Table" className="table-image" />
             <h3>Table {table.table_num}</h3>
             <p>Status: {table.table_status === false ? "Reserved" : "Available"}</p>
+            <p>Seats: {table.num_seats}</p>
           </div>
         ))}
       </div>
