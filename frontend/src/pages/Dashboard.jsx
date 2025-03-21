@@ -6,7 +6,7 @@ import Card from "react-bootstrap/Card";
 import menuImage from "../assets/menu.png";
 import orderImage from "../assets/order.png";
 import ticket from "../assets/ticket.png";
-import orderHistory from"../assets/orderhistory.png";
+import orderHistory from "../assets/orderhistory.png";
 import sales from "../assets/growing.png";
 import tableImage from "../../public/table.png";
 /* This page is the first page the staff sees when they log in */
@@ -40,7 +40,8 @@ function DashboardPage({ user }) {
           image={orderHistory}
           title="Order History"
           navigateTo="/order-history"
-
+        />
+        <NavigationCard
           image={sales}
           title="Sales Analysis"
           navigateTo="/sales-analysis"
@@ -65,11 +66,7 @@ const NavigationCard = ({ image, title, navigateTo }) => {
       className="shadow-lg"
       onClick={() => navigate(navigateTo)}
     >
-      <Card.Img
-        variant="top"
-        src={image}
-        style={styles.cardImage}
-      />
+      <Card.Img variant="top" src={image} style={styles.cardImage} />
       <Card.Body>
         <Card.Text style={styles.cardTitle}>{title}</Card.Text>
       </Card.Body>

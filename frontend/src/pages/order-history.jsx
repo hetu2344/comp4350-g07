@@ -3,6 +3,7 @@ import Card from "react-bootstrap/Card";
 import classes from "./active-orders.module.css";
 import { useNavigate } from "react-router-dom";
 import RoleProtection from "../components/security/RoleProtection";
+import OrderManagementNavigation from "../components/layout/OrderManagementNavigation";
 
 function OrderHistory({ user }) {
   const [orders, setOrders] = useState([]);
@@ -23,9 +24,10 @@ function OrderHistory({ user }) {
 
       const fullDetailsPromises = rawOrders
         .sort((a, b) => a.order_id - b.order_id)
-        .map(order =>
-          fetch(`http://localhost:8018/api/orders/${order.order_number}`)
-            .then(res => res.json())
+        .map((order) =>
+          fetch(`http://localhost:8018/api/orders/${order.order_number}`).then(
+            (res) => res.json()
+          )
         );
 
       const detailedOrders = await Promise.all(fullDetailsPromises);
@@ -38,18 +40,7 @@ function OrderHistory({ user }) {
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }}>
-        <button onClick={() => navigate("/dashboard")} style={{
-          backgroundColor: "#007bff",
-          color: "#fff",
-          border: "none",
-          padding: "0.5rem 1rem",
-          borderRadius: "4px",
-          cursor: "pointer"
-        }}>
-          🏠 Back to Dashboard
-        </button>
-      </div>
+      <OrderManagementNavigation />
 
       <Card>
         <div className={classes.container}>
@@ -67,34 +58,57 @@ function OrderHistory({ user }) {
 
                   <div className={classes.info}>
                     {order.order_type === "Dine-In" && (
-                      <p><strong>Table:</strong> {order.table_number}</p>
+                      <p>
+                        <strong>Table:</strong> {order.table_number}
+                      </p>
                     )}
                     {order.customer_name && (
-                      <p><strong>Customer:</strong> {order.customer_name}</p>
+                      <p>
+                        <strong>Customer:</strong> {order.customer_name}
+                      </p>
                     )}
                     {order.special_instructions && (
-                      <p><strong>Instructions:</strong> {order.special_instructions}</p>
+                      <p>
+                        <strong>Instructions:</strong>{" "}
+                        {order.special_instructions}
+                      </p>
                     )}
-                    <p><strong>Created by:</strong> {order.created_by}</p>
+                    <p>
+                      <strong>Created by:</strong> {order.created_by}
+                    </p>
                   </div>
 
                   <div className={classes.items}>
-                    <p><strong>Items:</strong></p>
+                    <p>
+                      <strong>Items:</strong>
+                    </p>
                     <ul>
-                      {items.map(item => (
+                      {items.map((item) => (
                         <li key={item.menu_item_id}>
-                          {item.item_name} × {item.quantity} (${item.item_price.toFixed(2)})
+                          {item.item_name} × {item.quantity} ($
+                          {item.item_price.toFixed(2)})
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div className={classes.totals}>
-                    <p><strong>Subtotal:</strong> ${order.item_total.toFixed(2)}</p>
-                    <p><strong>Service:</strong> ${order.service_charge.toFixed(2)}</p>
-                    <p><strong>GST:</strong> ${order.gst.toFixed(2)}</p>
-                    <p><strong>PST:</strong> ${order.pst.toFixed(2)}</p>
-                    <p><strong>Total:</strong> ${order.total_price.toFixed(2)}</p>
+                    <p>
+                      <strong>Subtotal:</strong> ${order.item_total.toFixed(2)}
+                    </p>
+                    <p>
+                      <strong>Service:</strong> $
+                      {order.service_charge.toFixed(2)}
+                    </p>
+                    <p>
+                      <strong>GST:</strong> ${order.gst.toFixed(2)}
+                    </p>
+                    <p>
+                      <strong>PST:</strong> ${order.pst.toFixed(2)}
+                    </p>
+                    <p>
+                      <strong>Total:</strong> ${order.total_price.toFixed(2)}
+                    </p>
                   </div>
                 </div>
               ))
