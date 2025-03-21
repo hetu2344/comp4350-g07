@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import DashboardNavigation from "../components/layout/DashboardNavigation"
 import RoleProtection from "../components/security/RoleProtection"
 import {
@@ -20,12 +20,55 @@ function SalesAnalysisPage({ user }) {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
 
+  // Add state to track if dates have been changed but not applied
+  const [datesChanged, setDatesChanged] = useState(false)
+
+  // Store the applied dates to compare with current input values
+  const appliedStartDate = useRef("")
+  const appliedEndDate = useRef("")
+
   // State for data
   const [totalRevenue, setTotalRevenue] = useState(null)
   const [topMenuItems, setTopMenuItems] = useState(null)
   const [revenueByCategory, setRevenueByCategory] = useState(null)
   const [weeklySales, setWeeklySales] = useState(null)
   const [dineVsTake, setDineVsTake] = useState(null)
+
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = String(today.getMonth() + 1).padStart(2, "0")
+    const day = String(today.getDate()).padStart(2, "0")
+    return `${year}-${month}-${day}`
+  }
+
+  // Set both date inputs to today and fetch data immediately
+  const handleSetToday = () => {
+    const today = getTodayDate()
+    setStartDate(today)
+    setEndDate(today)
+
+    // Update the applied dates
+    appliedStartDate.current = today
+    appliedEndDate.current = today
+
+    // Reset the datesChanged flag
+    setDatesChanged(false)
+
+    // Fetch data with today's date
+    fetchData(today, today)
+  }
+
+  // Handle date input changes
+  const handleDateChange = (setter, value) => {
+    setter(value)
+
+    // Check if the dates are different from the applied dates
+    setTimeout(() => {
+      setDatesChanged(startDate !== appliedStartDate.current || endDate !== appliedEndDate.current)
+    }, 0)
+  }
 
   // Check if user has access to this feature
   const hasAccess = user && (user.type === "S" || user.type === "M")
@@ -44,7 +87,7 @@ function SalesAnalysisPage({ user }) {
   }, [])
 
   // Fetch all data
-  const fetchData = async () => {
+  const fetchData = async (start = startDate, end = endDate) => {
     setIsLoading(true)
     setError(null)
 
@@ -52,11 +95,11 @@ function SalesAnalysisPage({ user }) {
       // Fetch all data in parallel
       const [totalRevenueData, topMenuItemsData, revenueByCategoryData, weeklySalesData, dineVsTakeData] =
         await Promise.all([
-          getTotalRevenue(startDate, endDate),
-          getTopMenuItems(startDate, endDate),
-          getRevenueByCategory(startDate, endDate),
+          getTotalRevenue(start, end),
+          getTopMenuItems(start, end),
+          getRevenueByCategory(start, end),
           getWeeklySales(),
-          getDineVsTake(startDate, endDate),
+          getDineVsTake(start, end),
         ])
 
       setTotalRevenue(totalRevenueData)
@@ -64,6 +107,13 @@ function SalesAnalysisPage({ user }) {
       setRevenueByCategory(revenueByCategoryData)
       setWeeklySales(weeklySalesData)
       setDineVsTake(dineVsTakeData)
+
+      // Update the applied dates
+      appliedStartDate.current = start
+      appliedEndDate.current = end
+
+      // Reset the datesChanged flag
+      setDatesChanged(false)
     } catch (err) {
       console.error("Error fetching sales data:", err)
       setError("Failed to load sales data. Please try again later.")
@@ -183,8 +233,9 @@ function SalesAnalysisPage({ user }) {
               type="date"
               className={styles.dateInput}
               value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
+              onChange={(e) => handleDateChange(setStartDate, e.target.value)}
               disabled={!hasAccess}
+              max={getTodayDate()}
             />
           </div>
           <div>
@@ -194,14 +245,23 @@ function SalesAnalysisPage({ user }) {
               type="date"
               className={styles.dateInput}
               value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              onChange={(e) => handleDateChange(setEndDate, e.target.value)}
               disabled={!hasAccess}
+              max={getTodayDate()}
             />
           </div>
-          <button className={styles.applyButton} onClick={handleApplyDateRange} disabled={!hasAccess}>
+          <button className={styles.todayButton} onClick={handleSetToday} disabled={!hasAccess}>
+            Today
+          </button>
+          <button className={styles.applyButton} onClick={handleApplyDateRange} disabled={!hasAccess || !datesChanged}>
             Apply
           </button>
         </div>
+
+        {/* Date Changed Warning */}
+        {datesChanged && (
+          <div className={styles.dateChangedWarning}>Date range has changed. Click "Apply" to update the data.</div>
+        )}
 
         {/* Error Message */}
         {error && <div className={styles.errorMessage}>{error}</div>}
@@ -213,8 +273,8 @@ function SalesAnalysisPage({ user }) {
         <div className={`${!hasAccess ? styles.disabledOverlay : ""}`}>
           {!isLoading && !error && (
             <>
-              {/* Revenue Overview */}
-              <div className={styles.dashboardGrid}>
+              {/* All cards in a grid with max 3 per row */}
+              <div className={`${styles.dashboardGrid} ${datesChanged ? styles.dataOutdated : ""}`}>
                 {/* Total Revenue Card */}
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Revenue Overview</h2>
@@ -303,10 +363,7 @@ function SalesAnalysisPage({ user }) {
                     </>
                   )}
                 </div>
-              </div>
 
-              {/* Top Menu Items and Revenue by Category */}
-              <div className={styles.dashboardGrid}>
                 {/* Top Menu Items */}
                 <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Top Selling Items</h2>
@@ -369,8 +426,8 @@ function SalesAnalysisPage({ user }) {
               </div>
 
               {/* Detailed Category Breakdown */}
-              <div className={styles.dashboardGrid}>
-                <div className={`${styles.card} ${styles.fullWidthCard}`}>
+              <div className={`${styles.detailedGrid} ${datesChanged ? styles.dataOutdated : ""}`}>
+                <div className={styles.card}>
                   <h2 className={styles.cardTitle}>Detailed Category Breakdown</h2>
                   {revenueByCategory && (
                     <div className={styles.tableContainer}>
