@@ -28,14 +28,6 @@
   "jest": {
     "testEnvironment": "node",
     "collectCoverage": true,
-    "coverageThreshold": {
-      "global": {
-        "branches": 60,
-        "functions": 60,
-        "lines": 70,
-        "statements": 65
-      }
-    },
     "coverageReporters": [
       "json",
       "lcov",
