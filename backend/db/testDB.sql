@@ -1,5 +1,3 @@
-CREATE DATABASE restro_test;
-\connect restro_test;
 CREATE TABLE menu_categories
 (
     id SERIAL PRIMARY KEY,

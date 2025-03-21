@@ -1,4 +1,4 @@
--- \connect restro_sync;
+-- \connect restro_sync
 
 CREATE TABLE menu_categories
 (
@@ -69,23 +69,6 @@ CREATE TABLE stores (
     name VARCHAR(255) UNIQUE NOT NULL,
     owner_username VARCHAR(50) NOT NULL,
     CONSTRAINT fk_owner FOREIGN KEY (owner_username) REFERENCES users(username) ON DELETE CASCADE
-);
-
--- Create the Tables Table
-CREATE TABLE tables
-(
-    table_num SERIAL PRIMARY KEY,
-    num_seats INT NOT NULL,
-    table_status BOOLEAN DEFAULT TRUE
-);
--- Create the Reservations Table
-CREATE TABLE reservations
-(
-    reservation_id SERIAL PRIMARY KEY,
-    table_num INT REFERENCES tables(table_num) ON DELETE CASCADE,
-    customer_name VARCHAR(50) NOT NULL,
-    reservation_time TIMESTAMP NOT NULL,
-    party_size INT NOT NULL
 );
 
 

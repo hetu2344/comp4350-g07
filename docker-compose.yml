@@ -15,7 +15,23 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+    
+  test-db:
+    image: postgres:latest
+    container_name: restro_sync_test_db
+    restart: always
+    environment:
+      DB_HOST: test-db
+      POSTGRES_USER: restro_usr
+      POSTGRES_PASSWORD: cs4350
+      POSTGRES_DB: restro_test
+    ports:
+      - "5433:5432"
+    volumes:
+      - test_db_data:/var/lib/postgresql/data
       - ./backend/db/testDB.sql:/docker-entrypoint-initdb.d/testDB.sql
+
   backend:
     build:
       context: ./backend
@@ -55,13 +71,14 @@ services:
     working_dir: /app
     command: npm test  # Run Jest inside the container
     environment:
-      DB_HOST: db
+      DB_HOST: test-db
       DB_USER: restro_usr
       DB_PASSWORD: cs4350
       DB_NAME: restro_test
       DB_PORT: 5432
       NODE_ENV: test  # Important for testing environment
     depends_on:
-      - db
+      - test-db
 volumes:
   db_data:
+  test_db_data:
