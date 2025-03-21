@@ -4,13 +4,14 @@
 name: Restro Sync CI
 
 on:
-  #push:
-   # branches: [ "dev" ]
+  push:
+    branches: [ "dev" ]
   pull_request:
     branches: [ "dev" ]
 
 jobs:
   build-frontend:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -35,6 +36,7 @@ jobs:
 
 
   build-backend:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
