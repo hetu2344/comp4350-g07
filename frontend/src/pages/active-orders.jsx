@@ -4,6 +4,8 @@ import classes from "./active-orders.module.css";
 import { useNavigate } from "react-router-dom";
 import RoleProtection from "../components/security/RoleProtection";
 import OrderManagementNavigation from "../components/layout/OrderManagementNavigation";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ActiveOrders({ user }) {
   const [orders, setOrders] = useState([]);
@@ -36,12 +38,11 @@ function ActiveOrders({ user }) {
     } catch (err) {
       console.error("Error loading orders:", err.message);
       setError("Failed to load active orders.");
+      toast.error("Failed to load active orders.");
     }
   };
 
   const handleMarkCompleted = async (orderNumber) => {
-    if (!window.confirm(`Mark order ${orderNumber} as completed?`)) return;
-
     try {
       const response = await fetch(
         `http://localhost:8018/api/orders/${orderNumber}/status`,
@@ -60,10 +61,11 @@ function ActiveOrders({ user }) {
         throw new Error(errorData.error || "Failed to update order status");
       }
 
+      toast.success(`Order ${orderNumber} marked as completed!`);
       fetchAllOrderDetails();
     } catch (err) {
       console.error("Failed to mark completed:", err.message);
-      alert("Failed to mark order as completed.");
+      toast.error("Failed to mark order as completed.");
     }
   };
 
@@ -162,6 +164,8 @@ function ActiveOrders({ user }) {
           </div>
         </div>
       </Card>
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </>
   );
 }
