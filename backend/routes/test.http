@@ -1,1 +1,1 @@
-GET http://localhost:8018/api/menu
+Post http://localhost:8018/api/orders

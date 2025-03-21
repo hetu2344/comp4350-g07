@@ -61,33 +61,47 @@ function MenuManagement() {
   };
 
   return (
-    <Card>
-      <div className={classes.container}>
-        <h1 className={classes.title}>📜 Menu Management</h1>
-        <button className={classes.editBtn} onClick={() => handleAdd()}>Add item</button>
-        {error && <p className={classes.error}>{error}</p>}
-        <div className={classes.menuList}>
-          {menuItems.length > 0 ? (
-            menuItems.map((item) => (
-              <div key={item.item_id} className={classes.menuCard}>
-                <div className={classes.menuContent}>
-                  <h3>{item.item_name}</h3>
-                  <p className={classes.category}>{item.category_name}</p>
-                  <p>{item.item_description}</p>
-                  <p className={classes.price}><strong>Price:</strong> ${item.price}</p>
-                </div>
-                <div className={classes.actions}>
-                  <button className={classes.editBtn} onClick={() => handleEdit(item.item_id)}>✏️ Edit</button>
-                  <button className={classes.deleteBtn} onClick={() => handleDelete(item.item_id)}>🗑️ Delete</button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className={classes.noItems}>No menu items available.</p>
-          )}
-        </div>
+    <>
+      <div style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }}>
+        <button onClick={() => navigate("/dashboard")} style={{
+          backgroundColor: "#007bff",
+          color: "#fff",
+          border: "none",
+          padding: "0.5rem 1rem",
+          borderRadius: "4px",
+          cursor: "pointer"
+        }}>
+          🏠 Back to Dashboard
+        </button>
       </div>
-    </Card>
+    <Card>
+        <div className={classes.container}>
+          <h1 className={classes.title}>📜 Menu Management</h1>
+          <button className={classes.editBtn} onClick={() => handleAdd()}>Add item</button>
+          {error && <p className={classes.error}>{error}</p>}
+          <div className={classes.menuList}>
+            {menuItems.length > 0 ? (
+              menuItems.map((item) => (
+                <div key={item.item_id} className={classes.menuCard}>
+                  <div className={classes.menuContent}>
+                    <h3>{item.item_name}</h3>
+                    <p className={classes.category}>{item.category_name}</p>
+                    <p>{item.item_description}</p>
+                    <p className={classes.price}><strong>Price:</strong> ${item.price}</p>
+                  </div>
+                  <div className={classes.actions}>
+                    <button className={classes.editBtn} onClick={() => handleEdit(item.item_id)}>✏️ Edit</button>
+                    <button className={classes.deleteBtn} onClick={() => handleDelete(item.item_id)}>🗑️ Delete</button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className={classes.noItems}>No menu items available.</p>
+            )}
+          </div>
+        </div>
+      </Card>
+    </>
   );
 }
 
