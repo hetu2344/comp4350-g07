@@ -43,27 +43,27 @@ function AddOrder({ user }) {
     }));
   };
 
-  const handleItemChange = (menuItemId, isChecked) => {
+  const handleItemChange = (menu_item_id, isChecked) => {
     setOrderData((prev) => {
       if (isChecked) {
         return {
           ...prev,
-          items: [...prev.items, { menuItemId, quantity: 1 }],
+          items: [...prev.items, { menu_item_id, quantity: 1 }],
         };
       } else {
         return {
           ...prev,
-          items: prev.items.filter((item) => item.menuItemId !== menuItemId),
+          items: prev.items.filter((item) => item.menu_item_id !== menu_item_id),
         };
       }
     });
   };
 
-  const handleQuantityChange = (menuItemId, quantity) => {
+  const handleQuantityChange = (menu_item_id, quantity) => {
     setOrderData((prev) => ({
       ...prev,
       items: prev.items.map((item) =>
-        item.menuItemId === menuItemId ? { ...item, quantity } : item
+        item.menu_item_id === menu_item_id ? { ...item, quantity } : item
       ),
     }));
   };
@@ -169,7 +169,7 @@ function AddOrder({ user }) {
             <div className={classes.checkboxGroup}>
               {menuItems.map((item) => {
                 const isSelected = orderData.items.some(
-                  (i) => i.menuItemId === item.item_id
+                  (i) => i.menu_item_id === item.item_id
                 );
                 return (
                   <div key={item.item_id} className={classes.menuItem}>
@@ -189,7 +189,7 @@ function AddOrder({ user }) {
                         min="1"
                         value={
                           orderData.items.find(
-                            (i) => i.menuItemId === item.item_id
+                            (i) => i.menu_item_id === item.item_id
                           )?.quantity || 1
                         }
                         onChange={(e) =>
