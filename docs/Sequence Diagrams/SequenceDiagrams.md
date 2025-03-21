@@ -22,3 +22,7 @@
 # Core Feature - Table Booking
 ### Action - Booking a Table  
 ![Table Booking](bookingTable.png)
+
+# Core Feature - Sales Analysis
+### Action - Looking at the sales  
+![Looking at the sales](saleManagement.png)
