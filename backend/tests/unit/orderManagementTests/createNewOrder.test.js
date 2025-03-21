@@ -101,15 +101,6 @@ describe("Order Mannagement CREATE NEW ORDER TESTS", () => {
       return Promise.resolve({ rows: [] });
     });
 
-    // mockClient.query.mockResolvedValueOnce({ rows: [{ order_id: 8, order_number:"TAKE-100008" }], });
-
-    // mockClient.query.mockResolvedValueOnce({
-    //      rows: [{ price: 12.99 }],
-    //    });
-
-    // mockClient.query.mockResolvedValueOnce({ rows: [] });
-
-    // mockClient.query.mockResolvedValueOnce({ rows: [] });
 
     const response = await request(app).post("/api/orders/").send(newOrder);
     console.log(response);
@@ -450,4 +441,87 @@ describe("Order Mannagement CREATE NEW ORDER TESTS", () => {
       "Customer name is required for Take-Out orders."
     );
   });
+
+
+    test("should fail to create a new order", async () => {
+      const newOrder = {
+        storeId: 1,
+        orderType: "Take-Out",
+        tableNum: null,
+        customerName: null,
+        specialInstructions: "No onions",
+        createdBy: "employee_david",
+        items: [{ menu_item_id: 1, quantity: 1 }],
+      };
+
+      pool.__mockClient.query.mockImplementation((sql, params) => {
+        if (
+          sql.includes(
+            "INSERT INTO orders (store_id, order_type, table_num, customer_name, special_instructions, created_by)"
+          )
+        ) {
+          return Promise.resolve({
+            rows: [
+              {
+                order_id: 8,
+                order_number: "TAKE-100008",
+                storeId: 1,
+                orderType: "Take-Out",
+                tableNum: null,
+                customerName: "Sarah Smith",
+                order_status: "Active",
+                order_time: "2025-03-18 17:26:16.166083",
+                specialInstructions: "No onions",
+                total_price: 0.0,
+                createdBy: "employee_david",
+              },
+            ],
+          });
+        }
+        if (sql.includes("SELECT * FROM menu_items WHERE item_id")) {
+          return Promise.resolve({
+            rows: [
+              {
+                item_id: 1,
+                item_name: "Margherita Pizza",
+                item_description:
+                  "Classic pizza with mozzarella, tomatoes, and basil.",
+                price: 12.99,
+                category_id: 2,
+                is_available: true,
+                is_vegetarian: true,
+                is_vegan: false,
+                is_gluten_free: false,
+                created_at: "2025-03-18 17:04:15.730762",
+              },
+            ],
+          });
+        }
+
+        if (sql.includes("INSERT INTO order_items")) {
+          return Promise.resolve();
+        }
+
+        if (sql.includes("UPDATE orders SET total_price=$1 WHERE order_id=")) {
+          return Promise.resolve();
+        }
+
+        if (sql.startsWith("BEGIN")) {
+          return Promise.resolve();
+        }
+        if (sql.startsWith("COMMIT")) {
+          return Promise.resolve();
+        }
+
+        return Promise.resolve({ rows: [] });
+      });
+
+      const response = await request(app).post("/api/orders/").send(newOrder);
+      console.log(response);
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toEqual({
+        error: "Customer name is required for Take-Out orders.",
+      });
+    });
+
 });

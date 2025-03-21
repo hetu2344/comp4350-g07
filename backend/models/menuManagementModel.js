@@ -58,15 +58,11 @@ async function insertMenuItem(
       menuItemName: result.rows[0].item_name,
     };
   } catch (error) {
-    if (client) {
       await client.query("ROLLBACK");
-    }
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
-    if (client) {
       client.release();
-    }
   }
 }
 
@@ -111,23 +107,19 @@ async function updateItem(
       ]
     );
 
-    if(result.rowCount===0){
-      throw new Error(`Menu item with ID ${itemId} not found.`);
-    }
+    // if(result.rowCount===0){
+    //   throw new Error(`Menu item with ID ${itemId} not found.`);
+    // }
 
     await client.query("COMMIT");
 
     return result;
   } catch (error) {
-    if (client) {
       await client.query("ROLLBACK");
-    }
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
-    if (client) {
       client.release();
-    }
   }
 }
 
@@ -149,15 +141,11 @@ async function removeAllAllergens(itemId) {
     console.log("REMOVE ITEM RESULT",result);
     return result;
   } catch (error) {
-    if (client) {
       await client.query("ROLLBACK");
-    }
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
-    if (client) {
       client.release();
-    }
   }
 }
 
@@ -182,15 +170,11 @@ async function insertAllergens(itemId, allergens) {
     await client.query("COMMIT");
     return insertCount;
   } catch (error) {
-    if (client) {
       await client.query("ROLLBACK");
-    }
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
-    if (client) {
       client.release();
-    }
   }
 }
 
@@ -211,20 +195,16 @@ async function checkItemExist(id,){
 
     console.log("RowCount:",result.rowCount);
     console.log("ROWS:",result.rows);
-       if (result.rows.error && result.rows.error !== undefined) {
+    if (result.rowCount===0) {
          throw new Error(`Menu item not found.`);
        }
     return result.rows;
   } catch (error) {
-    if (client) {
       await client.query("ROLLBACK");
-    }
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
-    if (client) {
       client.release();
-    }
   }
 }
 

@@ -1,9 +1,9 @@
 const request = require("supertest");
-const app = require("../../../../index");
-const pool = require("../../../../db/db");
+const app = require("../../../index");
+const pool = require("../../../db/db");
 
 // Creating a mock database connection
-jest.mock("../../../../db/db", () => {
+jest.mock("../../../db/db", () => {
   const mockClient = {
     query: jest.fn(),
     release: jest.fn(),
@@ -45,7 +45,7 @@ describe("Menu Mannagement API Tests", () => {
       itemName: "Veggie Burger",
       itemDescription: "Delicious plant-based burger",
       price: 12.99,
-      category: "Diet",
+      category: "Main Course",
       isAvailable: true,
       isVegetarian: false,
       isVegan: false,
@@ -149,5 +149,48 @@ describe("Menu Mannagement API Tests", () => {
     expect(res.body).toEqual(expectedMessage);
     expect(pool.__mockClient.query).toHaveBeenCalledTimes(5);
   });
+
+
+  test("should fail to insert a new item in the menu", async () => {
+    pool.__mockClient.query.mockImplementation((sql, params) => {
+      if (sql.includes("SELECT id FROM menu_categories")) {
+        return Promise.resolve({ rows: [{ id: 2 }] });
+      }
+      if (
+        sql.includes(
+          "INSERT INTO menu_items (item_name,item_description,price,category_id,is_available,is_vegetarian,is_vegan,is_gluten_free) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING item_id,item_name"
+        )
+      ) {
+        return Promise.reject(new Error("Database Error"));
+      }
+      return Promise.resolve({ rows: [] });
+    });
+
+    const newMenuItem = {
+      itemName: "Veggie Burger",
+      itemDescription: "Delicious plant-based burger",
+      price: 12.99,
+      category: "Diet",
+      isAvailable: true,
+      isVegetarian: false,
+      isVegan: false,
+      isGlutenFree: false,
+      allergens: ["Dairy"],
+    };
+
+    const expectedMessage = {
+      error: "Server Error : Unable to add item to the menu.",
+    };
+
+    const res = await request(app)
+      .post("/api/menu")
+      .send(newMenuItem)
+      .set("Accept", "application/json");
+    console.log("Actual response:", res.body);
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toEqual(expectedMessage);
+  });
+
 });
 

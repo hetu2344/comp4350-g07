@@ -1,9 +1,9 @@
 const request = require("supertest");
-const app = require("../../../../index");
-const pool = require("../../../../db/db");
+const app = require("../../../index");
+const pool = require("../../../db/db");
 
 // Creating a mock database connection
-jest.mock("../../../../db/db", () => {
+jest.mock("../../../db/db", () => {
   const mockClient = {
     query: jest.fn(),
     release: jest.fn(),
