@@ -25,7 +25,7 @@ function DashboardPage({ user }) {
         <NavigationCard
           image={sales}
           title="Sales Analysis"
-          navigateTo="/sales-analysis"
+          navigateTo="/dashboard"
         />
       </div>
     </div>
