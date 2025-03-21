@@ -12,7 +12,7 @@ function AddOrder({ user }) {
   const [error, setError] = useState(null);
 
   const [orderData, setOrderData] = useState({
-    storeId: user?.storeId?.toString() || "",
+    storeId: user?.storeId?.toString() || '1',
     orderType: orderTypes[0],
     tableNum: "",
     customerName: "",
@@ -90,6 +90,7 @@ function AddOrder({ user }) {
     try {
       const response = await fetch("http://localhost:8018/api/orders", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
       });
