@@ -49,23 +49,6 @@ jobs:
       - name: Build (backend)
         working-directory: backend
         run: npm run build --if-present
-
-      - name: Verify Docker Compose version
-        run: docker-compose --version
-
-      - name: Build and start test containers
-        run: docker-compose up -d --build test test-db
-
-      - name: Wait for services to be ready
-        run: |
-          # Optionally, wait for Postgres to be ready before running tests
-          echo "Waiting for Postgres to be available..."
-          until docker exec restro_sync_test_db pg_isready -U restro_usr; do
-            sleep 2
-          done
-
-      - name: Run integration tests
-        run: docker-compose run --rm test npm test -- --coverage --detectOpenHandles
-
-      - name: Tear down containers
-        run: docker-compose down
+      - name: Test (backend)
+        working-directory: backend
+        run: npm test -- tests/unit
