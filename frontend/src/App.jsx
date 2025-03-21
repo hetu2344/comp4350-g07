@@ -34,7 +34,7 @@ function App() {
         <Route path="/add-menu-item" element={<AddMenuItem />} />
         <Route path="/TableManagement" element={<TableManagement />} /> 
         <Route path="/reservation" element={<Reservation />} /> 
-        <Route path="/add-order" element={<AddOrder />} />     
+        <Route path="/add-order" element={<AddOrder  />} />     
       </Routes>
     </div>
   );

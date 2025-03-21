@@ -2,84 +2,88 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import classes from "./add-order.module.css";
+import RoleProtection from "../components/security/RoleProtection";
 
-// Order types
 const orderTypes = ["Dine-In", "Take-Out"];
 
-function AddOrder() {
+function AddOrder({ user }) {
   const navigate = useNavigate();
-  const [menuItems, setMenuItems] = useState([]); // Store menu items for selection
+  const [menuItems, setMenuItems] = useState([]);
   const [error, setError] = useState(null);
 
   const [orderData, setOrderData] = useState({
-    storeId: "",
-    orderType: orderTypes[0], // Default to first option
+    storeId: user?.storeId?.toString() || "",
+    orderType: orderTypes[0],
     tableNum: "",
     customerName: "",
     specialInstructions: "",
-    createdBy: "",
+    createdBy: user?.username || "owner_john",
     items: [],
   });
 
-  // Fetch available menu items
   useEffect(() => {
     async function fetchMenuItems() {
       try {
         const response = await fetch("http://localhost:8018/api/menu");
-        if (!response.ok) throw new Error("Failed to fetch menu items.");
         const data = await response.json();
         setMenuItems(data);
       } catch (err) {
         console.error("Error fetching menu items:", err.message);
       }
     }
+
     fetchMenuItems();
   }, []);
 
-  // Handle input change
   const handleChange = (event) => {
-    const { name, value, type, checked } = event.target;
-    setOrderData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+    const { name, value } = event.target;
+    setOrderData((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
-  // Handle item selection & quantity
-  const handleItemChange = (menuItemId, quantity) => {
-    setOrderData((prevData) => {
-      const existingItem = prevData.items.find((item) => item.menuItemId === menuItemId);
-      if (existingItem) {
+  const handleItemChange = (menuItemId, isChecked) => {
+    setOrderData((prev) => {
+      if (isChecked) {
         return {
-          ...prevData,
-          items: prevData.items.map((item) =>
-            item.menuItemId === menuItemId ? { ...item, quantity } : item
-          ),
+          ...prev,
+          items: [...prev.items, { menuItemId, quantity: 1 }],
         };
       } else {
         return {
-          ...prevData,
-          items: [...prevData.items, { menuItemId, quantity }],
+          ...prev,
+          items: prev.items.filter((item) => item.menuItemId !== menuItemId),
         };
       }
     });
   };
 
-  // Handle form submission
+  const handleQuantityChange = (menuItemId, quantity) => {
+    setOrderData((prev) => ({
+      ...prev,
+      items: prev.items.map((item) =>
+        item.menuItemId === menuItemId ? { ...item, quantity } : item
+      ),
+    }));
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("Submitting order:", orderData);
 
-    // Ensure proper validation before submitting
     if (orderData.orderType === "Dine-In" && !orderData.tableNum) {
       setError("Table number is required for Dine-In orders.");
       return;
     }
-    if (orderData.orderType === "Take-Out" && !orderData.customerName) {
-      setError("Customer name is required for Take-Out orders.");
+
+    if (!orderData.customerName) {
+      setError("Customer name is required.");
       return;
     }
-    if (!orderData.storeId || !orderData.createdBy || orderData.items.length === 0) {
-      setError("Store ID, Creator, and at least one item are required.");
+
+    if (!orderData.createdBy || !orderData.storeId || orderData.items.length === 0) {
+      setError("Missing required order info.");
       return;
     }
 
@@ -91,9 +95,8 @@ function AddOrder() {
       });
 
       if (!response.ok) throw new Error("Failed to create order.");
-      
       alert("Order created successfully!");
-      navigate("/orders");
+      navigate("/dashboard"); 
     } catch (err) {
       console.error("Error creating order:", err.message);
       setError("Failed to create order. Try again.");
@@ -105,17 +108,23 @@ function AddOrder() {
       <div className={classes.container}>
         <h1 className={classes.title}>🛒 Create a New Order</h1>
         {error && <p className={classes.error}>{error}</p>}
+
         <form className={classes.form} onSubmit={handleSubmit}>
-          <div className={classes.control}>
-            <label>Store ID:</label>
-            <input type="text" name="storeId" value={orderData.storeId} onChange={handleChange} required />
-          </div>
+          <input type="hidden" name="storeId" value={orderData.storeId} />
+          <input type="hidden" name="createdBy" value={orderData.createdBy} />
 
           <div className={classes.control}>
             <label>Order Type:</label>
-            <select name="orderType" value={orderData.orderType} onChange={handleChange} required>
+            <select
+              name="orderType"
+              value={orderData.orderType}
+              onChange={handleChange}
+              required
+            >
               {orderTypes.map((type) => (
-                <option key={type} value={type}>{type}</option>
+                <option key={type} value={type}>
+                  {type}
+                </option>
               ))}
             </select>
           </div>
@@ -123,49 +132,77 @@ function AddOrder() {
           {orderData.orderType === "Dine-In" && (
             <div className={classes.control}>
               <label>Table Number:</label>
-              <input type="text" name="tableNum" value={orderData.tableNum} onChange={handleChange} required />
+              <input
+                type="text"
+                name="tableNum"
+                value={orderData.tableNum}
+                onChange={handleChange}
+                required
+              />
             </div>
           )}
 
-          {orderData.orderType === "Take-Out" && (
-            <div className={classes.control}>
-              <label>Customer Name:</label>
-              <input type="text" name="customerName" value={orderData.customerName} onChange={handleChange} required />
-            </div>
-          )}
+          <div className={classes.control}>
+            <label>Customer Name:</label>
+            <input
+              type="text"
+              name="customerName"
+              value={orderData.customerName}
+              onChange={handleChange}
+              required
+              autoComplete="off"
+            />
+          </div>
 
           <div className={classes.control}>
             <label>Special Instructions:</label>
-            <textarea name="specialInstructions" value={orderData.specialInstructions} onChange={handleChange} />
+            <textarea
+              name="specialInstructions"
+              value={orderData.specialInstructions}
+              onChange={handleChange}
+              placeholder="Optional"
+            />
           </div>
 
-          <div className={classes.control}>
-            <label>Created By:</label>
-            <input type="text" name="createdBy" value={orderData.createdBy} onChange={handleChange} required />
-          </div>
-
-          {/* Menu Item Selection */}
           <div className={classes.control}>
             <label>Select Items:</label>
             <div className={classes.checkboxGroup}>
-              {menuItems.map((item) => (
-                <div key={item.id} className={classes.menuItem}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value={item.id}
-                      onChange={(e) => handleItemChange(item.id, e.target.checked ? 1 : 0)}
-                    />
-                    {item.itemName} (${item.price})
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    disabled={!orderData.items.some((i) => i.menuItemId === item.id)}
-                    onChange={(e) => handleItemChange(item.id, Number(e.target.value))}
-                  />
-                </div>
-              ))}
+              {menuItems.map((item) => {
+                const isSelected = orderData.items.some(
+                  (i) => i.menuItemId === item.item_id
+                );
+                return (
+                  <div key={item.item_id} className={classes.menuItem}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={(e) =>
+                          handleItemChange(item.item_id, e.target.checked)
+                        }
+                      />
+                      {item.item_name} (${item.price})
+                    </label>
+                    {isSelected && (
+                      <input
+                        type="number"
+                        min="1"
+                        value={
+                          orderData.items.find(
+                            (i) => i.menuItemId === item.item_id
+                          )?.quantity || 1
+                        }
+                        onChange={(e) =>
+                          handleQuantityChange(
+                            item.item_id,
+                            Number(e.target.value)
+                          )
+                        }
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -178,4 +215,4 @@ function AddOrder() {
   );
 }
 
-export default AddOrder;
+export default RoleProtection(AddOrder, ["S", "M", "E"]);
