@@ -3,7 +3,6 @@ import HomePage from "./pages/Home";
 import LogInPage from "./pages/Login";
 import SignUpPage from "./pages/Signup";
 import DashboardPage from "./pages/Dashboard";
-import TableManagement from "./pages/TableManagement";
 import MenuManagement from "./pages/MenuManagement";
 import EditMenuItem from "./pages/edit-menu-item";
 import AddMenuItem from "./pages/add-menu-item";
