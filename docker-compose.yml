@@ -2,35 +2,39 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:latest
+    build:
+      context: ./backend/db
+      dockerfile: Dockerfile
+    image: het2344/comp4350-g07:db
     container_name: restro_sync_db
     restart: always
-    environment:
-      DB_HOST: db
-      POSTGRES_USER: restro_usr
-      POSTGRES_PASSWORD: cs4350
-      POSTGRES_DB: restro_sync
+    args:
+        DB_USER: restro_usr
+        DB_PASSWORD: cs4350
+        DB_NAME: restro_sync
+        INIT_SCRIPT: init.sql
     ports:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-      - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
     
   test-db:
-    image: postgres:latest
+    build:
+      context: ./backend/db
+      dockerfile: Dockerfile
+    image: het2344/comp4350-g07:test-db
     container_name: restro_sync_test_db
     restart: always
-    environment:
-      DB_HOST: test-db
-      POSTGRES_USER: restro_usr
-      POSTGRES_PASSWORD: cs4350
-      POSTGRES_DB: restro_test
+    args:
+        DB_USER: restro_usr
+        DB_PASSWORD: cs4350
+        DB_NAME: restro_test
+        INIT_SCRIPT: testDB.sql
     ports:
       - "5433:5432"
     volumes:
       - test_db_data:/var/lib/postgresql/data
-      - ./backend/db/testDB.sql:/docker-entrypoint-initdb.d/testDB.sql
 
   backend:
     build:
