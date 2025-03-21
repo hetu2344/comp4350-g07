@@ -26,8 +26,10 @@ const parseDatesOrToday = (req) => {
 
 exports.getTotalRevenueDetails = async (req, res) => {
     try {
+        console.log("REQ",req);
         const { startDate, endDate } = parseDatesOrToday(req);
         const revenueDetails = await salesModel.totalRevenueDetails(startDate, endDate);
+        console.log(revenueDetails);
         res.json({ startDate, endDate, revenueDetails });
     } catch (error) {
         res.status(500).json({ error: error.message });

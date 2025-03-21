@@ -364,17 +364,4 @@ describe("Integration Test: Orders API", () => {
   });
 });
 
-/**
 
-
-
-// Remove item from order
-router.delete("/:orderNumber/items/:itemId",handleRemoveItemFromOrder);
-
-// Delete order
-router.delete("/:orderNumber",protectedDeleteOrder);
-
-module.exports = router;
-
-
- */
