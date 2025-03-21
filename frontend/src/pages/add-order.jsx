@@ -5,6 +5,7 @@ import classes from "./add-order.module.css";
 import RoleProtection from "../components/security/RoleProtection";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import OrderManagementNavigation from "../components/layout/OrderManagementNavigation";
 
 const orderTypes = ["Dine-In", "Take-Out"];
 
@@ -55,7 +56,9 @@ function AddOrder({ user }) {
       } else {
         return {
           ...prev,
-          items: prev.items.filter((item) => item.menu_item_id !== menu_item_id),
+          items: prev.items.filter(
+            (item) => item.menu_item_id !== menu_item_id
+          ),
         };
       }
     });
@@ -87,7 +90,11 @@ function AddOrder({ user }) {
       return;
     }
 
-    if (!orderData.createdBy || !orderData.storeId || orderData.items.length === 0) {
+    if (
+      !orderData.createdBy ||
+      !orderData.storeId ||
+      orderData.items.length === 0
+    ) {
       const msg = "Missing required order info.";
       setError(msg);
       toast.error(msg);
@@ -116,6 +123,7 @@ function AddOrder({ user }) {
 
   return (
     <>
+      <OrderManagementNavigation />
       <Card>
         <div className={classes.container}>
           <h1 className={classes.title}>🛒 Create a New Order</h1>
@@ -225,7 +233,11 @@ function AddOrder({ user }) {
         </div>
       </Card>
 
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
     </>
   );
 }
