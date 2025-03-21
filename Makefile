@@ -67,10 +67,23 @@ test:
 
 # Run API and tests simultaneously
 run-all-tests:
-	$(DOCKER_COMPOSE) up -d --build backend db
+	$(DOCKER_COMPOSE) up -d --build test test-db
 	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
 	$(DOCKER_COMPOSE) down
 
+test-file:
+	$(DOCKER_COMPOSE) run --rm test npm test -- $(FILE) --coverage --detectOpenHandles
+
+test-folder:
+ifndef DIR
+	@echo "Usage: make test-folder DIR=path/to/folder"
+	@echo "Example: make test-folder DIR=orderManagementTests"
+	@exit 1
+endif
+	$(DOCKER_COMPOSE) run --rm test npm test --tests/unit/$(DIR) --coverage --detectOpenHandles
+
+regression-test:
+	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
 # Help command to show available commands
 help:
 	@echo "Available commands:"
@@ -91,3 +104,5 @@ help:
 	@echo "  make test            - Run Jest tests inside the Docker container"
 	@echo "  make run-all-tests   - Run API and tests simultaneously"
 	@echo "  make test-coverage   - Opens test coverage."
+	@echo "  make test-file FILE=filename.test.js  - Run a specific test file"
+	@echo "  make test-folder DIR=foldername  - Run all tests in one folder"

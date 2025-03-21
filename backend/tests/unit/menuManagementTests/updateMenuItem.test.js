@@ -1,9 +1,9 @@
 const request = require("supertest");
-const app = require("../../../../index");
-const pool = require("../../../../db/db");
+const app = require("../../../index");
+const pool = require("../../../db/db");
 
 // Creating a mock database connection
-jest.mock("../../../../db/db", () => {
+jest.mock("../../../db/db", () => {
   const mockClient = {
     query: jest.fn(),
     release: jest.fn(),
@@ -37,7 +37,7 @@ describe("Menu Mannagement API Tests", () => {
       isVegetarian: true,
       isVegan: false,
       isGlutenFree: false,
-      allergens: ["Dairy"],
+      allergens: ["Dairy","Gluten"],
     };
 
     const expectedResponse = {
@@ -79,8 +79,9 @@ describe("Menu Mannagement API Tests", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual(expectedResponse);
-    expect(pool.__mockClient.query).toHaveBeenCalledTimes(12);
+    expect(pool.__mockClient.query).toHaveBeenCalledTimes(13);
   });
+
 
   test("should return 404 if menu item does not exist", async () => {
     const updatedItem = {
@@ -192,5 +193,109 @@ describe("Menu Mannagement API Tests", () => {
  });
 
 
+ test("should successfully update a menu item", async () => {
+   const updatedItem = {
+     itemName: "Updated Pizza",
+     itemDescription: "New pizza description",
+     price: 12.99,
+     category: "Main Course",
+     isAvailable: true,
+     isVegetarian: true,
+     isVegan: false,
+     isGlutenFree: false,
+     allergens: ["Dairy", "Gluten"],
+   };
 
+   const expectedResponse = {
+     error: "Server Error : Unable to update the menu item.",
+   };
+
+   pool.__mockClient.query.mockImplementation((sql, params) => {
+     if (sql.includes("SELECT * FROM menu_items WHERE item_id")) {
+       return Promise.resolve({
+         rows: [
+           {
+             item_id: 1,
+             item_name: "Margherita Pizza",
+             item_description:
+               "Classic pizza with mozzarella, tomatoes, and basil.",
+             price: "12.99",
+             category_id: 2,
+             is_available: true,
+             is_vegetarian: true,
+             is_vegan: false,
+             is_gluten_free: false,
+             created_at: "2025-02-24T18:38:18.273Z",
+           },
+         ],
+       });
+     }
+     if (sql.includes("SELECT id FROM menu_categories WHERE name")) {
+       return Promise.resolve({ rows: [{ id: 2 }] });
+     }
+
+     if (
+       sql.include(
+         "INSERT INTO menu_item_allergens (menu_item_id,allergen_id) VALUES ($1, (SELECT id FROM menu_allergens WHERE name = $2))"
+       )
+     )
+       return Promise.reject(new Error("Database Error"));
+   });
+
+   // Make the API request
+   const res = await request(app)
+     .put("/api/menu/1")
+     .send(updatedItem)
+     .set("Accept", "application/json");
+
+   expect(res.statusCode).toBe(500);
+   expect(res.body).toEqual(expectedResponse);
+ });
+
+
+ test("should fail to update a menu item", async () => {
+   const updatedItem = {
+     itemName: "Updated Pizza",
+     itemDescription: "New pizza description",
+     price: 12.99,
+     category: "Main Course",
+     isAvailable: true,
+     isVegetarian: true,
+     isVegan: false,
+     isGlutenFree: false,
+     allergens: ["Dairy", "Gluten"],
+   };
+
+   const expectedResponse = {
+     error: "Server Error : Unable to update the menu item.",
+   };
+
+   pool.__mockClient.query.mockImplementation((sql, params) => {
+     if (sql.includes("SELECT * FROM menu_items WHERE item_id")) {
+       return Promise.reject(new Error("Database Error"));
+     }
+     if (sql.includes("SELECT id FROM menu_categories WHERE name")) {
+       return Promise.resolve({ rows: [{ id: 2 }] });
+     }
+
+     if (
+       sql.include(
+         "INSERT INTO menu_item_allergens (menu_item_id,allergen_id) VALUES ($1, (SELECT id FROM menu_allergens WHERE name = $2))"
+       )
+     )
+       return Promise.reject(new Error("Database Error"));
+   });
+
+   // Make the API request
+   const res = await request(app)
+     .put("/api/menu/1")
+     .send(updatedItem)
+     .set("Accept", "application/json");
+
+   expect(res.statusCode).toBe(500);
+   expect(res.body).toEqual(expectedResponse);
+ });
+
+
+  
 });

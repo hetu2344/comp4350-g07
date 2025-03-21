@@ -10,7 +10,8 @@ router.get("/me", userController.getCurrentUser); // Get current logged-in user 
 //**User Management (Only Store Owners & Managers)**
 router.post("/signup", userController.signup); // Create new user
 router.put("/update/:username", userController.updateUser); // Update user details
-router.delete("/delete/:username", userController.deleteUser); // Delete user
+// Delete a user with checks
+router.delete("/:username", userController.deleteUserWithChecks);
 
 //**User Query Routes**
 router.get("/:username", userController.getUserByUsername); // Get user by username

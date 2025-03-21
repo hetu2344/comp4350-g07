@@ -131,8 +131,6 @@ async function deleteReservation(req, res) {
     }
 }
 
-
-
 async function getAllTables(req, res) {
     try {
         const tables = await getAllTablesInfo();
@@ -150,7 +148,6 @@ async function updateTable(req, res) {
         if (!tableNum || typeof isOpen !== "boolean") {
             return res.status(400).json({ error: "Invalid input provided." });
         }
-
         await updateTableStatus(tableNum, isOpen);
 
         res.status(200).json({ message: "Table status updated successfully." });
@@ -182,6 +179,7 @@ async function getReservationsByTable(req, res) {
 async function getReservationsByCustomer(req, res) {
     try {
         const { customerName } = req.query;
+
 
         if (!customerName) {
             return res.status(400).json({ error: "Invalid input provided." });

@@ -36,7 +36,9 @@ async function updateTableStatus(tableNum, isOpen) {
 }
 
 async function getAllTablesInfo() {
+
     console.log("Retrieving all tables with reservations");
+
 
     let client;
     try {
@@ -85,6 +87,7 @@ async function getAllTablesInfo() {
         await client.query("COMMIT");
         return result.rows; //  Updated data
 
+
     } catch (error) {
         if (client) {
             await client.query("ROLLBACK");
@@ -97,7 +100,6 @@ async function getAllTablesInfo() {
         }
     }
 }
-
 
 async function getAllReservations() {
     console.log("Retrieving all reservations");
@@ -263,6 +265,7 @@ async function createReservation(customerName, tableNum, partySize, time) {
         await client.query("BEGIN");
 
 
+
         const result = await client.query(
             'INSERT INTO reservations (table_num, customer_name, reservation_time, party_size) VALUES ($1, $2, $3, $4) RETURNING reservation_id',
             [tableNum, customerName, time, partySize]
@@ -297,6 +300,7 @@ async function deleteReservationByID(reservationID) {
         await client.query("BEGIN");
 
         const result = await client.query(
+
             "DELETE FROM reservations WHERE reservation_id=$1 RETURNING table_num",
             [reservationID]
         );

@@ -1,4 +1,5 @@
 // src/pages/TableManagement.jsx
+
 import React, { useEffect, useState } from "react";
 import "../components/layout/TableManagement.css";
 import RoleProtection from "../components/security/RoleProtection";
@@ -17,6 +18,7 @@ const TableManagement = () => {
       try {
         console.log("Fetching tables...");
         const data = await getAllTables();
+
         console.log("Raw API Response:", data); // Debugging output
 
         if (!Array.isArray(data)) {
@@ -25,6 +27,7 @@ const TableManagement = () => {
 
         setTables(data); // Update state with table data
         console.log("Updated tables state:", data); // Log after state update
+
       } catch (err) {
         console.error("Error fetching tables:", err);
         setError("Failed to load tables.");
@@ -33,6 +36,7 @@ const TableManagement = () => {
         setLoading(false);
       }
     };
+
 
     fetchTables();
   }, []);
@@ -128,13 +132,16 @@ const TableManagement = () => {
       const updatedTables = await getAllTables();
       setTables(updatedTables);
     } catch (err) {
+
       setError("Failed to update table status.");
       console.error("Error updating table status:", err);
+
     }
   };
 
   if (loading) return <p>Loading tables...</p>;
   if (error) return <p>Error: {error}</p>;
+
 
   return (
     <div className="table-management">
@@ -143,6 +150,7 @@ const TableManagement = () => {
         {tables.map((table) => (
           <div
             key={table.table_num}
+
             className={`table-card ${table.table_status === false ? "reserved" : ""}`}
             onClick={() => setSelectedTable(table)}
           >
@@ -202,4 +210,6 @@ const TableManagement = () => {
   );
 };
 
+
 export default RoleProtection(TableManagement, ["S", "M", "E"]);
+
