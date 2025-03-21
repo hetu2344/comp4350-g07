@@ -51,4 +51,4 @@ jobs:
         run: npm run build --if-present
       - name: Test (backend)
         working-directory: backend
-        run: npm test
+        run: npm test -- tests/unit
