@@ -5,14 +5,14 @@ services:
     build:
       context: ./backend/db
       dockerfile: Dockerfile
-    image: het2344/comp4350-g07:db
-    container_name: restro_sync_db
-    restart: always
-    args:
+      args:
         DB_USER: restro_usr
         DB_PASSWORD: cs4350
         DB_NAME: restro_sync
         INIT_SCRIPT: init.sql
+    image: het2344/comp4350-g07:db
+    container_name: restro_sync_db
+    restart: always
     ports:
       - "5432:5432"
     volumes:
@@ -23,14 +23,14 @@ services:
     build:
       context: ./backend/db
       dockerfile: Dockerfile
-    image: het2344/comp4350-g07:test-db
-    container_name: restro_sync_test_db
-    restart: always
-    args:
+      args:
         DB_USER: restro_usr
         DB_PASSWORD: cs4350
         DB_NAME: restro_test
         INIT_SCRIPT: testDB.sql
+    image: het2344/comp4350-g07:test-db
+    container_name: restro_sync_test_db
+    restart: always
     ports:
       - "5433:5432"
     volumes:
