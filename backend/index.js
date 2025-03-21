@@ -4,6 +4,7 @@ const userManagementRoutes = require("./routes/userManagementRoutes");
 const menuManagementRoutes = require("./routes/menuManagementRoutes");
 const tableManagementRoutes = require("./routes/tableManagementRoutes");
 const orderManagementRoutes = require("./routes/orderManagementRoutes");
+const salesAnalysisRoutes = require("./routes/salesAnalysisRoutes");
 const cookieParser = require('cookie-parser');
 
 const cors = require("cors");
@@ -26,6 +27,7 @@ app.use("/api/user", userManagementRoutes);
 app.use("/api/menu", menuManagementRoutes);
 app.use("/api/tables", tableManagementRoutes);
 app.use("/api/orders", orderManagementRoutes);
+app.use("/api/sales", salesAnalysisRoutes);
 if(require.main===module){
 // get all menu items
 app.listen(PORT,"0.0.0.0" , () => {

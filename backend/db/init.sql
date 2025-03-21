@@ -298,6 +298,26 @@ VALUES
     (1, 'Dine-In', 5, NULL, 'Active',NULL, 36.97, 'manager_susan'),
     (1, 'Dine-In', 7, NULL, 'Completed',NULL, 19.48, 'employee_lisa');
 
+-- Orders for March 17, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, special_instructions, created_by, total_price, order_status, order_time)
+VALUES 
+(1, 'Dine-In', 5, NULL, 'Extra cheese', 'employee_lisa', 45.00, 'Completed', '2025-03-17 13:15:00'),
+(1, 'Take-Out', NULL, 'Jane Smith', NULL, 'employee_lisa', 30.00, 'Completed', '2025-03-17 16:45:00'),
+(1, 'Dine-In', 2, NULL, NULL, 'employee_lisa', 80.00, 'Completed', '2025-03-17 19:20:00');
+
+-- Orders for March 18, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, special_instructions, created_by, total_price, order_status, order_time)
+VALUES 
+(1, 'Take-Out', NULL, 'Mike Tyson', 'No onions', 'employee_lisa', 25.00, 'Completed', '2025-03-18 12:30:00'),
+(1, 'Dine-In', 4, NULL, 'Gluten-free', 'employee_lisa', 60.00, 'Completed', '2025-03-18 14:00:00'),
+(1, 'Take-Out', NULL, 'Sarah Connor', 'Extra spicy', 'employee_lisa', 40.00, 'Completed', '2025-03-18 18:45:00');
+
+-- Orders for March 19, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, special_instructions, created_by, total_price, order_status, order_time)
+VALUES 
+(1, 'Dine-In', 1, NULL, NULL, 'employee_lisa', 55.00, 'Completed', '2025-03-19 11:00:00'),
+(1, 'Take-Out', NULL, 'Peter Parker', NULL, 'employee_lisa', 35.00, 'Completed', '2025-03-19 15:30:00'),
+(1, 'Dine-In', 3, NULL, 'Extra napkins', 'employee_lisa', 90.00, 'Completed', '2025-03-19 20:10:00');
 
 
 INSERT INTO order_items
@@ -324,6 +344,39 @@ VALUES
 
     (7, 3, 1, 6.49, 'employee_lisa'),
     (7, 1, 1, 12.99, 'employee_lisa');
+
+-- Order items for orders on March 17, 2025
+INSERT INTO order_items (order_id, menu_item_id, quantity, item_price, created_by)
+VALUES
+(1, 1, 2, 15.00, 'john_doe'), -- total 30.00
+(1, 3, 1, 15.00, 'john_doe'), -- total 15.00
+
+(2, 4, 2, 10.00, 'jane_smith'), -- total 20.00
+(2, 5, 1, 10.00, 'jane_smith'), -- total 10.00
+
+(3, 2, 4, 20.00, 'alice_johnson'); -- total 80.00
+
+-- Order items for orders on March 18, 2025
+INSERT INTO order_items (order_id, menu_item_id, quantity, item_price, created_by)
+VALUES
+(4, 6, 1, 25.00, 'mike_tyson'), -- total 25.00
+
+(5, 7, 2, 20.00, 'john_doe'), -- total 40.00
+(5, 8, 1, 20.00, 'john_doe'), -- total 20.00
+
+(6, 9, 2, 20.00, 'sarah_connor'); -- total 40.00
+
+-- Order items for orders on March 19, 2025
+INSERT INTO order_items (order_id, menu_item_id, quantity, item_price, created_by)
+VALUES
+(7, 2, 1, 20.00, 'alice_johnson'), -- total 20.00
+(7, 3, 1, 35.00, 'alice_johnson'), -- total 35.00
+
+(8, 1, 1, 15.00, 'peter_parker'), -- total 15.00
+(8, 4, 2, 10.00, 'peter_parker'), -- total 20.00
+
+(9, 2, 3, 20.00, 'john_doe'), -- total 60.00
+(9, 5, 3, 10.00, 'john_doe'); -- total 30.00
 
 
 COMMIT;

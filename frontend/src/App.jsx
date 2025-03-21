@@ -8,6 +8,7 @@ import EditMenuItem from "./pages/edit-menu-item";
 import AddMenuItem from "./pages/add-menu-item";
 import TableManagement from "./pages/TableManagement";
 import Reservation from "./pages/Reservation";
+import SalesAnalysis from "./pages/SalesAnalysis";
 
 /*
 This function is used for adding routes to the website. Whenever you add a new page
@@ -33,7 +34,7 @@ function App() {
         <Route path="/add-menu-item" element={<AddMenuItem />} />
         <Route path="/TableManagement" element={<TableManagement />} /> 
         <Route path="/reservation" element={<Reservation />} /> 
-            
+        <Route path="/sales-analysis" element={<SalesAnalysis />} />
       </Routes>
     </div>
   );
