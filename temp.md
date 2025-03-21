@@ -10,6 +10,20 @@
 * Includes overall totals for orders and revenue within the specified date range.
 * Returns the `startDate` and `endDate` used for the query.
 
+**Query Parameters:**
+
+* startDate (optional): Start of the date range (YYYY-MM-DD).
+
+* endDate (optional): End of the date range (YYYY-MM-DD).
+
+**Possible Errors:**
+
+* 401: User not logged in (No JWT provided).
+
+* 403: Invalid JWT or unauthorized access.
+
+* 500: Server/database errors.
+
 **Example Response:**
 
 ```json
@@ -45,6 +59,21 @@ Response:
 Lists item_id, item_name, and quantity_sold for each top-selling item.
 Items are ordered by quantity_sold in descending order.
 Returns the startDate and endDate used for the query.
+
+**Query Parameters:**
+
+* startDate (optional): Start of the date range (YYYY-MM-DD).
+
+* endDate (optional): End of the date range (YYYY-MM-DD).
+
+**Possible Errors:**
+
+* 401: User not logged in (No JWT provided).
+
+* 403: Invalid JWT or unauthorized access.
+
+* 500: Server/database errors.
+
 Example Response:
 ```json
 {
@@ -78,6 +107,24 @@ Response:
 Lists each category and its total revenue.
 Includes a detailed itemssold array for each category, showing the itemName, itemPrice, and quantitySold for each item contributing to the category's revenue.
 Returns the startDate and endDate used for the query.
+
+**Query Parameters:**
+
+* startDate (optional): Start of the date range (YYYY-MM-DD).
+
+* endDate (optional): End of the date range (YYYY-MM-DD).
+
+
+**Possible Errors:**
+
+* 401: User not logged in (No JWT provided).
+
+* 403: Invalid JWT or unauthorized access.
+
+* 500: Server/database errors.
+
+
+
 Example Response:
 
 ```json
@@ -139,6 +186,19 @@ Response:
 Provides an array of dailySales, each containing the day_name, date, and daily_revenue.
 Includes weeklyTotal representing the sum of daily_revenue for the week.
 The date range is automatically the current week.
+
+**Query Parameters:**
+
+* None
+
+**Possible Errors:**
+
+* 401: User not logged in (No JWT provided).
+
+* 403: Invalid JWT or unauthorized access.
+
+* 500: Server/database errors.
+
 Example Response:
 
 ```json
@@ -180,6 +240,21 @@ Response:
 Provides a breakdown of revenue and order counts categorized by order_type ("Dine-In", "Take-Out").
 Includes overall totals for orders and revenue within the specified date range.
 Returns the startDate and endDate used for the query.
+
+**Query Parameters:**
+
+* startDate (optional): Start of the date range (YYYY-MM-DD).
+
+* endDate (optional): End of the date range (YYYY-MM-DD).
+
+**Possible Errors:**
+
+* 401: User not logged in (No JWT provided).
+
+* 403: Invalid JWT or unauthorized access.
+
+* 500: Server/database errors.
+
 Example Response:
 
 ```json
