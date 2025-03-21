@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.8.4",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
@@ -21,9 +22,21 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
     "supertest": "^7.0.0"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover"
+    ],
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   }
 }

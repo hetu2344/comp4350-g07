@@ -1,3 +1,5 @@
+-- \connect restro_sync
+
 CREATE TABLE menu_categories
 (
     id SERIAL PRIMARY KEY,
@@ -42,12 +44,94 @@ CREATE TABLE users (
     store_id INTEGER NULL -- Nullable, user can exist without a store
 );
 
+-- Create the Tables Table
+CREATE TABLE tables
+(
+    table_num SERIAL PRIMARY KEY,
+    num_seats INT NOT NULL,
+    table_status BOOLEAN DEFAULT TRUE
+);
+
+
+-- Create the Reservations Table
+CREATE TABLE reservations
+(
+    reservation_id SERIAL PRIMARY KEY,
+    table_num INT REFERENCES tables(table_num) ON DELETE CASCADE,
+    customer_name VARCHAR(50) NOT NULL,
+    reservation_time TIMESTAMP NOT NULL,
+    party_size INT NOT NULL
+);
+
 -- Create the Stores Table
 CREATE TABLE stores (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) UNIQUE NOT NULL,
     owner_username VARCHAR(50) NOT NULL,
     CONSTRAINT fk_owner FOREIGN KEY (owner_username) REFERENCES users(username) ON DELETE CASCADE
+);
+
+
+CREATE SEQUENCE order_serial_seq START WITH 100001 INCREMENT BY 1;
+
+
+CREATE TABLE orders (
+    order_id SERIAL PRIMARY KEY,
+    order_number VARCHAR(15) UNIQUE,
+    store_id INTEGER REFERENCES stores(id) ON DELETE CASCADE,
+    order_type VARCHAR(10) NOT NULL CHECK(order_type IN ('Dine-In', 'Take-Out')),
+    table_num INTEGER REFERENCES tables(table_num) ON DELETE CASCADE,
+    customer_name VARCHAR(255),
+    order_status VARCHAR(50) DEFAULT 'Active' CHECK(order_status IN ('Active', 'Completed', 'Cancelled')),
+    order_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    special_instructions TEXT DEFAULT NULL,
+    total_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    created_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL
+);
+
+CREATE FUNCTION generate_order_number()
+RETURNS TRIGGER AS $$
+DECLARE 
+    new_serial INTEGER;
+    new_order_number VARCHAR(15);
+BEGIN
+    SELECT nextval('order_serial_seq') INTO new_serial;
+    IF NEW.order_type = 'Dine-In' THEN
+        new_order_number := 'DINE-' || LPAD(new_serial::TEXT, 6, '0');
+    ELSE
+        new_order_number := 'TAKE-' || LPAD(new_serial::TEXT, 6, '0');
+    END IF;
+
+    NEW.order_number := new_order_number;
+    RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE TRIGGER trigger_generate_order_number
+BEFORE INSERT ON orders 
+FOR EACH ROW
+EXECUTE FUNCTION generate_order_number();
+    
+
+CREATE TABLE order_items (
+    order_item_id SERIAL PRIMARY KEY,
+    order_id INTEGER REFERENCES orders(order_id) ON DELETE CASCADE,
+    menu_item_id INTEGER REFERENCES menu_items(item_id) ON DELETE CASCADE,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    item_price DECIMAL(10,2) NOT NULL,
+    created_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+CREATE TABLE order_status_history
+(
+    id SERIAL PRIMARY KEY,
+    order_id INT REFERENCES orders(order_id) ON DELETE CASCADE,
+    status VARCHAR(50) CHECK (status IN ('Active', 'Completed', 'Cancelled')),
+    changed_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL,
+    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE users 
@@ -159,5 +243,170 @@ VALUES('Cheesecake', 'Rich and creamy cheesecake topped with strawberries.', 6.4
         FROM menu_categories
         WHERE name = 'Dessert'), TRUE, TRUE, FALSE, FALSE);
 
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES
+(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(4);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(8);
+
+INSERT INTO tables
+    (num_seats)
+VALUES(2);
+
+-- Clear existing data first (optional for clarity if re-running script)
+DELETE FROM order_items;
+DELETE FROM orders;
+
+-- Insert Orders (Clearly structured and consistent)
+-- Orders for March 17, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
+VALUES 
+(1, 'Dine-In', 5, NULL, 'Completed', 'Extra cheese', 45.00, 'employee_lisa', '2025-03-17 13:15:00'), -- order_id: 1
+(1, 'Take-Out', NULL, 'Jane Smith', 'Completed', NULL, 30.00, 'employee_lisa', '2025-03-17 16:45:00'), -- order_id: 2
+(1, 'Dine-In', 2, NULL, 'Completed', NULL, 80.00, 'employee_lisa', '2025-03-17 19:20:00'); -- order_id: 3
+
+-- Orders for March 18, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
+VALUES 
+(1, 'Take-Out', NULL, 'Mike Tyson', 'Completed', 'No onions', 25.00, 'employee_lisa', '2025-03-18 12:30:00'), -- order_id: 4
+(1, 'Dine-In', 4, NULL, 'Completed', 'Gluten-free', 60.00, 'employee_lisa', '2025-03-18 14:00:00'), -- order_id: 5
+(1, 'Take-Out', NULL, 'Sarah Connor', 'Completed', 'Extra spicy', 40.00, 'employee_lisa', '2025-03-18 18:45:00'); -- order_id: 6
+
+-- Orders for March 19, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
+VALUES 
+(1, 'Dine-In', 1, NULL, 'Completed', NULL, 55.00, 'employee_lisa', '2025-03-19 11:00:00'), -- order_id: 7
+(1, 'Take-Out', NULL, 'Peter Parker', 'Completed', NULL, 35.00, 'employee_lisa', '2025-03-19 15:30:00'), -- order_id: 8
+(1, 'Dine-In', 3, NULL, 'Completed', 'Extra napkins', 90.00, 'employee_lisa', '2025-03-19 20:10:00'); -- order_id: 9
+
+-- Orders for March 20, 2025
+INSERT INTO orders (store_id, order_type, table_num, customer_name, order_status, special_instructions, total_price, created_by, order_time)
+VALUES
+(1, 'Take-Out', NULL, 'Sarah Smith', 'Active', 'Light Cheese', 32.47, 'employee_david', '2025-03-20 13:15:00'), -- order_id: 10
+(1, 'Take-Out', NULL, 'James Anderson', 'Completed', 'Extra Ketchup', 18.48, 'manager_susan', '2025-03-20 13:15:00'), -- order_id: 11
+(1, 'Dine-In', 1, NULL, 'Active', 'No Cheese in Vegan Bowl', 18.48, 'employee_emma', '2025-03-20 13:15:00'), -- order_id: 12
+(1, 'Dine-In', 2, NULL, 'Completed', NULL, 19.48, 'manager_bob', '2025-03-20 13:15:00'); -- order_id: 13
+
+-- Insert consistent order_items for orders
+INSERT INTO order_items (order_id, menu_item_id, quantity, item_price, created_by)
+VALUES
+-- March 17
+(1, 1, 2, 12.99, 'employee_lisa'), -- Margherita Pizza (25.98)
+(1, 3, 1, 6.49, 'employee_lisa'), -- Cheesecake (6.49), total = 32.47
+
+(2, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 23.98
+
+(3, 1, 3, 12.99, 'employee_lisa'), -- Margherita Pizza (38.97)
+(3, 2, 3, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (35.97), total = 74.94
+
+-- March 18
+(4, 2, 1, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (11.99), total = 11.99
+
+(5, 2, 3, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (35.97)
+(5, 3, 3, 6.49, 'employee_lisa'), -- Cheesecake (19.47), total = 55.44
+
+(6, 1, 2, 12.99, 'employee_lisa'), -- Margherita Pizza (25.98)
+(6, 3, 2, 6.49, 'employee_lisa'), -- Cheesecake (12.98), total = 38.96
+
+-- March 19
+(7, 1, 2, 12.99, 'employee_lisa'), -- Margherita Pizza (25.98)
+(7, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 49.96
+
+(8, 3, 2, 6.49, 'employee_lisa'), -- Cheesecake (12.98)
+(8, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 36.96
+
+(9, 1, 4, 12.99, 'employee_lisa'), -- Margherita Pizza (51.96)
+(9, 2, 2, 11.99, 'employee_lisa'), -- Vegan Buddha Bowl (23.98), total = 75.94
+
+-- March 20
+(10, 1, 2, 12.99, 'employee_david'), -- Margherita Pizza (25.98)
+(10, 3, 1, 6.49, 'employee_david'), -- Cheesecake (6.49), total = 32.47
+
+(11, 2, 1, 11.99, 'manager_susan'), -- Vegan Buddha Bowl (11.99)
+(11, 3, 1, 6.49, 'manager_susan'), -- Cheesecake (6.49), total = 18.48
+
+(12, 2, 1, 11.99, 'employee_emma'), -- Vegan Buddha Bowl (11.99)
+(12, 3, 1, 6.49, 'employee_emma'), -- Cheesecake (6.49), total = 18.48
+
+(13, 1, 1, 12.99, 'manager_bob'), -- Margherita Pizza (12.99)
+(13, 3, 1, 6.49, 'manager_bob'); -- Cheesecake (6.49), total = 19.48
 
 
+COMMIT;
+
+CREATE VIEW order_summary_view AS
+SELECT
+    o.order_id,
+    o.order_number,
+    o.order_type,
+    COALESCE(t.table_num::TEXT, 'N/A') AS table_number,
+    o.customer_name,
+    o.order_status,
+    o.order_time,
+    o.special_instructions,
+
+    SUM(oi.quantity * oi.item_price) AS item_total,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 0.05, 2) AS service_charge,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 0.05, 2) AS gst,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 0.07, 2) AS pst,
+
+    ROUND(SUM(oi.quantity * oi.item_price) * 1.17, 2) AS total_price,
+
+    o.created_by
+FROM orders o
+    LEFT JOIN tables t ON o.table_num = t.table_num 
+    JOIN order_items oi ON o.order_id = oi.order_id
+GROUP BY o.order_id, o.order_number, o.order_type, t.table_num, 
+         o.customer_name, o.order_status, o.order_time, o.created_by;
+
+
+CREATE VIEW order_details_view AS
+SELECT
+    o.order_id,
+    o.order_number,
+    m.item_name,
+    oi.quantity,
+    oi.item_price,
+    (oi.quantity * oi.item_price) AS total_item_price
+FROM orders o
+    JOIN order_items oi ON o.order_id = oi.order_id 
+    JOIN menu_items m ON oi.menu_item_id = m.item_id
+ORDER BY o.order_id, m.item_name;

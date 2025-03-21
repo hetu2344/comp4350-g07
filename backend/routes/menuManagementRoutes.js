@@ -5,6 +5,7 @@ const {
   getAllMenuItems,
   removeMenuItem,
   getAnyOneItemByID,
+  getAllAllergen,
 } = require("../controllers/menuManagementControllers");
 
 const router = express.Router();
@@ -15,6 +16,9 @@ router.get("/", getAllMenuItems);
 // Create a Menu Item
 router.post("/", createMenuItem);
 
+// Get all allergens
+router.get("/allergens", getAllAllergen);
+
 // Update a menu Item
 router.put("/:id", updateMenuItem);
 
@@ -23,6 +27,7 @@ router.delete("/:id",removeMenuItem);
 
 // Get a menu item by id
 router.get("/:id", getAnyOneItemByID);
+
 
 
 

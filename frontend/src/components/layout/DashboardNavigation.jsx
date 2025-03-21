@@ -1,8 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import classes from "./Navigation.module.css";
 
-//<div className={classes.dashboard}>Dashboard-</div>//
-
 /*
 This component is used to render the header for the DashboardNavigation Page
 It also has implementation for the log out button

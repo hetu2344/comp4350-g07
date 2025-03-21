@@ -1,14 +1,16 @@
-import Card from "react-bootstrap/Card"; 
+import Card from "react-bootstrap/Card";
 import classes from "./menu-management.module.css";
+import RoleProtection from "../components/security/RoleProtection";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import MenuManagementNavigation from "../components/layout/MenuManagementNavigation";
 
 /*
 This component renders the Menu Management page, displays the menu items,
 and provides Edit & Delete options for each item.
 */
 
-function MenuManagement() {
+function MenuManagement({ user }) {
   const [menuItems, setMenuItems] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -29,8 +31,7 @@ function MenuManagement() {
     fetchMenu();
   }, []);
 
-    const handleDelete = async (id) => {
-  
+  const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
 
     try {
@@ -41,10 +42,15 @@ function MenuManagement() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `Failed to delete item (Status: ${response.status})`);
+        throw new Error(
+          errorData.message ||
+            `Failed to delete item (Status: ${response.status})`
+        );
       }
 
-      setMenuItems((prevItems) => prevItems.filter((item) => item.item_id != id));
+      setMenuItems((prevItems) =>
+        prevItems.filter((item) => item.item_id != id)
+      );
       console.log(`Item ${id} deleted successfully.`);
     } catch (err) {
       console.error("Error deleting menu item:", err.message);
@@ -61,34 +67,51 @@ function MenuManagement() {
   };
 
   return (
-    <Card>
-      <div className={classes.container}>
-        <h1 className={classes.title}>📜 Menu Management</h1>
-        <button className={classes.editBtn} onClick={() => handleAdd()}>Add item</button>
-        {error && <p className={classes.error}>{error}</p>}
-        <div className={classes.menuList}>
-          {menuItems.length > 0 ? (
-            menuItems.map((item) => (
-              <div key={item.item_id} className={classes.menuCard}>
-                <div className={classes.menuContent}>
-                  <h3>{item.item_name}</h3>
-                  <p className={classes.category}>{item.category_name}</p>
-                  <p>{item.item_description}</p>
-                  <p className={classes.price}><strong>Price:</strong> ${item.price}</p>
+    <>
+      <MenuManagementNavigation />
+      <Card>
+        <div className={classes.container}>
+          <h1 className={classes.title}>📜 Menu Management</h1>
+          <button className={classes.editBtn} onClick={() => handleAdd()}>
+            Add item
+          </button>
+          {error && <p className={classes.error}>{error}</p>}
+          <div className={classes.menuList}>
+            {menuItems.length > 0 ? (
+              menuItems.map((item) => (
+                <div key={item.item_id} className={classes.menuCard}>
+                  <div className={classes.menuContent}>
+                    <h3>{item.item_name}</h3>
+                    <p className={classes.category}>{item.category_name}</p>
+                    <p>{item.item_description}</p>
+                    <p className={classes.price}>
+                      <strong>Price:</strong> ${item.price}
+                    </p>
+                  </div>
+                  <div className={classes.actions}>
+                    <button
+                      className={classes.editBtn}
+                      onClick={() => handleEdit(item.item_id)}
+                    >
+                      ✏️ Edit
+                    </button>
+                    <button
+                      className={classes.deleteBtn}
+                      onClick={() => handleDelete(item.item_id)}
+                    >
+                      🗑️ Delete
+                    </button>
+                  </div>
                 </div>
-                <div className={classes.actions}>
-                  <button className={classes.editBtn} onClick={() => handleEdit(item.item_id)}>✏️ Edit</button>
-                  <button className={classes.deleteBtn} onClick={() => handleDelete(item.item_id)}>🗑️ Delete</button>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className={classes.noItems}>No menu items available.</p>
-          )}
+              ))
+            ) : (
+              <p className={classes.noItems}>No menu items available.</p>
+            )}
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </>
   );
 }
 
-export default MenuManagement;
+export default RoleProtection(MenuManagement, ["S", "M"]);
