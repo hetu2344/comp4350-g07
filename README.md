@@ -25,6 +25,19 @@ make up-build
 make down-volumes
 ```
 
+# Running the test
+
+To run the unit and integration tests all together first [stop](https://github.com/hetu2344/comp4350-g07#stopping-the-application) the application first. then the run the following commands
+
+```{bash}
+make up-build
+make run-all-tests
+```
+
+**NOTE**: All of the test are passing and here is the coverage for the [backend]() test. However, you might see the _TCPWRAP_ or _open handle_ error from JEST, which are related to how jest is handle the integration tests.
+
+Run the `make help` command to get the list of command availabe, if you want to run some tests seperately.
+
 # Link to documents
 [Vision Statement](docs/Vision_Statement.md#vision-statement)
 
