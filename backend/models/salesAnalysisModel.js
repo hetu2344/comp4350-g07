@@ -1,6 +1,7 @@
 const pool = require('../db/db');
 
 exports.totalRevenueDetails = async (start, end) => {
+
     const { rows } = await pool.query(`
         SELECT order_status, 
                COUNT(order_id) AS total_orders, 
@@ -15,6 +16,10 @@ exports.totalRevenueDetails = async (start, end) => {
         FROM orders
         WHERE DATE(order_time) BETWEEN $1 AND $2`, [start, end]);
 
+    console.log({
+        byStatus: rows,
+        total: totalSummary.rows[0]
+    });
     return {
         byStatus: rows,
         total: totalSummary.rows[0]
@@ -163,6 +168,10 @@ exports.weeklySalesDetails = async () => {
           AND DATE(order_time) >= DATE_TRUNC('week', CURRENT_DATE)
           AND DATE(order_time) < DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '7 days'`);
 
+    console.log({
+        dailySales: rows,
+        weeklyTotal: totalWeekRevenue.rows[0].weekly_total
+    });
     return {
         dailySales: rows,
         weeklyTotal: totalWeekRevenue.rows[0].weekly_total
