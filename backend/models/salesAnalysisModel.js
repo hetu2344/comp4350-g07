@@ -168,6 +168,10 @@ exports.weeklySalesDetails = async () => {
           AND DATE(order_time) >= DATE_TRUNC('week', CURRENT_DATE)
           AND DATE(order_time) < DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '7 days'`);
 
+    console.log({
+        dailySales: rows,
+        weeklyTotal: totalWeekRevenue.rows[0].weekly_total
+    });
     return {
         dailySales: rows,
         weeklyTotal: totalWeekRevenue.rows[0].weekly_total

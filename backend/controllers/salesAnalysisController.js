@@ -109,6 +109,7 @@ exports.getDineVsTakeRevenueDetails = async (req, res) => {
 exports.getWeeklySalesDetails = async (req, res) => {
     try {
         const weeklySalesData = await salesModel.weeklySalesDetails();
+        console.log(weeklySalesData);
         res.json({ weeklySalesData });
     } catch (error) {
         res.status(500).json({ error: error.message });

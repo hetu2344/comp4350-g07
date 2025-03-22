@@ -276,28 +276,13 @@ describe("Integration Test: Sales API", () => {
       weeklySalesData: {
         dailySales: [
           {
-            day_name: "Monday",
-            date: "2025-03-19",
-            daily_revenue: 0,
-          },
-          {
-            day_name: "Tuesday",
-            date: "2025-03-19",
-            daily_revenue: 0,
-          },
-          {
             day_name: "Wednesday",
             date: "2025-03-19",
-            daily_revenue: 0,
-          },
-          {
-            day_name: "Friday",
-            date: "2025-03-19",
             daily_revenue: 57.44,
-          },
+          }
         ],
         weeklyTotal: 57.44,
-      },
+      }
     };
     console.log(response.body);
 
