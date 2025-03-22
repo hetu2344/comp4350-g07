@@ -100,14 +100,14 @@ As a restaurant owner, I want to create accounts for different roles of my resta
 
 **Acceptance Criteria**:
 
-**Scenario**: Successfully Modify a Staff Member’s Role
+**Scenario**: Successfully create a Staff Member’s account
 
 Given I am a restaurant owner
-And I am on the Staff Management page
-When I select a staff member and change their role (e.g., from Employee to Manager)
-And I click the "Save Changes" button
-Then the system should update their role
-And the staff member should receive a notification about their updated permissions
+And I am on the Staff Management Page
+When I select a create account for staff member
+And I give it details
+And I click create account
+Then the system should create an account for my staff member.
 
 ---
 
