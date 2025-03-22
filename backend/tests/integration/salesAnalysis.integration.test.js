@@ -262,63 +262,67 @@ describe("Integration Test: Sales API", () => {
     expect(response.body).toEqual(expectedResponse);
   });
 
-  test("GET /api/sales/dailyTrend without params ", async () => {
+  test("GET  /api/sales/weeklySales gets  daily revenue for the current week, along with the total revenue for the week.", async () => {
+    const payload = { username: "admin", storeId: 1, type: "M" };
+    const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "2h" });
+    jwt.verify = jest.fn((t, secret, callback) => callback(null, payload));
+
+    const response = await request(app)
+      .get("/api/sales/weeklySales")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(response.statusCode).toBe(200);
+    expectedResponse = {
+      weeklySalesData: {
+        dailySales: [
+          {
+            day_name: "Monday",
+            date: "2025-03-19",
+            daily_revenue: 0,
+          },
+          {
+            day_name: "Tuesday",
+            date: "2025-03-19",
+            daily_revenue: 0,
+          },
+          {
+            day_name: "Wednesday",
+            date: "2025-03-19",
+            daily_revenue: 0,
+          },
+          {
+            day_name: "Friday",
+            date: "2025-03-19",
+            daily_revenue: 57.44,
+          },
+        ],
+        weeklyTotal: 57.44,
+      },
+    };
+    console.log(response.body);
+
+    expect(response.body).toEqual(expectedResponse);
+  });
+
+  test("GET /api/sales/dailyTrend", async () => {
     const payload = { username: "admin", storeId: 1, type: "M" };
     const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "2h" });
     jwt.verify = jest.fn((t, secret, callback) => callback(null, payload));
 
     const response = await request(app)
       .get("/api/sales/dailyTrend")
+      .query({ startDate: "2025-03-19", endDate: "2025-03-19" })
       .set("Cookie", [`token=${token}`]);
 
     expect(response.statusCode).toBe(200);
 
     expectedResponse = {
-      startDate: "2025-03-21",
-      endDate: "2025-03-21",
-      dailySales: [],
+      startDate: "2025-03-19",
+      endDate: "2025-03-19",
+      dailySales: [ { date: '2025-03-19T00:00:00.000Z', revenue: 57.44 } ]
     };
+
+    console.log(response.body);
     expect(response.body).toEqual(expectedResponse);
   });
-
-  // test("GET  /api/sales/weeklySales gets  daily revenue for the current week, along with the total revenue for the week.", async () => {
-  //   const payload = { username: "admin", storeId: 1, type: "M" };
-  //   const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "2h" });
-  //   jwt.verify = jest.fn((t, secret, callback) => callback(null, payload));
-
-  //   const response = await request(app)
-  //     .get("/api/sales/weeklySales")
-  //     .set("Cookie", [`token=${token}`]);
-
-  //   expect(response.statusCode).toBe(200);
-  //   console.log(response.body);
-  //   expectedResponse = {
-  //     weeklySalesData: {
-  //       dailySales: [
-  //         {
-  //           day_name: "Monday",
-  //           date: "2025-03-19",
-  //           daily_revenue: 0,
-  //         },
-  //         {
-  //           day_name: "Tuesday",
-  //           date: "2025-03-19",
-  //           daily_revenue: 0,
-  //         },
-  //         {
-  //           day_name: "Wednesday",
-  //           date: "2025-03-19",
-  //           daily_revenue: 0,
-  //         },
-  //         {
-  //           day_name: "Friday",
-  //           date: "2025-03-19",
-  //           daily_revenue: 57.44,
-  //         },
-  //       ],
-  //       weeklyTotal: 57.44,
-  //     },
-  //   };
-  //   expect(response.body).toEqual(expectedResponse);
-  // });
 });
