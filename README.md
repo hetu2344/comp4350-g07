@@ -34,7 +34,7 @@ make up-build
 make run-all-tests
 ```
 
-**NOTE**: All of the test are passing and here is the coverage for the [backend]() test. However, you might see the _TCPWRAP_ or _open handle_ error from JEST, which are related to how jest is handle the integration tests.
+**NOTE**: All of the test are passing and here is the coverage for the [backend](https://github.com/hetu2344/comp4350-g07/blob/main/docs/test-coverage.png) test. However, you might see the _TCPWRAP_ or _open handle_ error from JEST, which are related to how jest is handle the integration tests.
 
 Run the `make help` command to get the list of command availabe, if you want to run some tests seperately.
 
