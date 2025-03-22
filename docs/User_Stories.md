@@ -93,7 +93,7 @@ And the staff member should receive an email with login credentials
 
 **Description**:
 
-As a restaurant owner, I want to modify the roles of my restaurant staff so that I can efficiently manage my employees.
+As a restaurant owner, I want to create accounts for different roles of my restaurant staff so that I can efficiently manage my employees.
 
 * Priority: High
 * Time: 1 day
