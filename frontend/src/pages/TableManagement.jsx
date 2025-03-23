@@ -177,7 +177,7 @@ const TableManagement = () => {
           <button onClick={handleSearchCustomer} className="action-button" disabled={loading}>
             Search
           </button>
-          <button onClick={clearCustomerSearch} className="clear-button" disabled={loading}>
+          <button onClick={clearCustomerSearch} className="cancel-button" disabled={loading}>
             Clear
           </button>
         </div>
@@ -210,6 +210,15 @@ const TableManagement = () => {
                       >
                         View
                       </button>
+                       <button
+                        onClick={() => {
+                          const table = tables.find((t) => t.table_num === reservation.table_num)
+                          if (table) setSelectedTable(table)
+                        }}
+                        className="action-button"
+                      >
+                        Cancel
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -233,7 +242,7 @@ const TableManagement = () => {
           <button onClick={handleSearchTable} className="action-button" disabled={loading}>
             Search
           </button>
-          <button onClick={clearTableSearch} className="clear-button" disabled={loading}>
+          <button onClick={clearTableSearch} className="cancel-button" disabled={loading}>
             Clear
           </button>
         </div>

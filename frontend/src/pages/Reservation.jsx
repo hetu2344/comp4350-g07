@@ -107,6 +107,10 @@ if(!localTable){
   return (
     <div className="modal">
       <div className="modal-content">
+        {/* Close button at top right */}
+        <button onClick={onClose} className="close-button-top" aria-label="Close">
+          ✕
+        </button>
         <h2>Table {localTable.table_num}</h2>
         <p>Seats: {localTable.num_seats}</p>
 
@@ -118,33 +122,7 @@ if(!localTable){
           </div>
         )}
 
-        {localTable.reservations && localTable.reservations.length > 0 ? (
-          <div>
-            <h3>Current Reservations</h3>
-            {localTable.reservations.map((reservation) => (
-              <div key={reservation.reservation_id} className="reservation-item">
-                <p>
-                  <strong>Reserved by:</strong> {reservation.customer_name}
-                </p>
-                <p>
-                  <strong>Party Size:</strong> {reservation.party_size}
-                </p>
-                <p>
-                  <strong>Time:</strong> {formatDate(reservation.reservation_time)}
-                </p>
-                <button
-                  onClick={() => handleCancelReservation(reservation.reservation_id)}
-                  className="cancel-button"
-                  disabled={loading}
-                >
-                  Cancel Reservation
-                </button>
-              </div>
-            ))}
-            <hr />
-          </div>
-        ) : null}
-
+        
         <h3>Make a New Reservation</h3>
         <div className="reservation-form">
           <div className="form-group">
@@ -185,7 +163,39 @@ if(!localTable){
           <button onClick={handleReserve} className="action-button" disabled={loading}>
             Reserve
           </button>
+          <hr />
+
         </div>
+
+
+        {localTable.reservations && localTable.reservations.length > 0 ? (
+          <div>
+            <h3>Current Reservations</h3>
+              <hr />
+
+            {localTable.reservations.map((reservation) => (
+              <div key={reservation.reservation_id} className="reservation-item">
+                <p>
+                  <strong>Reserved by:</strong> {reservation.customer_name}
+                </p>
+                <p>
+                  <strong>Party Size:</strong> {reservation.party_size}
+                </p>
+                <p>
+                  <strong>Time:</strong> {formatDate(reservation.reservation_time)}
+                </p>
+                <button
+                  onClick={() => handleCancelReservation(reservation.reservation_id)}
+                  className="cancel-button"
+                  disabled={loading}
+                >
+                  Cancel Reservation
+                </button>
+              </div>
+            ))}
+            <hr />
+          </div>
+        ) : null}
 
         <button onClick={onClose} className="close-button">
           Close

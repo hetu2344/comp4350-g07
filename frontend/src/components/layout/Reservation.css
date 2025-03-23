@@ -114,3 +114,32 @@
     cursor: pointer;
     font-weight: bold;
 }
+
+.close-button-top {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.close-button-top:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+
+/* Make sure the modal-content has position relative for absolute positioning */
+.modal-content {
+    position: relative;
+    /* Keep your existing styles */
+}
