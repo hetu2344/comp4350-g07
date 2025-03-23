@@ -19,7 +19,7 @@ const router = express.Router();
 
 router.get("/", getAllTables); // Returns all tables, including table num, status, and number of seats
 
-router.post("/", updateTable); // Change status of the table, new status in body json with isOpen as title
+// router.post("/", updateTable); // Change status of the table, new status in body json with isOpen as title
 
 router.post("/reservation", addReservation); // Adds a reservation, user
 

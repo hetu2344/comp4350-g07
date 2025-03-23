@@ -5,10 +5,10 @@ import "../components/layout/TableManagement.css";
 import RoleProtection from "../components/security/RoleProtection";
 import {
   getAllTables,
-  updateTableStatus,
-  addReservation,
-  deleteReservation,
+  getReservationsByCustomer,
+  getReservationsByTable,
 } from "../services/api";
+import Reservation from "./Reservation";
 import TableManagementNavigation from "../components/layout/TableManagementNavigation";
 
 const TableManagement = () => {
@@ -16,16 +16,25 @@ const TableManagement = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    partySize: "",
-    time: "",
-  });
+  const [searchCustomer,setSearchCustomer]=useState("");
+  const [customerReservations, setCustomerReservations] = useState([]);
+  const [searchTableNum, setSearchTableNum] = useState("");
+  const [tableReservations, setTableReservations] = useState([]);
+  const [hasSearchedTable, setHasSearchedTable] = useState(false)
+
+
+
 
   // Fetch tables from the backend
   useEffect(() => {
-    const fetchTables = async () => {
+    fetchTables();
+  }, []);
+
+
+   const fetchTables = async () => {
       try {
+        setLoading(true)
+        setError(null)
         console.log("Fetching tables...");
         const data = await getAllTables();
 
@@ -46,219 +55,284 @@ const TableManagement = () => {
       }
     };
 
-    fetchTables();
-  }, []);
-
-  // Handle reservation creation
-  const handleReserve = async () => {
-    console.log("Current formData before sending:", formData);
-
-    if (
-      !formData.name ||
-      !formData.partySize ||
-      !formData.time ||
-      !selectedTable
-    ) {
-      setError("Please fill out all fields and select a table.");
-      return;
+  const handleSearchCustomer=async()=>{
+    if (!searchCustomer.trim()) {
+      setError("Please enter a customer name to search")
+      return
     }
 
-    let selectedTime = new Date(formData.time);
-    if (isNaN(selectedTime.getTime())) {
-      setError("Invalid date selected.");
-      return;
+    try{
+      setLoading(true);
+      setError(null);
+      const reservations= await getReservationsByCustomer(searchCustomer);
+      setCustomerReservations(reservations)
+    }catch(err){
+      setError("Failed to find customer reservations.");
+    }finally{
+      setLoading(false);
     }
+  }
 
-    const formattedTime = selectedTime.toISOString();
-
-    console.log("Calling addReservation with:", {
-      name: formData.name,
-      tableNum: selectedTable.table_num, // Ensure the selected table number is sent
-      partySize: formData.partySize,
-      time: formattedTime,
-    });
-
-    try {
-      await addReservation(
-        formData.name,
-        selectedTable.table_num, // Ensure tableNum is included
-        formData.partySize,
-        formattedTime
-      );
-      console.log("Reservation request sent!");
-
-      // Refresh tables
-      const updatedTables = await getAllTables();
-      setTables(updatedTables);
-
-      setSelectedTable(null);
-      setFormData({ name: "", partySize: "", time: "" });
-    } catch (err) {
-      console.error("Error making reservation:", err);
-      setError("Failed to add reservation.");
-    }
-  };
-
-  // Handle reservation deletion
-  const handleCancelReservation = async () => {
-    if (
-      !selectedTable ||
-      !selectedTable.reservations ||
-      selectedTable.reservations.length === 0
-    ) {
-      console.error("No reservation found to cancel.");
-      return;
-    }
-
-    const reservationId = selectedTable.reservations[0].reservation_id;
-    console.log("Reservation ID:", reservationId);
-
-    if (!reservationId) {
-      console.error(" Reservation ID is undefined.");
-      return;
+  
+  const handleSearchTable = async () => {
+    if (!searchTableNum.trim()) {
+      setError("Please enter a table number to search")
+      return
     }
 
     try {
-      console.log("🛠 Calling deleteReservation with:", reservationId);
-      await deleteReservation(reservationId);
-      console.log("Reservation Deleted");
-      setSelectedTable(null);
-
-      // Update table status to available
-      await updateTableStatus(selectedTable.table_num, true);
-
-      // Refresh tables
-      const updatedTables = await getAllTables();
-      setTables(updatedTables);
+      setLoading(true)
+      setError(null)
+      const tableNum = Number.parseInt(searchTableNum)
+      const response = await getReservationsByTable(tableNum)
+      setTableReservations(response || [])
     } catch (err) {
-      console.error("Error deleting reservation:", err);
-      setError("Failed to delete reservation.");
+      setError("Failed to find reservations for this table.")
+    } finally {
+      setLoading(false)
     }
-  };
+  }
 
-  // Handle manual table status update
-  const handleUpdateStatus = async (tableNum, isAvailable) => {
-    try {
-      await updateTableStatus(tableNum, isAvailable);
+  const clearCustomerSearch = () => {
+    setSearchCustomer("")
+    setCustomerReservations([])
+  }
 
-      // Refresh the table list after updating
-      const updatedTables = await getAllTables();
-      setTables(updatedTables);
-    } catch (err) {
-      setError("Failed to update table status.");
-      console.error("Error updating table status:", err);
+  const clearTableSearch = () => {
+    setSearchTableNum("")
+    setTableReservations([])
+  }
+
+
+   const formatDate = (dateString) => {
+    if (!dateString) return "N/A"
+    const date = new Date(dateString)
+    return date.toLocaleString()
+  }
+
+  const getNextReservation=(table)=>{
+    if(!table.reservations||table.reservations.length===0){
+      return null;
     }
-  };
 
-  if (loading) return <p>Loading tables...</p>;
-  if (error) return <p>Error: {error}</p>;
+    const now=new Date();
+    const futureReservations=table.reservations.filter((res)=>new Date(res.reservation_time)>now).sort((a,b)=>new Date(a.reservation_time)-new Date(b.reservation_time));
+
+    if(futureReservations.length>0){
+      return futureReservations[0];
+    }else{
+      return null;
+    }
+  }
+
 
   return (
-    <>
-      <TableManagementNavigation />
-      <div className="table-management">
-        <h2>Table Management</h2>
-        <div className="table-grid">
-          {tables.map((table) => (
-            <div
-              key={table.table_num}
-              className={`table-card ${
-                table.table_status === false ? "reserved" : ""
-              }`}
-              onClick={() => setSelectedTable(table)}
-            >
-              <img src="/table.png" alt="Table" className="table-image" />
+    <div>
+       <TableManagementNavigation />
+
+
+    
+    <div className="table-management">
+      <h2>Table Management</h2>
+
+      {/* Error */}
+      {error && (
+        <div className="error-message">
+          {error}
+          <button onClick={() => setError(null)}>✕</button>
+        </div>
+      )}
+
+      {/* Loading*/}
+      {loading && <div className="loading-indicator">Loading...</div>}
+
+      {/*TableGrid*/}
+      <div className="table-grid">
+        {tables.map((table) => {
+          const nextReservation = getNextReservation(table)
+
+          return (
+            <div key={table.table_num} className="table-card" onClick={() => setSelectedTable(table)}>
               <h3>Table {table.table_num}</h3>
-              <p>
-                Status:{" "}
-                {table.table_status === false ? "Reserved" : "Available"}
-              </p>
+              <p>Seats: {table.num_seats}</p>
+              <p>Reservations: {table.reservations ? table.reservations.length : 0}</p>
+              {nextReservation && (
+                <p className="next-reservation">Next: {formatDate(nextReservation.reservation_time)}</p>
+              )}
             </div>
-          ))}
+          )
+        })}
+      </div>
+
+      {/* Customer Search*/}
+      <div className="reservation-list-container">
+        <h3>Search Reservations by Customer</h3>
+        <div className="search-form">
+          <input
+            type="text"
+            placeholder="Customer Name"
+            value={searchCustomer}
+            onChange={(e) => setSearchCustomer(e.target.value)}
+          />
+          <button onClick={handleSearchCustomer} className="action-button" disabled={loading}>
+            Search
+          </button>
+          <button onClick={clearCustomerSearch} className="clear-button" disabled={loading}>
+            Clear
+          </button>
         </div>
 
-        {/* Modal for Reservation Details */}
-        {selectedTable && (
-          <div className="modal">
-            <div className="modal-content">
-              <h2>Table {selectedTable.table_num}</h2>
-
-              {/* Check if the table has any reservations */}
-              {selectedTable.reservations.length > 0 ? (
-                selectedTable.reservations.map((reservation) => (
-                  <div key={reservation.reservation_id}>
-                    <p>
-                      <strong>Reserved by:</strong>{" "}
-                      {reservation.customer_name || "Unknown"}
-                    </p>
-                    <p>
-                      <strong>Party Size:</strong>{" "}
-                      {reservation.party_size || "N/A"}
-                    </p>
-                    <p>
-                      <strong>Time:</strong>{" "}
-                      {reservation.reservation_time
-                        ? new Date(
-                            reservation.reservation_time
-                          ).toLocaleString()
-                        : "N/A"}
-                    </p>
-                    <button
-                      onClick={() =>
-                        handleCancelReservation(reservation.reservation_id)
-                      }
-                      className="cancel-button"
-                    >
-                      Cancel Reservation
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <>
-                  <h3>Make a Reservation</h3>
-                  <input
-                    type="text"
-                    placeholder="Name"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                  />
-                  <input
-                    type="number"
-                    placeholder="Party Size"
-                    value={formData.partySize}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        partySize: Number(e.target.value),
-                      })
-                    } // Ensure numeric value
-                  />
-                  <input
-                    type="datetime-local"
-                    value={formData.time}
-                    onChange={(e) =>
-                      setFormData({ ...formData, time: e.target.value })
-                    } //  Ensure proper date format
-                  />
-                  <button onClick={handleReserve} className="action-button">
-                    Reserve
-                  </button>
-                </>
-              )}
-              <button
-                onClick={() => setSelectedTable(null)}
-                className="close-button"
-              >
-                Close
-              </button>
-            </div>
+        {customerReservations.length > 0 && (
+          <div>
+            <h4>Results for "{searchCustomer}"</h4>
+            <table className="reservation-table">
+              <thead>
+                <tr>
+                  <th>Table</th>
+                  <th>Party Size</th>
+                  <th>Date & Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customerReservations.map((reservation) => (
+                  <tr key={reservation.reservation_id}>
+                    <td>Table {reservation.table_num}</td>
+                    <td>{reservation.party_size}</td>
+                    <td>{formatDate(reservation.reservation_time)}</td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          const table = tables.find((t) => t.table_num === reservation.table_num)
+                          if (table) setSelectedTable(table)
+                        }}
+                        className="action-button"
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
-    </>
-  );
-};
 
-export default RoleProtection(TableManagement, ["S", "M", "E"]);
+      {/* Table Number Search */}
+      <div className="reservation-list-container">
+        <h3>Search by Table Number</h3>
+        <div className="search-form">
+          <input
+            type="number"
+            placeholder="Table Number"
+            value={searchTableNum}
+            onChange={(e) => setSearchTableNum(e.target.value)}
+            min="1"
+          />
+          <button onClick={handleSearchTable} className="action-button" disabled={loading}>
+            Search
+          </button>
+          <button onClick={clearTableSearch} className="clear-button" disabled={loading}>
+            Clear
+          </button>
+        </div>
+
+        {tableReservations.length > 0 && (
+          <div>
+            <h4>Reservations for Table #{searchTableNum}</h4>
+            <table className="reservation-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Party Size</th>
+                  <th>Date & Time</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableReservations.map((reservation) => (
+                  <tr key={reservation.reservation_id}>
+                    <td>{reservation.customer_name}</td>
+                    <td>{reservation.party_size}</td>
+                    <td>{formatDate(reservation.reservation_time)}</td>
+                    <td>
+                      <button
+                        onClick={() => {
+                          const table = tables.find((t) => t.table_num === Number.parseInt(searchTableNum))
+                          if (table) setSelectedTable(table)
+                        }}
+                        className="action-button"
+                      >
+                        View
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {hasSearchedTable && tableReservations.length === 0 && !loading && (
+          <p>No reservations found for Table #{searchTableNum}.</p>
+        )}
+      </div>
+
+      {/*ReservationList*/}
+      <div className="reservation-list-container">
+        <h2 className="reservation-list-title">All Reservations</h2>
+        <table className="reservation-table">
+          <thead>
+            <tr>
+              <th>Table</th>
+              <th>Customer</th>
+              <th>Party Size</th>
+              <th>Date & Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tables.flatMap((table) =>
+              table.reservations
+                ? table.reservations.map((reservation) => (
+                    <tr key={reservation.reservation_id}>
+                      <td>Table {table.table_num}</td>
+                      <td>{reservation.customer_name}</td>
+                      <td>{reservation.party_size}</td>
+                      <td>{formatDate(reservation.reservation_time)}</td>
+                      <td>
+                        <button onClick={() => setSelectedTable(table)} className="action-button">
+                          View
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                : [],
+            )}
+            {tables.every((table) => !table.reservations || table.reservations.length === 0) && (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center" }}>
+                  No reservations found
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Reservation Modal */}
+      {selectedTable && (
+        <Reservation
+          selectedTable={selectedTable}
+          onClose={() => setSelectedTable(null)}
+          onReservationChange={fetchTables}
+          formatDate={formatDate}
+        />
+      )}
+    </div>
+    </div>
+  )
+}
+
+export default RoleProtection(TableManagement, ["S", "M", "E"])
+
