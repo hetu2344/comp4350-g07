@@ -185,10 +185,14 @@ describe("Table Management Integration Tests", () => {
         expect(postRes.body).toHaveProperty("reservation");
         const insertedName = postRes.body.reservation.customer_name;
         expect(insertedName).toBe("CustomerTest");
-    
-        const res = await request(app).get("/api/tables/reservation/customer?customerName=${encodeURIComponent(insertedName)}");
+            const res = await request(app).get(
+              `/api/tables/reservation/customer?customerName=CustomerTest`
+            );
+
         expect(res.statusCode).toBe(200);
+        console.log(res.body.rows);
         const data = res.body.rows ? res.body.rows : res.body;
+        console.log(data);
         expect(Array.isArray(data)).toBe(true);
       });
     });

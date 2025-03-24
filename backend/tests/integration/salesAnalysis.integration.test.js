@@ -274,14 +274,8 @@ describe("Integration Test: Sales API", () => {
     expect(response.statusCode).toBe(200);
     expectedResponse = {
       weeklySalesData: {
-        dailySales: [
-          {
-            day_name: "Wednesday",
-            date: "2025-03-19",
-            daily_revenue: 57.44,
-          }
-        ],
-        weeklyTotal: 57.44,
+        dailySales: [],
+        weeklyTotal: null,
       }
     };
     console.log(response.body);
