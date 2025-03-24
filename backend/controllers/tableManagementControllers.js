@@ -8,9 +8,21 @@ const {
 const pool = require("../db/db");
 
 function parseLocalDateTime(datetimeString) {
+  if (!datetimeString || typeof datetimeString !== "string" || !datetimeString.includes("T")) {
+    return new Date("Invalid Date");
+  }
   const [datePart, timePart] = datetimeString.split("T");
-  const [year, month, day] = datePart.split("-").map(Number);
-  const [hour, minute, second = 0] = timePart.split(":").map(Number);
+  if (!timePart) return new Date("Invalid Date");
+
+  const dateParts = datePart.split("-");
+  if (dateParts.length !== 3) return new Date("Invalid Date");
+  const [year, month, day] = dateParts.map(Number);
+
+  const timeParts = timePart.split(":");
+  if (timeParts.length < 2) return new Date("Invalid Date");
+  // Allow seconds to be optional
+  const [hour, minute, second = 0] = timeParts.map(Number);
+
   return new Date(year, month - 1, day, hour, minute, second);
 }
 

@@ -1,57 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="20" failures="0" errors="0" time="0.424">
-  <testsuite name="GET /api/sales/totalRevenue" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.151" tests="3">
-    <testcase classname="GET /api/sales/totalRevenue should return total revenue details when startDate and endDate are provided" name="GET /api/sales/totalRevenue should return total revenue details when startDate and endDate are provided" time="0.018">
+<testsuites name="jest tests" tests="9" failures="9" errors="0" time="20.302">
+  <testsuite name="Table Management Integration Tests" errors="0" failures="9" skipped="0" timestamp="2025-03-24T02:08:48" time="20.167" tests="9">
+    <testcase classname="Table Management Integration Tests GET / (get all tables) should return all tables with reservation info" name="Table Management Integration Tests GET / (get all tables) should return all tables with reservation info" time="2.707">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
     </testcase>
-    <testcase classname="GET /api/sales/totalRevenue should default to current date when startDate and endDate are missing" name="GET /api/sales/totalRevenue should default to current date when startDate and endDate are missing" time="0.002">
+    <testcase classname="Table Management Integration Tests POST /reservation (add reservation) should add a new reservation successfully" name="Table Management Integration Tests POST /reservation (add reservation) should add a new reservation successfully" time="2.688">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
     </testcase>
-    <testcase classname="GET /api/sales/totalRevenue should return 500 if an error occurs" name="GET /api/sales/totalRevenue should return 500 if an error occurs" time="0.002">
+    <testcase classname="Table Management Integration Tests POST /reservation (add reservation) should return 400 if reservation time is too soon" name="Table Management Integration Tests POST /reservation (add reservation) should return 400 if reservation time is too soon" time="2.7">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
     </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/dinevstake" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.033" tests="3">
-    <testcase classname="GET /api/sales/dinevstake should return dine vs take revenue details when dates are provided" name="GET /api/sales/dinevstake should return dine vs take revenue details when dates are provided" time="0.002">
+    <testcase classname="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should delete an existing reservation" name="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should delete an existing reservation" time="0">
+      <failure>TypeError: Cannot read properties of undefined (reading &apos;reservation_id&apos;)
+    at Object.reservation_id (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:91:46)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="GET /api/sales/dinevstake should default to current date when query params are missing" name="GET /api/sales/dinevstake should default to current date when query params are missing" time="0.002">
+    <testcase classname="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should return 400 for invalid reservation id" name="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should return 400 for invalid reservation id" time="0">
+      <failure>TypeError: Cannot read properties of undefined (reading &apos;reservation_id&apos;)
+    at Object.reservation_id (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:91:46)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="GET /api/sales/dinevstake should return 500 if an error occurs" name="GET /api/sales/dinevstake should return 500 if an error occurs" time="0.001">
+    <testcase classname="Table Management Integration Tests GET /reservation/table (get reservations by table) should return 400 if tableNum is missing" name="Table Management Integration Tests GET /reservation/table (get reservations by table) should return 400 if tableNum is missing" time="2.702">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
     </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/weeklySales" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.036" tests="2">
-    <testcase classname="GET /api/sales/weeklySales should return weekly sales details" name="GET /api/sales/weeklySales should return weekly sales details" time="0.004">
+    <testcase classname="Table Management Integration Tests GET /reservation/table (get reservations by table) should return reservations for a valid table" name="Table Management Integration Tests GET /reservation/table (get reservations by table) should return reservations for a valid table" time="2.7">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
     </testcase>
-    <testcase classname="GET /api/sales/weeklySales should return 500 if an error occurs" name="GET /api/sales/weeklySales should return 500 if an error occurs" time="0.001">
+    <testcase classname="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return 400 if customerName is missing" name="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return 400 if customerName is missing" time="2.699">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
     </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/revenueByCategory" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.031" tests="3">
-    <testcase classname="GET /api/sales/revenueByCategory should return revenue by category with items when dates are provided" name="GET /api/sales/revenueByCategory should return revenue by category with items when dates are provided" time="0.004">
-    </testcase>
-    <testcase classname="GET /api/sales/revenueByCategory should default to current date when query params are missing" name="GET /api/sales/revenueByCategory should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/revenueByCategory should return 500 if an error occurs" name="GET /api/sales/revenueByCategory should return 500 if an error occurs" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/dailyTrend" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.029" tests="3">
-    <testcase classname="GET /api/sales/dailyTrend should return daily sales trend when dates are provided" name="GET /api/sales/dailyTrend should return daily sales trend when dates are provided" time="0.002">
-    </testcase>
-    <testcase classname="GET /api/sales/dailyTrend should default to current date when query params are missing" name="GET /api/sales/dailyTrend should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/dailyTrend should return 500 if an error occurs" name="GET /api/sales/dailyTrend should return 500 if an error occurs" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/topMenuItems" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.028" tests="3">
-    <testcase classname="GET /api/sales/topMenuItems should return top menu items when dates are provided" name="GET /api/sales/topMenuItems should return top menu items when dates are provided" time="0.002">
-    </testcase>
-    <testcase classname="GET /api/sales/topMenuItems should default to current date when query params are missing" name="GET /api/sales/topMenuItems should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/topMenuItems should return 500 if an error occurs" name="GET /api/sales/topMenuItems should return 500 if an error occurs" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/averageOrderValue" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.029" tests="3">
-    <testcase classname="GET /api/sales/averageOrderValue should return average order value when dates are provided" name="GET /api/sales/averageOrderValue should return average order value when dates are provided" time="0.002">
-    </testcase>
-    <testcase classname="GET /api/sales/averageOrderValue should default to current date when query params are missing" name="GET /api/sales/averageOrderValue should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/averageOrderValue should return 500 if an error occurs" name="GET /api/sales/averageOrderValue should return 500 if an error occurs" time="0.001">
+    <testcase classname="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return reservations for a valid customer" name="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return reservations for a valid customer" time="2.696">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
     </testcase>
   </testsuite>
 </testsuites>
