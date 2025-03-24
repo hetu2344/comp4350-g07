@@ -10,5 +10,4 @@ async function resetTestDatabase() {
 
 }
 
-// module.exports={resetTestDatabase}
 module.exports = { resetTestDatabase };

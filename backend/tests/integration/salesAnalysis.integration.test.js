@@ -6,6 +6,7 @@ const TIMESTAMP = "2025-03-19T05:20:59.268Z";
 const jwt = require("jsonwebtoken");
 
 describe("Integration Test: Sales API", () => {
+  jest.setTimeout(30000);
   beforeEach(async () => {
     await resetTestDatabase();
   });

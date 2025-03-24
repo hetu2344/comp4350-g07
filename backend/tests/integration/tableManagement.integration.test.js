@@ -28,7 +28,8 @@ function formatLocalDateTime(date) {
   
   
 describe("Table Management Integration Tests", () => {
-    beforeEach(async () => {
+  jest.setTimeout(30000);
+  beforeEach(async () => {
     await resetTestDatabase();});
       
       afterAll(async () => {

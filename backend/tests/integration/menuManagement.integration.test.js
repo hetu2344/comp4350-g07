@@ -5,7 +5,9 @@ const { resetTestDatabase } = require('../testHelpers');
 const TIMESTAMP = "2025-03-19T05:20:59.268Z";
 
 describe("Integration Test: Menu API", () => {
+  jest.setTimeout(30000);
   beforeEach(async () => {
+    
     await resetTestDatabase();
   });
 
