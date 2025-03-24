@@ -210,15 +210,6 @@ const TableManagement = () => {
                       >
                         View
                       </button>
-                       <button
-                        onClick={() => {
-                          const table = tables.find((t) => t.table_num === reservation.table_num)
-                          if (table) setSelectedTable(table)
-                        }}
-                        className="action-button"
-                      >
-                        Cancel
-                      </button>
                     </td>
                   </tr>
                 ))}
