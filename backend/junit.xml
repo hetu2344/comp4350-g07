@@ -1,64 +1,683 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="9" failures="9" errors="0" time="20.302">
-  <testsuite name="Table Management Integration Tests" errors="0" failures="9" skipped="0" timestamp="2025-03-24T02:08:48" time="20.167" tests="9">
-    <testcase classname="Table Management Integration Tests GET / (get all tables) should return all tables with reservation info" name="Table Management Integration Tests GET / (get all tables) should return all tables with reservation info" time="2.707">
-      <failure>Error: getaddrinfo ENOTFOUND test-db
-    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
-    at processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
-    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
+<testsuites name="jest tests" tests="191" failures="44" errors="0" time="42.613">
+  <testsuite name="GET /api/sales/dinevstake" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.591" tests="3">
+    <testcase classname="GET /api/sales/dinevstake should return dine vs take revenue details when dates are provided" name="GET /api/sales/dinevstake should return dine vs take revenue details when dates are provided" time="0.113">
     </testcase>
-    <testcase classname="Table Management Integration Tests POST /reservation (add reservation) should add a new reservation successfully" name="Table Management Integration Tests POST /reservation (add reservation) should add a new reservation successfully" time="2.688">
-      <failure>Error: getaddrinfo ENOTFOUND test-db
-    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
-    at processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
-    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
+    <testcase classname="GET /api/sales/dinevstake should default to current date when query params are missing" name="GET /api/sales/dinevstake should default to current date when query params are missing" time="0.019">
     </testcase>
-    <testcase classname="Table Management Integration Tests POST /reservation (add reservation) should return 400 if reservation time is too soon" name="Table Management Integration Tests POST /reservation (add reservation) should return 400 if reservation time is too soon" time="2.7">
-      <failure>Error: getaddrinfo ENOTFOUND test-db
-    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
-    at processTicksAndRejections (node:internal/process/task_queues:105:5)
-    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
-    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
+    <testcase classname="GET /api/sales/dinevstake should return 500 if an error occurs" name="GET /api/sales/dinevstake should return 500 if an error occurs" time="0.015">
     </testcase>
-    <testcase classname="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should delete an existing reservation" name="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should delete an existing reservation" time="0">
-      <failure>TypeError: Cannot read properties of undefined (reading &apos;reservation_id&apos;)
-    at Object.reservation_id (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:91:46)
+  </testsuite>
+  <testsuite name="GET /api/sales/weeklySales" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.673" tests="2">
+    <testcase classname="GET /api/sales/weeklySales should return weekly sales details" name="GET /api/sales/weeklySales should return weekly sales details" time="0.197">
+    </testcase>
+    <testcase classname="GET /api/sales/weeklySales should return 500 if an error occurs" name="GET /api/sales/weeklySales should return 500 if an error occurs" time="0.025">
+    </testcase>
+  </testsuite>
+  <testsuite name="GET /api/sales/averageOrderValue" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.718" tests="3">
+    <testcase classname="GET /api/sales/averageOrderValue should return average order value when dates are provided" name="GET /api/sales/averageOrderValue should return average order value when dates are provided" time="0.159">
+    </testcase>
+    <testcase classname="GET /api/sales/averageOrderValue should default to current date when query params are missing" name="GET /api/sales/averageOrderValue should default to current date when query params are missing" time="0.018">
+    </testcase>
+    <testcase classname="GET /api/sales/averageOrderValue should return 500 if an error occurs" name="GET /api/sales/averageOrderValue should return 500 if an error occurs" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="GET /api/sales/revenueByCategory" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.66" tests="3">
+    <testcase classname="GET /api/sales/revenueByCategory should return revenue by category with items when dates are provided" name="GET /api/sales/revenueByCategory should return revenue by category with items when dates are provided" time="0.11">
+    </testcase>
+    <testcase classname="GET /api/sales/revenueByCategory should default to current date when query params are missing" name="GET /api/sales/revenueByCategory should default to current date when query params are missing" time="0.039">
+    </testcase>
+    <testcase classname="GET /api/sales/revenueByCategory should return 500 if an error occurs" name="GET /api/sales/revenueByCategory should return 500 if an error occurs" time="0.016">
+    </testcase>
+  </testsuite>
+  <testsuite name="GET /api/sales/topMenuItems" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.729" tests="3">
+    <testcase classname="GET /api/sales/topMenuItems should return top menu items when dates are provided" name="GET /api/sales/topMenuItems should return top menu items when dates are provided" time="0.136">
+    </testcase>
+    <testcase classname="GET /api/sales/topMenuItems should default to current date when query params are missing" name="GET /api/sales/topMenuItems should default to current date when query params are missing" time="0.019">
+    </testcase>
+    <testcase classname="GET /api/sales/topMenuItems should return 500 if an error occurs" name="GET /api/sales/topMenuItems should return 500 if an error occurs" time="0.049">
+    </testcase>
+  </testsuite>
+  <testsuite name="GET /api/sales/totalRevenue" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.799" tests="3">
+    <testcase classname="GET /api/sales/totalRevenue should return total revenue details when startDate and endDate are provided" name="GET /api/sales/totalRevenue should return total revenue details when startDate and endDate are provided" time="0.248">
+    </testcase>
+    <testcase classname="GET /api/sales/totalRevenue should default to current date when startDate and endDate are missing" name="GET /api/sales/totalRevenue should default to current date when startDate and endDate are missing" time="0.06">
+    </testcase>
+    <testcase classname="GET /api/sales/totalRevenue should return 500 if an error occurs" name="GET /api/sales/totalRevenue should return 500 if an error occurs" time="0.022">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement API Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.713" tests="7">
+    <testcase classname="Menu Mannagement API Tests should successfully update a menu item" name="Menu Mannagement API Tests should successfully update a menu item" time="0.279">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should return 404 if menu item does not exist" name="Menu Mannagement API Tests should return 404 if menu item does not exist" time="0.08">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should return 400 if id is not in correct format while updating" name="Menu Mannagement API Tests should return 400 if id is not in correct format while updating" time="0.037">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should return 500 and fail updating if database update fails" name="Menu Mannagement API Tests should return 500 and fail updating if database update fails" time="0.035">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should return 400 if invalid input is provided" name="Menu Mannagement API Tests should return 400 if invalid input is provided" time="0.063">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should successfully update a menu item" name="Menu Mannagement API Tests should successfully update a menu item" time="0.015">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should fail to update a menu item" name="Menu Mannagement API Tests should fail to update a menu item" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="GET /api/sales/dailyTrend" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.828" tests="3">
+    <testcase classname="GET /api/sales/dailyTrend should return daily sales trend when dates are provided" name="GET /api/sales/dailyTrend should return daily sales trend when dates are provided" time="0.209">
+    </testcase>
+    <testcase classname="GET /api/sales/dailyTrend should default to current date when query params are missing" name="GET /api/sales/dailyTrend should default to current date when query params are missing" time="0.034">
+    </testcase>
+    <testcase classname="GET /api/sales/dailyTrend should return 500 if an error occurs" name="GET /api/sales/dailyTrend should return 500 if an error occurs" time="0.027">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Management Updating Item in order TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="5.954" tests="8">
+    <testcase classname="Order Management Updating Item in order TESTS should update item&apos;s quantity in an order" name="Order Management Updating Item in order TESTS should update item&apos;s quantity in an order" time="0.333">
+    </testcase>
+    <testcase classname="Order Management Updating Item in order TESTS should update item&apos;s price in an order" name="Order Management Updating Item in order TESTS should update item&apos;s price in an order" time="0.03">
+    </testcase>
+    <testcase classname="Order Management Updating Item in order TESTS should try to update an order but fails due to order number not found" name="Order Management Updating Item in order TESTS should try to update an order but fails due to order number not found" time="0.161">
+    </testcase>
+    <testcase classname="Order Management Updating Item in order TESTS should try to update an order but fails due to order number not found" name="Order Management Updating Item in order TESTS should try to update an order but fails due to order number not found" time="0.031">
+    </testcase>
+    <testcase classname="Order Management Updating Item in order TESTS should try to update an order but fails due to item not found" name="Order Management Updating Item in order TESTS should try to update an order but fails due to item not found" time="0.031">
+    </testcase>
+    <testcase classname="Order Management Updating Item in order TESTS should try to update an order but fails due to invalid order number" name="Order Management Updating Item in order TESTS should try to update an order but fails due to invalid order number" time="0.066">
+    </testcase>
+    <testcase classname="Order Management Updating Item in order TESTS should try to update an order but fails due to invalid quantity" name="Order Management Updating Item in order TESTS should try to update an order but fails due to invalid quantity" time="0.034">
+    </testcase>
+    <testcase classname="Order Management Updating Item in order TESTS should try to update an order but fails due missing required details" name="Order Management Updating Item in order TESTS should try to update an order but fails due missing required details" time="0.023">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Mannagement CREATE NEW ORDER TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:08" time="6.068" tests="9">
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order" time="0.349">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order" time="0.082">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 500" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 500" time="0.165">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 404" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 404" time="0.063">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to storeId missing" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to storeId missing" time="0.03">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to invalid order-type" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to invalid order-type" time="0.031">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to being Dine in with no table num" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to being Dine in with no table num" time="0.033">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to being Take out with no customer name" name="Order Mannagement CREATE NEW ORDER TESTS should create a new order but fails with 400 due to being Take out with no customer name" time="0.03">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should fail to create a new order" name="Order Mannagement CREATE NEW ORDER TESTS should fail to create a new order" time="0.036">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Management Getting order by order number TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:14" time="0.849" tests="4">
+    <testcase classname="Order Management Getting order by order number TESTS should get order by order number" name="Order Management Getting order by order number TESTS should get order by order number" time="0.071">
+    </testcase>
+    <testcase classname="Order Management Getting order by order number TESTS should get order but fail due to 400 due to invalid order number" name="Order Management Getting order by order number TESTS should get order but fail due to 400 due to invalid order number" time="0.125">
+    </testcase>
+    <testcase classname="Order Management Getting order by order number TESTS should get order but fail due to 404 due to order not found" name="Order Management Getting order by order number TESTS should get order but fail due to 404 due to order not found" time="0.038">
+    </testcase>
+    <testcase classname="Order Management Getting order by order number TESTS should get order but fail due to 500 due to server error" name="Order Management Getting order by order number TESTS should get order but fail due to 500 due to server error" time="0.019">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Management Updateing order TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:14" time="0.976" tests="5">
+    <testcase classname="Order Management Updateing order TESTS should update order by order number for takeout" name="Order Management Updateing order TESTS should update order by order number for takeout" time="0.152">
+    </testcase>
+    <testcase classname="Order Management Updateing order TESTS should update order by order number for dine in" name="Order Management Updateing order TESTS should update order by order number for dine in" time="0.028">
+    </testcase>
+    <testcase classname="Order Management Updateing order TESTS should update order by order number but fails due to order number not found" name="Order Management Updateing order TESTS should update order by order number but fails due to order number not found" time="0.104">
+    </testcase>
+    <testcase classname="Order Management Updateing order TESTS should update order by order number for dine in but fails due to no details getting updated" name="Order Management Updateing order TESTS should update order by order number for dine in but fails due to no details getting updated" time="0.022">
+    </testcase>
+    <testcase classname="Order Management Updateing order TESTS should update order by order number but fails due to invalid order number" name="Order Management Updateing order TESTS should update order by order number but fails due to invalid order number" time="0.016">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement API Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:14" time="0.852" tests="4">
+    <testcase classname="Menu Mannagement API Tests should insert a new item in the menu" name="Menu Mannagement API Tests should insert a new item in the menu" time="0.092">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should try to insert a new item in the menu but fail due to category not fund" name="Menu Mannagement API Tests should try to insert a new item in the menu but fail due to category not fund" time="0.068">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should fail to insert a new item in the menu" name="Menu Mannagement API Tests should fail to insert a new item in the menu" time="0.039">
+    </testcase>
+    <testcase classname="Menu Mannagement API Tests should fail to insert a new item in the menu" name="Menu Mannagement API Tests should fail to insert a new item in the menu" time="0.04">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Management Removing Item from order TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:14" time="0.917" tests="6">
+    <testcase classname="Order Management Removing Item from order TESTS should remove item in an order" name="Order Management Removing Item from order TESTS should remove item in an order" time="0.097">
+    </testcase>
+    <testcase classname="Order Management Removing Item from order TESTS should remove item in an order but fails due to order number not found" name="Order Management Removing Item from order TESTS should remove item in an order but fails due to order number not found" time="0.144">
+    </testcase>
+    <testcase classname="Order Management Removing Item from order TESTS should remove item in an order but fails due to item not found" name="Order Management Removing Item from order TESTS should remove item in an order but fails due to item not found" time="0.033">
+    </testcase>
+    <testcase classname="Order Management Removing Item from order TESTS should remove item in an order but fails due to Server Error" name="Order Management Removing Item from order TESTS should remove item in an order but fails due to Server Error" time="0.021">
+    </testcase>
+    <testcase classname="Order Management Removing Item from order TESTS should remove item in an order but fails due invalid order number" name="Order Management Removing Item from order TESTS should remove item in an order but fails due invalid order number" time="0.018">
+    </testcase>
+    <testcase classname="Order Management Removing Item from order TESTS should remove item in an order but fails due missing details" name="Order Management Removing Item from order TESTS should remove item in an order but fails due missing details" time="0.018">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Management Deleting order TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:15" time="0.792" tests="4">
+    <testcase classname="Order Management Deleting order TESTS should delete order successfully" name="Order Management Deleting order TESTS should delete order successfully" time="0.06">
+    </testcase>
+    <testcase classname="Order Management Deleting order TESTS should delete order but fails due to no order found" name="Order Management Deleting order TESTS should delete order but fails due to no order found" time="0.063">
+    </testcase>
+    <testcase classname="Order Management Deleting order TESTS should delete order but fails due to no Server Error" name="Order Management Deleting order TESTS should delete order but fails due to no Server Error" time="0.03">
+    </testcase>
+    <testcase classname="Order Management Deleting order TESTS should delete order but fails due invalid order number" name="Order Management Deleting order TESTS should delete order but fails due invalid order number" time="0.027">
+    </testcase>
+  </testsuite>
+  <testsuite name="PUT /api/user/update/:username" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:15" time="0.759" tests="4">
+    <testcase classname="PUT /api/user/update/:username should update user successfully when password is provided" name="PUT /api/user/update/:username should update user successfully when password is provided" time="0.111">
+    </testcase>
+    <testcase classname="PUT /api/user/update/:username should update user successfully without password" name="PUT /api/user/update/:username should update user successfully without password" time="0.021">
+    </testcase>
+    <testcase classname="PUT /api/user/update/:username should not update user as nothing is provided" name="PUT /api/user/update/:username should not update user as nothing is provided" time="0.015">
+    </testcase>
+    <testcase classname="PUT /api/user/update/:username should not update user without username" name="PUT /api/user/update/:username should not update user without username" time="0.02">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Management Adding Item to order TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:14" time="1.05" tests="8">
+    <testcase classname="Order Management Adding Item to order TESTS should insert new item in an order" name="Order Management Adding Item to order TESTS should insert new item in an order" time="0.136">
+    </testcase>
+    <testcase classname="Order Management Adding Item to order TESTS should insert existing item in an order" name="Order Management Adding Item to order TESTS should insert existing item in an order" time="0.023">
+    </testcase>
+    <testcase classname="Order Management Adding Item to order TESTS should try to add item to order but fails due to order number not found" name="Order Management Adding Item to order TESTS should try to add item to order but fails due to order number not found" time="0.117">
+    </testcase>
+    <testcase classname="Order Management Adding Item to order TESTS should try to add item to order but fails due to menu item not found" name="Order Management Adding Item to order TESTS should try to add item to order but fails due to menu item not found" time="0.023">
+    </testcase>
+    <testcase classname="Order Management Adding Item to order TESTS should try to add item to order but fails due Server Error" name="Order Management Adding Item to order TESTS should try to add item to order but fails due Server Error" time="0.021">
+    </testcase>
+    <testcase classname="Order Management Adding Item to order TESTS should try to add item to order but fails due to invalid order number." name="Order Management Adding Item to order TESTS should try to add item to order but fails due to invalid order number." time="0.035">
+    </testcase>
+    <testcase classname="Order Management Adding Item to order TESTS should try to add item to order but fails due to invalid quantity" name="Order Management Adding Item to order TESTS should try to add item to order but fails due to invalid quantity" time="0.022">
+    </testcase>
+    <testcase classname="Order Management Adding Item to order TESTS should try to add item to order but fails due to abscence of menuItemId" name="Order Management Adding Item to order TESTS should try to add item to order but fails due to abscence of menuItemId" time="0.017">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Mannagement CREATE NEW ORDER TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:15" time="0.628" tests="2">
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should get all orders" name="Order Mannagement CREATE NEW ORDER TESTS should get all orders" time="0.027">
+    </testcase>
+    <testcase classname="Order Mannagement CREATE NEW ORDER TESTS should fail to get all orders" name="Order Mannagement CREATE NEW ORDER TESTS should fail to get all orders" time="0.091">
+    </testcase>
+  </testsuite>
+  <testsuite name="Order Management Updating order status TESTS" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:14" time="0.96" tests="7">
+    <testcase classname="Order Management Updating order status TESTS should update order by order number for takeout" name="Order Management Updating order status TESTS should update order by order number for takeout" time="0.112">
+    </testcase>
+    <testcase classname="Order Management Updating order status TESTS should try to update order status but fails due to order number not found" name="Order Management Updating order status TESTS should try to update order status but fails due to order number not found" time="0.114">
+    </testcase>
+    <testcase classname="Order Management Updating order status TESTS should try to update order status but fails due to same order status" name="Order Management Updating order status TESTS should try to update order status but fails due to same order status" time="0.018">
+    </testcase>
+    <testcase classname="Order Management Updating order status TESTS should try to update order status but fails due to invalid order number" name="Order Management Updating order status TESTS should try to update order status but fails due to invalid order number" time="0.017">
+    </testcase>
+    <testcase classname="Order Management Updating order status TESTS should try to update order status but fails due to no status given" name="Order Management Updating order status TESTS should try to update order status but fails due to no status given" time="0.017">
+    </testcase>
+    <testcase classname="Order Management Updating order status TESTS should try to update order status but fails due to invalid status given" name="Order Management Updating order status TESTS should try to update order status but fails due to invalid status given" time="0.019">
+    </testcase>
+    <testcase classname="Order Management Updating order status TESTS should try to update order status but fails due to no Changed By given" name="Order Management Updating order status TESTS should try to update order status but fails due to no Changed By given" time="0.017">
+    </testcase>
+  </testsuite>
+  <testsuite name="POST /api/user/signup" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:15" time="0.566" tests="4">
+    <testcase classname="POST /api/user/signup should return 400 if required fields are missing" name="POST /api/user/signup should return 400 if required fields are missing" time="0.039">
+    </testcase>
+    <testcase classname="POST /api/user/signup should return 400 for invalid user type" name="POST /api/user/signup should return 400 for invalid user type" time="0.012">
+    </testcase>
+    <testcase classname="POST /api/user/signup should create a new user successfully" name="POST /api/user/signup should create a new user successfully" time="0.014">
+    </testcase>
+    <testcase classname="POST /api/user/signup should handle ConflictError during signup" name="POST /api/user/signup should handle ConflictError during signup" time="0.012">
+    </testcase>
+  </testsuite>
+  <testsuite name="DELETE /api/user/:username" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:15" time="0.63" tests="5">
+    <testcase classname="DELETE /api/user/:username should return 403 if user tries to delete themselves" name="DELETE /api/user/:username should return 403 if user tries to delete themselves" time="0.05">
+    </testcase>
+    <testcase classname="DELETE /api/user/:username should return 400 if target user does not exist" name="DELETE /api/user/:username should return 400 if target user does not exist" time="0.023">
+    </testcase>
+    <testcase classname="DELETE /api/user/:username should return 403 if trying to delete store owner" name="DELETE /api/user/:username should return 403 if trying to delete store owner" time="0.019">
+    </testcase>
+    <testcase classname="DELETE /api/user/:username should successfully delete an employee by manager" name="DELETE /api/user/:username should successfully delete an employee by manager" time="0.022">
+    </testcase>
+    <testcase classname="DELETE /api/user/:username should handle server error gracefully" name="DELETE /api/user/:username should handle server error gracefully" time="0.021">
+    </testcase>
+  </testsuite>
+  <testsuite name="POST /api/user/login" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:15" time="0.567" tests="4">
+    <testcase classname="POST /api/user/login should return 400 if username or password is missing" name="POST /api/user/login should return 400 if username or password is missing" time="0.031">
+    </testcase>
+    <testcase classname="POST /api/user/login should return 401 if invalid credentials" name="POST /api/user/login should return 401 if invalid credentials" time="0.012">
+    </testcase>
+    <testcase classname="POST /api/user/login should login successfully and set HTTP-only cookie" name="POST /api/user/login should login successfully and set HTTP-only cookie" time="0.014">
+    </testcase>
+    <testcase classname="POST /api/user/login should return 404 when user does not exist" name="POST /api/user/login should return 404 when user does not exist" time="0.013">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement GET ALL API Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.608" tests="3">
+    <testcase classname="Menu Mannagement GET ALL API Tests should return all menu items along with category name and a list of allergens" name="Menu Mannagement GET ALL API Tests should return all menu items along with category name and a list of allergens" time="0.02">
+    </testcase>
+    <testcase classname="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 404" name="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 404" time="0.063">
+    </testcase>
+    <testcase classname="Menu Mannagement GET ALL API Tests should fail to return all menu items and return 500" name="Menu Mannagement GET ALL API Tests should fail to return all menu items and return 500" time="0.026">
+    </testcase>
+  </testsuite>
+  <testsuite name="GET /api/user/me" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.595" tests="3">
+    <testcase classname="GET /api/user/me should return current user info when authenticated" name="GET /api/user/me should return current user info when authenticated" time="0.017">
+    </testcase>
+    <testcase classname="GET /api/user/:username should get user by username successfully" name="GET /api/user/:username should get user by username successfully" time="0.013">
+    </testcase>
+    <testcase classname="GET /api/user/store/:storeId should get users by store id successfully" name="GET /api/user/store/:storeId should get users by store id successfully" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="tableManagementControllers" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.622" tests="18">
+    <testcase classname="tableManagementControllers addReservation should return 400 if required fields are missing" name="tableManagementControllers addReservation should return 400 if required fields are missing" time="0.003">
+    </testcase>
+    <testcase classname="tableManagementControllers addReservation should return 400 for invalid date format" name="tableManagementControllers addReservation should return 400 for invalid date format" time="0.001">
+    </testcase>
+    <testcase classname="tableManagementControllers addReservation should return 400 if reservation is less than 45 minutes in advance" name="tableManagementControllers addReservation should return 400 if reservation is less than 45 minutes in advance" time="0.085">
+    </testcase>
+    <testcase classname="tableManagementControllers addReservation should return 404 if selected table does not exist" name="tableManagementControllers addReservation should return 404 if selected table does not exist" time="0.008">
+    </testcase>
+    <testcase classname="tableManagementControllers addReservation should return 400 if party size exceeds table capacity" name="tableManagementControllers addReservation should return 400 if party size exceeds table capacity" time="0.006">
+    </testcase>
+    <testcase classname="tableManagementControllers addReservation should return 400 if there is a time conflict" name="tableManagementControllers addReservation should return 400 if there is a time conflict" time="0.007">
+    </testcase>
+    <testcase classname="tableManagementControllers addReservation should successfully add a reservation" name="tableManagementControllers addReservation should successfully add a reservation" time="0.007">
+    </testcase>
+    <testcase classname="tableManagementControllers deleteReservation should return 400 for invalid reservation ID" name="tableManagementControllers deleteReservation should return 400 for invalid reservation ID" time="0.004">
+    </testcase>
+    <testcase classname="tableManagementControllers deleteReservation should return 404 if reservation not found" name="tableManagementControllers deleteReservation should return 404 if reservation not found" time="0.004">
+    </testcase>
+    <testcase classname="tableManagementControllers deleteReservation should successfully delete a reservation" name="tableManagementControllers deleteReservation should successfully delete a reservation" time="0.004">
+    </testcase>
+    <testcase classname="tableManagementControllers getAllTables should return table data on success" name="tableManagementControllers getAllTables should return table data on success" time="0.001">
+    </testcase>
+    <testcase classname="tableManagementControllers getAllTables should return 500 on error" name="tableManagementControllers getAllTables should return 500 on error" time="0.043">
+    </testcase>
+    <testcase classname="tableManagementControllers getReservationsByTable should return 400 if tableNum is missing" name="tableManagementControllers getReservationsByTable should return 400 if tableNum is missing" time="0.001">
+    </testcase>
+    <testcase classname="tableManagementControllers getReservationsByTable should return reservations on success" name="tableManagementControllers getReservationsByTable should return reservations on success" time="0.001">
+    </testcase>
+    <testcase classname="tableManagementControllers getReservationsByTable should return 500 on error" name="tableManagementControllers getReservationsByTable should return 500 on error" time="0.001">
+    </testcase>
+    <testcase classname="tableManagementControllers getReservationsByCustomer should return 400 if customerName is missing" name="tableManagementControllers getReservationsByCustomer should return 400 if customerName is missing" time="0.002">
+    </testcase>
+    <testcase classname="tableManagementControllers getReservationsByCustomer should return reservations on success" name="tableManagementControllers getReservationsByCustomer should return reservations on success" time="0.002">
+    </testcase>
+    <testcase classname="tableManagementControllers getReservationsByCustomer should return 500 on error" name="tableManagementControllers getReservationsByCustomer should return 500 on error" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement GET ALL API Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.694" tests="4">
+    <testcase classname="Menu Mannagement GET ALL API Tests should return a menu item with a specific id" name="Menu Mannagement GET ALL API Tests should return a menu item with a specific id" time="0.034">
+    </testcase>
+    <testcase classname="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 400" name="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 400" time="0.014">
+    </testcase>
+    <testcase classname="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 404" name="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 404" time="0.047">
+    </testcase>
+    <testcase classname="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 500" name="Menu Mannagement GET ALL API Tests should fail to return menu item with a specific id and return 500" time="0.021">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Management DELETE API" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.667" tests="4">
+    <testcase classname="Menu Management DELETE API should successfully remove an existing menu item" name="Menu Management DELETE API should successfully remove an existing menu item" time="0.035">
+    </testcase>
+    <testcase classname="Menu Management DELETE API should fail to remove an existing menu item responding 404" name="Menu Management DELETE API should fail to remove an existing menu item responding 404" time="0.049">
+    </testcase>
+    <testcase classname="Menu Management DELETE API should fail to remove a menu item with a specific id and return 400" name="Menu Management DELETE API should fail to remove a menu item with a specific id and return 400" time="0.011">
+    </testcase>
+    <testcase classname="Menu Management DELETE API should fail to remove a menu item with a specific id and return 500" name="Menu Management DELETE API should fail to remove a menu item with a specific id and return 500" time="0.019">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement GET ALL Allergen API Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.622" tests="2">
+    <testcase classname="Menu Mannagement GET ALL Allergen API Tests should return all allergens along with category name and a list of allergens" name="Menu Mannagement GET ALL Allergen API Tests should return all allergens along with category name and a list of allergens" time="0.041">
+    </testcase>
+    <testcase classname="Menu Mannagement GET ALL Allergen API Tests should fail to return all allergens and return 500" name="Menu Mannagement GET ALL Allergen API Tests should fail to return all allergens and return 500" time="0.024">
+    </testcase>
+  </testsuite>
+  <testsuite name="GET /api/user/logout" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.52" tests="1">
+    <testcase classname="GET /api/user/logout should logout out current user" name="GET /api/user/logout should logout out current user" time="0.014">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement Insert ALL Allergen Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.553" tests="1">
+    <testcase classname="Menu Mannagement Insert ALL Allergen Tests should try to insert allergens but fails due to an error" name="Menu Mannagement Insert ALL Allergen Tests should try to insert allergens but fails due to an error" time="0.032">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement Remove ALL Allergen Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.499" tests="1">
+    <testcase classname="Menu Mannagement Remove ALL Allergen Tests should try to remove all allergens but fails due to an error" name="Menu Mannagement Remove ALL Allergen Tests should try to remove all allergens but fails due to an error" time="0.028">
+    </testcase>
+  </testsuite>
+  <testsuite name="Menu Mannagement Check Item Exists Tests" errors="0" failures="0" skipped="0" timestamp="2025-03-25T21:41:16" time="0.486" tests="1">
+    <testcase classname="Menu Mannagement Check Item Exists Tests should throw an error if menu item does not exist" name="Menu Mannagement Check Item Exists Tests should throw an error if menu item does not exist" time="0.024">
+    </testcase>
+  </testsuite>
+  <testsuite name="Table Management Integration Tests" errors="0" failures="1" skipped="0" timestamp="2025-03-25T21:41:08" time="11.185" tests="9">
+    <testcase classname="Table Management Integration Tests GET / (get all tables) should return all tables with reservation info" name="Table Management Integration Tests GET / (get all tables) should return all tables with reservation info" time="0.812">
+    </testcase>
+    <testcase classname="Table Management Integration Tests POST /reservation (add reservation) should add a new reservation successfully" name="Table Management Integration Tests POST /reservation (add reservation) should add a new reservation successfully" time="0.258">
+    </testcase>
+    <testcase classname="Table Management Integration Tests POST /reservation (add reservation) should return 400 if reservation time is too soon" name="Table Management Integration Tests POST /reservation (add reservation) should return 400 if reservation time is too soon" time="0.018">
+    </testcase>
+    <testcase classname="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should delete an existing reservation" name="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should delete an existing reservation" time="0.311">
+    </testcase>
+    <testcase classname="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should return 400 for invalid reservation id" name="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should return 400 for invalid reservation id" time="0.207">
+    </testcase>
+    <testcase classname="Table Management Integration Tests GET /reservation/table (get reservations by table) should return 400 if tableNum is missing" name="Table Management Integration Tests GET /reservation/table (get reservations by table) should return 400 if tableNum is missing" time="0.015">
+    </testcase>
+    <testcase classname="Table Management Integration Tests GET /reservation/table (get reservations by table) should return reservations for a valid table" name="Table Management Integration Tests GET /reservation/table (get reservations by table) should return reservations for a valid table" time="0.267">
+    </testcase>
+    <testcase classname="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return 400 if customerName is missing" name="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return 400 if customerName is missing" time="0.011">
+    </testcase>
+    <testcase classname="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return reservations for a valid customer" name="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return reservations for a valid customer" time="0.129">
+      <failure>Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: 200
+Received: 400
+    at Object.toBe (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:184:36)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
     </testcase>
-    <testcase classname="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should return 400 for invalid reservation id" name="Table Management Integration Tests DELETE /reservation/:reservationId (delete reservation) should return 400 for invalid reservation id" time="0">
-      <failure>TypeError: Cannot read properties of undefined (reading &apos;reservation_id&apos;)
-    at Object.reservation_id (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:91:46)
-    at processTicksAndRejections (node:internal/process/task_queues:105:5)</failure>
+    <testcase classname=" Test execution failure: could be caused by test hooks like &apos;afterAll&apos;." name=" Test execution failure: could be caused by test hooks like &apos;afterAll&apos;." time="0">
+      <failure>{&quot;message&quot;:&quot;&quot;,&quot;stack&quot;:&quot;Error: getaddrinfo ENOTFOUND test-db\n    at C:\\Users\\asoga\\Documents\\COMP_4350_Project\\comp4350-g07\\backend\\node_modules\\pg-pool\\index.js:45:11\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at resetTestDatabase (C:\\Users\\asoga\\Documents\\COMP_4350_Project\\comp4350-g07\\backend\\tests\\testHelpers.js:9:5)\n    at Object.&lt;anonymous&gt; (C:\\Users\\asoga\\Documents\\COMP_4350_Project\\comp4350-g07\\backend\\tests\\integration\\tableManagement.integration.test.js:33:9)&quot;}</failure>
     </testcase>
-    <testcase classname="Table Management Integration Tests GET /reservation/table (get reservations by table) should return 400 if tableNum is missing" name="Table Management Integration Tests GET /reservation/table (get reservations by table) should return 400 if tableNum is missing" time="2.702">
+  </testsuite>
+  <testsuite name="Integration Test: Sales API" errors="0" failures="10" skipped="0" timestamp="2025-03-25T21:41:08" time="33.285" tests="10">
+    <testcase classname="Integration Test: Sales API GET /api/sales/totalRevenue gets total revenue and order details for specified date range" name="Integration Test: Sales API GET /api/sales/totalRevenue gets total revenue and order details for specified date range" time="2.789">
       <failure>Error: getaddrinfo ENOTFOUND test-db
     at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
     at processTicksAndRejections (node:internal/process/task_queues:105:5)
     at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
-    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
     </testcase>
-    <testcase classname="Table Management Integration Tests GET /reservation/table (get reservations by table) should return reservations for a valid table" name="Table Management Integration Tests GET /reservation/table (get reservations by table) should return reservations for a valid table" time="2.7">
+    <testcase classname="Integration Test: Sales API GET /api/sales/topMenuItems gets top menu items sold for specified date range" name="Integration Test: Sales API GET /api/sales/topMenuItems gets top menu items sold for specified date range" time="2.695">
       <failure>Error: getaddrinfo ENOTFOUND test-db
     at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
     at processTicksAndRejections (node:internal/process/task_queues:105:5)
     at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
-    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
     </testcase>
-    <testcase classname="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return 400 if customerName is missing" name="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return 400 if customerName is missing" time="2.699">
+    <testcase classname="Integration Test: Sales API GET /api/sales/revenueByCategory gets revenue generated for each menu item category within a specified date range." name="Integration Test: Sales API GET /api/sales/revenueByCategory gets revenue generated for each menu item category within a specified date range." time="2.692">
       <failure>Error: getaddrinfo ENOTFOUND test-db
     at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
     at processTicksAndRejections (node:internal/process/task_queues:105:5)
     at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
-    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
     </testcase>
-    <testcase classname="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return reservations for a valid customer" name="Table Management Integration Tests GET /reservation/customer (get reservations by customer) should return reservations for a valid customer" time="2.696">
+    <testcase classname="Integration Test: Sales API GET /api/sales/dinevstake gets breakdown of revenue and order counts for Dine-In and Take-Out order types within a specified date range." name="Integration Test: Sales API GET /api/sales/dinevstake gets breakdown of revenue and order counts for Dine-In and Take-Out order types within a specified date range." time="2.699">
       <failure>Error: getaddrinfo ENOTFOUND test-db
     at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
     at processTicksAndRejections (node:internal/process/task_queues:105:5)
     at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
-    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\tableManagement.integration.test.js:11:7)</failure>
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Sales API GET /api/sales/dailyTrend?startDate=2025-03-19&amp;endDate=2025-03-19 " name="Integration Test: Sales API GET /api/sales/dailyTrend?startDate=2025-03-19&amp;endDate=2025-03-19 " time="2.688">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Sales API GET /api/sales/averageOrderValue?startDate=2025-03-19&amp;endDate=2025-03-19 " name="Integration Test: Sales API GET /api/sales/averageOrderValue?startDate=2025-03-19&amp;endDate=2025-03-19 " time="2.691">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Sales API GET /api/sales/totalRevenue gets total revenue and order details " name="Integration Test: Sales API GET /api/sales/totalRevenue gets total revenue and order details " time="2.71">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Sales API GET /api/sales/topMenuItems gets top menu items sold " name="Integration Test: Sales API GET /api/sales/topMenuItems gets top menu items sold " time="2.716">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Sales API GET  /api/sales/weeklySales gets  daily revenue for the current week, along with the total revenue for the week." name="Integration Test: Sales API GET  /api/sales/weeklySales gets  daily revenue for the current week, along with the total revenue for the week." time="2.699">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Sales API GET /api/sales/dailyTrend" name="Integration Test: Sales API GET /api/sales/dailyTrend" time="2.711">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\salesAnalysis.integration.test.js:11:5)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Integration Test: Menu API" errors="0" failures="10" skipped="0" timestamp="2025-03-25T21:41:08" time="33.306" tests="10">
+    <testcase classname="Integration Test: Menu API GET /api/menu gets all item in menu an order" name="Integration Test: Menu API GET /api/menu gets all item in menu an order" time="2.79">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API POST /api/menu creates a menu item" name="Integration Test: Menu API POST /api/menu creates a menu item" time="2.694">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API POST /api/menu creates a menu item but fails due to missing category" name="Integration Test: Menu API POST /api/menu creates a menu item but fails due to missing category" time="2.691">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API GET /api/menu/allergens gives all menu allergens" name="Integration Test: Menu API GET /api/menu/allergens gives all menu allergens" time="2.702">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API PUT /api/menu/1 updates a menu item" name="Integration Test: Menu API PUT /api/menu/1 updates a menu item" time="2.686">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API PUT /api/menu/abc updates a menu item but fails due to invalid id" name="Integration Test: Menu API PUT /api/menu/abc updates a menu item but fails due to invalid id" time="2.692">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API PUT /api/menu/1 updates a menu item but fails with 404" name="Integration Test: Menu API PUT /api/menu/1 updates a menu item but fails with 404" time="2.709">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API DELETE /api/menu/3 deletes a menu item" name="Integration Test: Menu API DELETE /api/menu/3 deletes a menu item" time="2.715">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API DELETE /api/menu/5 deletes a menu item but fails due to item not found" name="Integration Test: Menu API DELETE /api/menu/5 deletes a menu item but fails due to item not found" time="2.7">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Menu API GET /api/menu/3 gets a menu item with id" name="Integration Test: Menu API GET /api/menu/3 gets a menu item with id" time="2.697">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\menuManagement.integration.test.js:11:5)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Integration Test: Orders API" errors="0" failures="10" skipped="0" timestamp="2025-03-25T21:41:08" time="33.352" tests="10">
+    <testcase classname="Integration Test: Orders API GET /api/orders returns a list of orders" name="Integration Test: Orders API GET /api/orders returns a list of orders" time="2.807">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /api/orders creates an order" name="Integration Test: Orders API POST /api/orders creates an order" time="2.695">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API PUT /api/orders/DINE-100004 updates order" name="Integration Test: Orders API PUT /api/orders/DINE-100004 updates order" time="2.691">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API PUT /api/orders/DINE100004 fails to update order status" name="Integration Test: Orders API PUT /api/orders/DINE100004 fails to update order status" time="2.701">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API PUT /api/orders/TAKE-100001 updates order status" name="Integration Test: Orders API PUT /api/orders/TAKE-100001 updates order status" time="2.687">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API GET /api/orders/TAKE-100001 gets order details with order number" name="Integration Test: Orders API GET /api/orders/TAKE-100001 gets order details with order number" time="2.691">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /api/orders/TAKE-100001/items adds item in order" name="Integration Test: Orders API POST /api/orders/TAKE-100001/items adds item in order" time="2.711">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API PUT /api/orders/TAKE-100001/items/3 UPDATES item in order" name="Integration Test: Orders API PUT /api/orders/TAKE-100001/items/3 UPDATES item in order" time="2.715">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API DELETE /api/orders/TAKE-100001/items/1 deletes item in order" name="Integration Test: Orders API DELETE /api/orders/TAKE-100001/items/1 deletes item in order" time="2.7">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API DELETE /api/orders/DINE-100004 deletes order" name="Integration Test: Orders API DELETE /api/orders/DINE-100004 deletes order" time="2.698">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\orderManagement.integration.test.js:11:5)</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name="Integration Test: Orders API" errors="0" failures="13" skipped="0" timestamp="2025-03-25T21:41:08" time="41.521" tests="13">
+    <testcase classname="Integration Test: Orders API POST /login logs in the app" name="Integration Test: Orders API POST /login logs in the app" time="2.81">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /login logs in the app but fails due to 404" name="Integration Test: Orders API POST /login logs in the app but fails due to 404" time="2.696">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /login logs in the app but fails due to 400" name="Integration Test: Orders API POST /login logs in the app but fails due to 400" time="2.691">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /logout logs out of the app" name="Integration Test: Orders API POST /logout logs out of the app" time="2.701">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API GET /me gets current user logged in the app" name="Integration Test: Orders API GET /me gets current user logged in the app" time="2.687">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /api/user/signup creates a user" name="Integration Test: Orders API POST /api/user/signup creates a user" time="2.706">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /api/user/signup creates a user but fails due to 400" name="Integration Test: Orders API POST /api/user/signup creates a user but fails due to 400" time="2.71">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /api/user/signup creates a user but fails due to 400" name="Integration Test: Orders API POST /api/user/signup creates a user but fails due to 400" time="2.715">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API POST /api/update/:username updates a user detail" name="Integration Test: Orders API POST /api/update/:username updates a user detail" time="2.7">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API DELETE /api/user/:username updates a user detail" name="Integration Test: Orders API DELETE /api/user/:username updates a user detail" time="2.695">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API GET /api/user/:username give a user by username" name="Integration Test: Orders API GET /api/user/:username give a user by username" time="2.708">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API GET /api/user/me gives logged in user" name="Integration Test: Orders API GET /api/user/me gives logged in user" time="2.686">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
+    </testcase>
+    <testcase classname="Integration Test: Orders API GET /api/user/store/:storeID gives all users in a store" name="Integration Test: Orders API GET /api/user/store/:storeID gives all users in a store" time="2.699">
+      <failure>Error: getaddrinfo ENOTFOUND test-db
+    at C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\node_modules\pg-pool\index.js:45:11
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at resetTestDatabase (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\testHelpers.js:9:5)
+    at Object.&lt;anonymous&gt; (C:\Users\asoga\Documents\COMP_4350_Project\comp4350-g07\backend\tests\integration\userAccount.integration.test.js:11:5)</failure>
     </testcase>
   </testsuite>
 </testsuites>

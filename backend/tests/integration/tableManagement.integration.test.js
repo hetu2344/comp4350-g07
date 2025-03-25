@@ -29,10 +29,8 @@ function formatLocalDateTime(date) {
   
 describe("Table Management Integration Tests", () => {
   jest.setTimeout(30000);
-  beforeEach(async () => {
-    await resetTestDatabase();});
-      
       afterAll(async () => {
+        await resetTestDatabase();
         await pool.end();
       });
     
@@ -111,7 +109,8 @@ describe("Table Management Integration Tests", () => {
           .send(reservationData)
           .set("Accept", "application/json");
     
-        reservationId = res.body.reservation.reservation_id;
+          reservationId = Number(res.body.reservation.reservation_id);
+          expect(reservationId).toBeDefined();
       });
     
       test("should delete an existing reservation", async () => {
