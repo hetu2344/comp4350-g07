@@ -16,19 +16,19 @@ const {
 
 
 const router = express.Router();
+// Returns all tables, including table num, status, and number of seats
+router.get("/", getAllTables); 
 
-router.get("/", getAllTables); // Returns all tables, including table num, status, and number of seats
+// Adds a reservation, user
+router.post("/reservation", addReservation); 
 
-// router.post("/", updateTable); // Change status of the table, new status in body json with isOpen as title
-
-router.post("/reservation", addReservation); // Adds a reservation, user
-
+//Gets reservation by table
 router.get("/reservation/table", getReservationsByTable);
 
+// Getting reservations by customer name
 router.get("/reservation/customer", getReservationsByCustomer);
 
+// Deleting reservations
 router.delete("/reservation/:reservationId", deleteReservation);
-
-
 
 module.exports = router;

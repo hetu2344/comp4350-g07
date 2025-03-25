@@ -3,6 +3,7 @@ const types = require("pg").types;
 // Returns DECIMAL as Number instead of String
 types.setTypeParser(1700, (val) => parseFloat(val)); 
 
+// Creating pool to setup test database
 const pool = new Pool({
     user: process.env.DB_USER,
     host: process.env.TEST_DB_HOST,

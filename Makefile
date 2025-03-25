@@ -1,7 +1,9 @@
 # Variables
 DOCKER_COMPOSE = docker-compose
 PROJECT_NAME = my_project  # Change this to your project name
-
+RESULTS_DIR = "Loadtest/results"
+JMX_FILE="Loadtest/Restrosync.jmx"
+JMeter_IMAGE = justb4/jmeter
 # Default action
 .DEFAULT_GOAL := help
 

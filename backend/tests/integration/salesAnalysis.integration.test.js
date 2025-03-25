@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 describe("Integration Test: Sales API", () => {
   jest.setTimeout(30000);
-  beforeEach(async () => {
+  beforeAll(async () => {
     await resetTestDatabase();
   });
 

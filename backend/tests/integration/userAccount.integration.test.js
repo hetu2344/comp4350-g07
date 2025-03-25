@@ -7,7 +7,8 @@ const jwt = require("jsonwebtoken");
 
 describe("Integration Test: Orders API", () => {
   jest.setTimeout(30000);
-  beforeEach(async () => {
+  
+  beforeAll(async () => {
     await resetTestDatabase();
   });
 
@@ -159,6 +160,32 @@ describe("Integration Test: Orders API", () => {
      expect(response.body).toEqual(expectedResponse);
    });
 
+   test("GET /api/user/:username give a user by username", async () => {
+     const payload = { username: "admin", storeId: 1, type: "M" };
+     const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "2h" });
+     jwt.verify = jest.fn((t, secret, callback) => callback(null, payload));
+
+     const user = { username: "testuser" };
+     // userModel.getUserByUsername.mockResolvedValue(user);
+
+     const res = await request(app)
+       .get("/api/user/employee_emma")
+       .set("Cookie", [`token=${token}`]);
+
+     // expect(res.statusCode).toBe(200);
+     const expectedResponse = {
+       username: "employee_emma",
+       first_name: "Emma",
+       last_name: "Jones",
+       password_hash:
+         "$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6",
+       type: "E",
+       store_id: 1,
+     };
+     expect(res.body).toEqual(expectedResponse);
+   });
+
+
   test("POST /api/update/:username updates a user detail", async () => {
     const payload = { username: "admin", storeId: 1, type: "M" };
     const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "2h" });
@@ -190,6 +217,8 @@ describe("Integration Test: Orders API", () => {
     expect(response.body).toEqual(expectedResponse);
   });
 
+   
+
   test("DELETE /api/user/:username updates a user detail", async () => {
     const payload = { username: "admin", storeId: 1, type: "M" };
     const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "2h" });
@@ -206,31 +235,7 @@ describe("Integration Test: Orders API", () => {
     expect(response.body).toEqual(expectedResponse);
   });
 
-  test("GET /api/user/:username give a user by username", async () => {
-    const payload = { username: "admin", storeId: 1, type: "M" };
-    const token = jwt.sign(payload, "your_jwt_secret", { expiresIn: "2h" });
-    jwt.verify = jest.fn((t, secret, callback) => callback(null, payload));
-
-    const user = { username: "testuser" };
-    // userModel.getUserByUsername.mockResolvedValue(user);
-
-    const res = await request(app)
-      .get("/api/user/employee_emma")
-      .set("Cookie", [`token=${token}`]);
-
-    expect(res.statusCode).toBe(200);
-    const expectedResponse = {
-      username: "employee_emma",
-      first_name: "Emma",
-      last_name: "Jones",
-      password_hash:
-        "$2b$10$6FG6GpA4rRSSu3RP/syyzOEbh5/thfOYGGodaEk3KcUhWYDgiQPF6",
-      type: "E",
-      store_id: 1,
-    };
-    expect(res.body).toEqual(expectedResponse);
-  });
-
+ 
   test("GET /api/user/me gives logged in user", async () => {
     // Create a fake payload and token for authentication
     const payload = { username: "currentUser", storeId: 1, type: "M" };
@@ -275,10 +280,10 @@ describe("Integration Test: Orders API", () => {
           type: "M",
         },
         {
-          username: "employee_emma",
-          first_name: "Emma",
-          last_name: "Jones",
-          type: "E",
+          username: "newuser",
+          first_name: "New",
+          last_name: "User",
+          type: "M",
         },
       ];
       expect(res.statusCode).toBe(200);

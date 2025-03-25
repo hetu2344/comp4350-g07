@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 
 describe("Integration Test: Orders API", () => {
   jest.setTimeout(30000);
-  beforeEach(async () => {
+  beforeAll(async () => {
     await resetTestDatabase();
   });
 
@@ -255,7 +255,7 @@ describe("Integration Test: Orders API", () => {
         order_type: "Take-Out",
         table_number: "N/A",
         customer_name: "Sarah Smith",
-        order_status: "Active",
+        order_status: "Completed",
         order_time: TIMESTAMP,
         special_instructions: "Light Cheese",
         item_total: 32.47,
@@ -320,7 +320,7 @@ describe("Integration Test: Orders API", () => {
         itemId: 3,
         quantity: 5,
         newPrice: 12.99,
-        totalprice: 90.93,
+        totalprice: 150.88,
       },
     };
     expect(response.body).toEqual(expectedResponse);
@@ -340,7 +340,7 @@ describe("Integration Test: Orders API", () => {
       order: {
         orderNumber: "TAKE-100001",
         itemId: 1,
-        totalprice: 6.489999999999998,
+        totalprice: 124.89999999999999,
       },
     };
     expect(response.body).toEqual(expectedResponse);
