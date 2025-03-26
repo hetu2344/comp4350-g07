@@ -1,6 +1,5 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
 name: Restro Sync CI
 
 on:
@@ -10,77 +9,79 @@ on:
     branches: ["dev"]
 
 jobs:
-  build-frontend:
+  build-and-test:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "23"
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
-      - name: List frontend directory contents
-        working-directory: frontend
-        run: ls -la
-      - name: Install dependencies (frontend)
-        working-directory: frontend
-        run: npm ci
-      - name: Build (frontend)
-        working-directory: frontend
-        run: npm run build --if-present
-      - name: Start Backend
-        working-directory: backend
-        run: npm start &
-      - name: Start Frontend
-        working-directory: frontend
-        run: npm run dev &
-      - name: Wait for servers to be ready
-        run: |
-          echo "Waiting for services..."
-          sleep 10
-      - name: Test (frontend)
-        working-directory: frontend
-        run: npm run test:headless
 
-  build-backend:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
     steps:
+      # Checkout repository
       - uses: actions/checkout@v4
+
+      # Setup Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "23"
           cache: npm
-          cache-dependency-path: backend/package-lock.json
-      - name: Install dependencies (backend)
+          cache-dependency-path: |
+            frontend/package-lock.json
+            backend/package-lock.json
+
+      # Install dependencies
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Install backend dependencies
         working-directory: backend
         run: npm ci
-      - name: Build (backend)
-        working-directory: backend
-        run: npm run build --if-present
-      - name: Test (backend)
-        working-directory: backend
-        run: npm test -- tests/unit
+
+      # Build the Docker containers
+      - name: Build Docker containers
+        run: make up-build
+
+      # Wait for services to be ready
+      - name: Wait for Services to be Ready
+        run: |
+          echo "Waiting for Backend and Frontend to be ready..."
+          sleep 15  # Wait for containers to stabilize
+          until curl --output /dev/null --silent --head --fail http://localhost:8018/api/health; do
+            printf '.'
+            sleep 2
+          done
+          echo "Backend is ready!"
+          until curl --output /dev/null --silent --head --fail http://localhost:8017; do
+            printf '.'
+            sleep 2
+          done
+          echo "Frontend is ready!"
+
+      # Run Tests (Jest and Cypress)
+      - name: Run All Tests
+        run: make run-all-tests
+
+      # Tear down services
+      - name: Tear down services
+        run: make down
 
   deploy:
     runs-on: ubuntu-latest
-    # needs: [build-frontend, build-backend] # Uncomment if builds should run on push too
     if: github.event_name == 'push'
+
     steps:
-      - uses: actions/checkout@v4 # Keep: Needed for files
+      - uses: actions/checkout@v4
       - name: Login to Docker Hub
-        uses: docker/login-action@v2 # Keep: Needed for push
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
+
       - name: Install Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
+
       - name: Build and Push with Docker Compose
         run: |
           docker-compose -f docker-compose.yml build
