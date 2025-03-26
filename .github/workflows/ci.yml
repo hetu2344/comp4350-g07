@@ -55,22 +55,6 @@ jobs:
       - name: Build Docker containers
         run: make up-build
 
-      # Wait for services to be ready
-      - name: Wait for Services to be Ready
-        run: |
-          echo "Waiting for Backend and Frontend to be ready..."
-          sleep 15  # Wait for containers to stabilize
-          until curl --output /dev/null --silent --head --fail http://localhost:8018/api/health; do
-            printf '.'
-            sleep 2
-          done
-          echo "Backend is ready!"
-          until curl --output /dev/null --silent --head --fail http://localhost:8017; do
-            printf '.'
-            sleep 2
-          done
-          echo "Frontend is ready!"
-
       # Run Tests (Jest and Cypress)
       - name: Run All Tests
         run: make run-all-tests
