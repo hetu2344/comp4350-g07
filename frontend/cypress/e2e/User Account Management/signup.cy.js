@@ -17,7 +17,7 @@ describe('Create Staff Account', () => {
       });
     
   
-    it('should fill out the sign-up form and submit successfully', () => {
+    it('Should fill out the sign-up form and submit successfully', () => {
         const randomSuffix = Math.floor(Math.random() * 1000);
         const uniqueUserId = 'user_' + randomSuffix;
 
