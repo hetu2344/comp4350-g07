@@ -36,6 +36,11 @@ jobs:
       - name: Build Docker containers
         run: make up-build
 
+      # Clean test database before running tests
+      - name: Clean Test Database
+        run: |
+          docker exec -i restro_sync_test_db psql -U restro_usr -d restro_sync -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+
       # Run Tests (Jest and Cypress)
       - name: Run All Tests
         run: make run-all-tests
