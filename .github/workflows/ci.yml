@@ -17,16 +17,6 @@ jobs:
       # Checkout repository
       - uses: actions/checkout@v4
 
-      # Setup Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "23"
-          cache: npm
-          cache-dependency-path: |
-            frontend/package-lock.json
-            backend/package-lock.json
-
       # Install Docker and Docker Compose
       - name: Install Docker
         run: |
@@ -41,15 +31,6 @@ jobs:
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
-
-      # Install dependencies
-      - name: Install frontend dependencies
-        working-directory: frontend
-        run: npm ci
-
-      - name: Install backend dependencies
-        working-directory: backend
-        run: npm ci
 
       # Build the Docker containers
       - name: Build Docker containers
