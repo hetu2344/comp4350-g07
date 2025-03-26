@@ -16,7 +16,7 @@ describe('Log Out', () => {
       //Click on the log-out button
         cy.get('button').contains('Log Out').click();  
       
-      //Verify that the login button is visible on the home page
+      //verify that the login button is visible on the home page
         cy.get('a').contains('Log In').should('be.visible');
     });
   
