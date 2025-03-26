@@ -271,4 +271,5 @@ module.exports = {
   getAllTables,
   getReservationsByTable,
   getReservationsByCustomer,
+  parseLocalDateTime,
 };

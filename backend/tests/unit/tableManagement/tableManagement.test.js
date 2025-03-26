@@ -6,6 +6,7 @@ const {
     getAllTables,
     getReservationsByTable,
     getReservationsByCustomer,
+    parseLocalDateTime,
   } = require("../../../controllers/tableManagementControllers");
   
   const pool = require("../../../db/db");
@@ -158,6 +159,26 @@ jest.spyOn(Date.prototype, 'toLocaleString').mockImplementation(function(locale,
           reservation: fakeReservation,
         });
       });
+      test("should return 500 if a database error occurs during reservation insertion", async () => {
+        // Set valid request body values.
+        const future = new Date(Date.now() + 2 * 60 * 60 * 1000);
+        const isoFuture = future.toISOString().slice(0, 19);
+        req.body = { name: "John", tableNum: 1, partySize: 2, time: isoFuture };
+      
+        pool.query
+          .mockResolvedValueOnce({ rows: [{ num_seats: 4 }] }) // tableCheckQuery
+          // For the time conflict query, return an empty result (no conflict).
+          .mockResolvedValueOnce({ rows: [] })
+            // For the insert query, throw an error.
+          .mockRejectedValueOnce(new Error("DB error"));
+      
+        await addReservation(req, res);
+      
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+          error: "Server Error: Unable to add reservation."
+        });
+      });
     });
   
     describe("deleteReservation", () => {
@@ -213,6 +234,21 @@ jest.spyOn(Date.prototype, 'toLocaleString').mockImplementation(function(locale,
         });
         expect(fakeClient.release).toHaveBeenCalled();
       });
+
+      test("should return 500 if a database error occurs during deletion", async () => {
+        req.params.reservationId = "1";
+        fakeClient.query
+          .mockResolvedValueOnce() // BEGIN succeeds
+          .mockRejectedValueOnce(new Error("DB error")); // SELECT fails
+      
+        await deleteReservation(req, res);
+      
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({
+          error: "Server Error: Unable to delete reservation."
+        });
+      });
+
     });
   
     describe("getAllTables", () => {
@@ -307,4 +343,71 @@ jest.spyOn(Date.prototype, 'toLocaleString').mockImplementation(function(locale,
         });
       });
     });
+  });
+
+  describe("parseLocalDateTime", () => {
+    test("should parse a full date-time string with seconds", () => {
+      const input = "2023-08-01T15:30:45";
+      const date = parseLocalDateTime(input);
+      expect(date.getFullYear()).toBe(2023);
+      expect(date.getMonth()).toBe(7); // Month is 0-indexed: 7 means August
+      expect(date.getDate()).toBe(1);
+      expect(date.getHours()).toBe(15);
+      expect(date.getMinutes()).toBe(30);
+      expect(date.getSeconds()).toBe(45);
+    });
+  
+    test("should parse a date-time string without seconds", () => {
+      const input = "2023-08-01T15:30";
+      const date = parseLocalDateTime(input);
+      expect(date.getFullYear()).toBe(2023);
+      expect(date.getMonth()).toBe(7);
+      expect(date.getDate()).toBe(1);
+      expect(date.getHours()).toBe(15);
+      expect(date.getMinutes()).toBe(30);
+      expect(date.getSeconds()).toBe(0); // seconds default to 0
+    });
+  
+    test("should return an Invalid Date if the string does not contain 'T'", () => {
+      const input = "2023-08-01 15:30:45";
+      const date = parseLocalDateTime(input);
+      expect(isNaN(date.getTime())).toBe(true);
+    });
+  
+    test("should return an Invalid Date for a non-string input", () => {
+      const input = 12345;
+      const date = parseLocalDateTime(input);
+      expect(isNaN(date.getTime())).toBe(true);
+    });
+  
+    test("should return an Invalid Date if the time part is missing", () => {
+      const input = "2023-08-01T";
+      const date = parseLocalDateTime(input);
+      expect(isNaN(date.getTime())).toBe(true);
+    });
+
+    test("should return Invalid Date if date part does not split into three components", () => {
+        // Missing day component; dateParts will have only 2 parts.
+        const input = "2023-08T15:30:45";
+        const date = parseLocalDateTime(input);
+        expect(isNaN(date.getTime())).toBe(true);
+      });
+    
+      test("should return Invalid Date if time part does not have at least two components", () => {
+        // Time part missing minutes; timeParts will have only 1 component.
+        const input = "2023-08-01T15";
+        const date = parseLocalDateTime(input);
+        expect(isNaN(date.getTime())).toBe(true);
+      });
+    
+      test("should correctly parse a valid date-time string", () => {
+        const input = "2023-08-01T15:30:45";
+        const date = parseLocalDateTime(input);
+        expect(date.getFullYear()).toBe(2023);
+        expect(date.getMonth()).toBe(7); // Month is 0-indexed: 7 means August
+        expect(date.getDate()).toBe(1);
+        expect(date.getHours()).toBe(15);
+        expect(date.getMinutes()).toBe(30);
+        expect(date.getSeconds()).toBe(45);
+      });
   });
