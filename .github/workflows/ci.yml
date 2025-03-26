@@ -30,6 +30,16 @@ jobs:
       - name: Build (frontend)
         working-directory: frontend
         run: npm run build --if-present
+      - name: Start Backend
+        working-directory: backend
+        run: npm start &
+      - name: Start Frontend
+        working-directory: frontend
+        run: npm run dev &
+      - name: Wait for servers to be ready
+        run: |
+          echo "Waiting for services..."
+          sleep 10
       - name: Test (frontend)
         working-directory: frontend
         run: npm run test:headless
