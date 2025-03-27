@@ -10,7 +10,7 @@ on:
     branches: ["dev"]
 
 jobs:
-  cypress-e2e-tests:
+  build-frontend:
     runs-on: ubuntu-latest
 
     steps:
@@ -64,8 +64,7 @@ jobs:
         run: make down-volumes
 
   build-backend:
-    #if: github.event_name == 'pull_request'
-    needs: cypress-e2e-tests
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
