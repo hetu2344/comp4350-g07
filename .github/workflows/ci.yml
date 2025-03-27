@@ -47,12 +47,7 @@ jobs:
       # Wait for Backend to be Ready
       - name: Wait for Backend Readiness
         run: |
-          echo "Waiting for backend service..."
-          until curl --fail http://localhost:8018/health; do
-            echo "Backend not ready yet..."
-            sleep 5
-          done
-          echo "Backend is ready!"
+          sleep 10
 
       # Run Cypress Tests
       - name: Run Cypress Tests
