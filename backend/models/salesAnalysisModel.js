@@ -26,6 +26,7 @@ exports.totalRevenueDetails = async (start, end) => {
     };
 };
 
+// Method that makes SQL query to get top 3 menu items and returns response
 exports.topMenuItems = async (start, end) => {
     const { rows } = await pool.query(`
         SELECT m.item_id, m.item_name, SUM(oi.quantity) AS quantity_sold
@@ -35,12 +36,15 @@ exports.topMenuItems = async (start, end) => {
         WHERE DATE(o.order_time) BETWEEN $1 AND $2
         GROUP BY m.item_id, m.item_name
         ORDER BY quantity_sold DESC LIMIT 3`, [start, end]);
+
+        // Return the response
     return rows;
 };
 
 
-
+// Method that makes SQL query to get revenue by category and returns response
 exports.revenueByCategoryWithItems = async (start, end) => {
+    // SQL Query
     const { rows } = await pool.query(`
         SELECT
             c.name AS category,
@@ -70,37 +74,36 @@ exports.revenueByCategoryWithItems = async (start, end) => {
         ORDER BY c.name;
     `, [start, end]);
 
+    // Return the response
     return rows;
 };
 
 
 
-
+// Method that makes SQL query to get average order value and returns response
 exports.averageOrderValue = async (start, end) => {
+    // SQL Query
     const { rows } = await pool.query(`
         SELECT COALESCE(AVG(total_price), 0) AS average 
         FROM orders
         WHERE order_status='Completed' AND DATE(order_time) BETWEEN $1 AND $2`, [start, end]);
-    return rows[0].average;
+    
+    // Return the response
+        return rows[0].average;
 };
 
+// Method that makes SQL query to get daily trend and returns response
 exports.dailyTrend = async (start, end) => {
     const { rows } = await pool.query(`
         SELECT DATE(order_time) AS date, SUM(total_price) AS revenue 
         FROM orders
         WHERE order_status='Completed' AND DATE(order_time) BETWEEN $1 AND $2
         GROUP BY date ORDER BY date`, [start, end]);
+
+        // Return the response
     return rows;
 };
 
-// exports.dineVsTakeRevenue = async (start, end) => {
-//     const { rows } = await pool.query(`
-//         SELECT order_type, SUM(total_price) AS revenue 
-//         FROM orders
-//         WHERE order_status='Completed' AND DATE(order_time) BETWEEN $1 AND $2
-//         GROUP BY order_type`, [start, end]);
-//     return rows;
-// };
 exports.dineVsTakeRevenueDetails = async (start, end) => {
     const { rows } = await pool.query(`
         SELECT order_type, 
