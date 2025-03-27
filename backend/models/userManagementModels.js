@@ -6,26 +6,33 @@ async function addUser(username, firstName, lastName, password, storeId, type) {
   let client;
   try {
     client = await pool.connect();
+    
+    //  Start transaction
     await client.query("BEGIN");
 
+    // Insert user
     const result = await client.query(
       `INSERT INTO users (username, first_name, last_name, password_hash, store_id, type) 
        VALUES ($1, $2, $3, $4, $5, $6) RETURNING username, first_name, last_name, type`,
       [username, firstName, lastName, password, storeId, type]
     );
 
+    // Commit transaction
     await client.query("COMMIT");
+
+    // Return the inserted user
     return result.rows[0];
   } catch (error) {
+    // ERROR
+    // Rollback transaction
     if (client) await client.query("ROLLBACK");
 
     if (error.code === "23505") {
       throw new ConflictError(`User with username '${username}' already exists.`);
     }
-
-    console.error("Transaction Failed:", error);
     throw new DBError("Error inserting user into database");
   } finally {
+    // Release client
     if (client) client.release();
   }
 }
@@ -41,6 +48,7 @@ async function getUsersByStoreId(storeId) {
       throw new ValidationError("Invalid store ID provided.");
     }
 
+    // SQL Query
     const result = await client.query(
       `SELECT username, first_name, last_name, type FROM users WHERE store_id = $1`,
       [storeId]
@@ -50,11 +58,13 @@ async function getUsersByStoreId(storeId) {
       return []; // Return empty array if no users found
     }
 
+    // Return the response
     return result.rows;
   } catch (error) {
-    console.error("Error fetching users by store ID:", error);
+    // ERROR
     throw new DBError("Error retrieving users from database.");
   } finally {
+    // Release client
     if (client) client.release();
   }
 }
@@ -62,18 +72,21 @@ async function getUsersByStoreId(storeId) {
 // Get a user by username
 async function getUserByUsername(username) {
   try {
+    // SQL Query
     const result = await pool.query(
       `SELECT * FROM users WHERE username = $1`,
       [username]
     );
 
+    // If no user found
     if (result.rows.length === 0) {
       throw new UserNotExistError(username);
     }
-    // console.log(result.rows[0]);
+    
+    // Return the response
     return result.rows[0];
   } catch (error) {
-    console.error("Error fetching user:", error);
+    // ERROR
     if (error instanceof UserNotExistError) throw new UserNotExistError(username);
     throw new DBError("Error retrieving user from database");
   }
@@ -84,24 +97,33 @@ async function removeUser(username) {
   let client;
   try {
     client = await pool.connect();
+
+    // Start transaction
     await client.query("BEGIN");
 
+    // SQL Query
     const result = await client.query(
       `DELETE FROM users WHERE username = $1 RETURNING *`,
       [username]
     );
 
+    // If no user found
     if (result.rows.length === 0) {
       throw new UserNotExistError(username);
     }
 
+// Commit transaction
     await client.query("COMMIT");
+    // Return the response
     return result.rows[0];
   } catch (error) {
+    // ERROR
+    // Rollback transaction
     if (client) await client.query("ROLLBACK");
     console.error("Transaction Failed:", error);
     throw new DBError("Error removing user from database");
   } finally {
+    // Release client
     if (client) client.release();
   }
 }
@@ -111,8 +133,11 @@ async function updateUser(username, firstName, lastName, password, storeId, type
   let client;
   try {
     client = await pool.connect();
+    
+    //  Start transaction
     await client.query("BEGIN");
 
+    // SQL Query
     const result = await client.query(
       `UPDATE users SET first_name = COALESCE($2, first_name), 
                         last_name = COALESCE($3, last_name), 
@@ -123,21 +148,29 @@ async function updateUser(username, firstName, lastName, password, storeId, type
       [username, firstName, lastName, password, storeId, type]
     );
 
+    // If no user found
     if (result.rows.length === 0) {
       throw new UserNotExistError(username);
     }
 
+    // Commit transaction
     await client.query("COMMIT");
+
+    // Return the response
     return result.rows[0];
   } catch (error) {
+    // ERROR
+    // Rollback transaction
     if (client) await client.query("ROLLBACK");
     console.error("Transaction Failed:", error);
     throw new DBError("Error updating user in database");
   } finally {
+    // Release client
     if (client) client.release();
   }
 }
 
+// Export the functions
 module.exports = {
   addUser,
   removeUser,
