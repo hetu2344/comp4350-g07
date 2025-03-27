@@ -64,7 +64,8 @@ jobs:
         run: make down-volumes
 
   build-backend:
-    if: github.event_name == 'pull_request'
+    #if: github.event_name == 'pull_request'
+    needs: cypress-e2e-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
