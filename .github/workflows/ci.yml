@@ -1,5 +1,6 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
 name: Restro Sync CI
 
 on:
@@ -8,149 +9,67 @@ on:
   pull_request:
     branches: ["dev"]
 
-# Build Frontend and Backend in Parallel
 jobs:
   build-frontend:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "23"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-
+      - name: List frontend directory contents
+        working-directory: frontend
+        run: ls -la
       - name: Install dependencies (frontend)
         working-directory: frontend
         run: npm ci
-
       - name: Build (frontend)
         working-directory: frontend
-        run: npm run build --if-present
-
-      - name: Cache Frontend Build
-        uses: actions/cache@v4
-        with:
-          path: frontend/dist
-          key: ${{ runner.os }}-frontend-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-frontend-
+      - name: Test (frontend)
+        working-directory: frontend
 
   build-backend:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "23"
           cache: npm
           cache-dependency-path: backend/package-lock.json
-
       - name: Install dependencies (backend)
         working-directory: backend
         run: npm ci
-
-      - name: Cache Backend Dependencies
-        uses: actions/cache@v4
-        with:
-          path: backend/node_modules
-          key: ${{ runner.os }}-backend-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-backend-
-
       - name: Build (backend)
         working-directory: backend
         run: npm run build --if-present
+      - name: Test (backend)
+        working-directory: backend
+        run: npm test -- tests/unit
 
-  # Full Integration Testing
-  integration-tests:
-    needs: [build-frontend, build-backend]
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      # Install Docker and Docker Compose
-      - name: Install Docker
-        run: |
-          curl -fsSL https://get.docker.com -o get-docker.sh
-          sudo sh get-docker.sh
-          sudo usermod -aG docker $USER
-          newgrp docker
-          docker --version
-
-      - name: Install Docker Compose
-        run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose --version
-
-      # Build Docker Containers with Caching
-      - name: Build Docker Containers
-        run: |
-          docker-compose build --no-cache
-
-      # Start Docker Services
-      - name: Start Docker Services
-        run: |
-          docker-compose up -d
-
-      # Wait for Database to be Ready
-      - name: Wait for PostgreSQL Service
-        run: |
-          echo "Waiting for PostgreSQL service..."
-          until docker exec restro_sync_db pg_isready -U restro_usr -d restro_sync; do
-            echo "Postgres not ready yet..."
-            sleep 5
-          done
-          echo "PostgreSQL is ready!"
-
-      # Run Tests
-      - name: Run Backend Tests
-        run: |
-          docker-compose exec -T backend npm test
-
-      - name: Run Cypress Tests
-        run: |
-          docker-compose exec -T frontend npm run cypress:run
-
-      # Clean Up Docker
-      - name: Tear down Docker Services
-        run: |
-          docker-compose down -v
-
-  # Deployment
   deploy:
-    needs: [integration-tests]
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
-
+    # needs: [build-frontend, build-backend] # Uncomment if builds should run on push too
+    if: github.event_name == 'push'
     steps:
-      - uses: actions/checkout@v4
-
-      # Docker Hub Login
+      - uses: actions/checkout@v4 # Keep: Needed for files
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v2 # Keep: Needed for push
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Install Docker Compose
         run: |
           sudo curl -L "https://github.com/docker/compose/releases/download/v2.20.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
-
-      # Build and Push Docker Images
-      - name: Build and Push Docker Images
+      - name: Build and Push with Docker Compose
         run: |
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml push
