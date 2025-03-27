@@ -8,13 +8,74 @@ on:
   pull_request:
     branches: ["dev"]
 
+# Build Frontend and Backend in Parallel
 jobs:
-  build-and-test:
+  build-frontend:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repository
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies (frontend)
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build (frontend)
+        working-directory: frontend
+        run: npm run build --if-present
+
+      - name: Cache Frontend Build
+        uses: actions/cache@v4
+        with:
+          path: frontend/dist
+          key: ${{ runner.os }}-frontend-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-frontend-
+
+  build-backend:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "23"
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies (backend)
+        working-directory: backend
+        run: npm ci
+
+      - name: Cache Backend Dependencies
+        uses: actions/cache@v4
+        with:
+          path: backend/node_modules
+          key: ${{ runner.os }}-backend-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-backend-
+
+      - name: Build (backend)
+        working-directory: backend
+        run: npm run build --if-present
+
+  # Full Integration Testing
+  integration-tests:
+    needs: [build-frontend, build-backend]
+    runs-on: ubuntu-latest
+
+    steps:
       - uses: actions/checkout@v4
 
       # Install Docker and Docker Compose
@@ -32,40 +93,50 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      # Build the Docker containers with wait for health checks
-      - name: Build Docker containers
-        run: docker-compose up --build --wait
+      # Build Docker Containers with Caching
+      - name: Build Docker Containers
+        run: |
+          docker-compose build --no-cache
 
-      # Wait for Test Database to be Ready
-      - name: Wait for Test Database to be Ready
+      # Start Docker Services
+      - name: Start Docker Services
+        run: |
+          docker-compose up -d
+
+      # Wait for Database to be Ready
+      - name: Wait for PostgreSQL Service
         run: |
           echo "Waiting for PostgreSQL service..."
-          until docker exec restro_sync_test_db pg_isready -U restro_usr -d restro_test; do
+          until docker exec restro_sync_db pg_isready -U restro_usr -d restro_sync; do
             echo "Postgres not ready yet..."
             sleep 5
           done
           echo "PostgreSQL is ready!"
 
-      # Run Tests (Jest and Cypress)
-      - name: Run All Tests
-        run: make run-all-tests
-
-      # Tear down services
-      - name: Tear down services
-        run: make down
-
-      # Clean up Docker volumes and networks
-      - name: Clean Up Docker
+      # Run Tests
+      - name: Run Backend Tests
         run: |
-          docker volume prune -f
-          docker network prune -f
+          docker-compose exec -T backend npm test
 
+      - name: Run Cypress Tests
+        run: |
+          docker-compose exec -T frontend npm run cypress:run
+
+      # Clean Up Docker
+      - name: Tear down Docker Services
+        run: |
+          docker-compose down -v
+
+  # Deployment
   deploy:
-    runs-on: ubuntu-latest
+    needs: [integration-tests]
     if: github.event_name == 'push'
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
+      # Docker Hub Login
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -78,7 +149,8 @@ jobs:
           sudo chmod +x /usr/local/bin/docker-compose
           docker-compose --version
 
-      - name: Build and Push with Docker Compose
+      # Build and Push Docker Images
+      - name: Build and Push Docker Images
         run: |
           docker-compose -f docker-compose.yml build
           docker-compose -f docker-compose.yml push
