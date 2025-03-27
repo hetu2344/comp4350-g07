@@ -104,7 +104,10 @@ exports.dailyTrend = async (start, end) => {
     return rows;
 };
 
+// Method that makes SQL query to get dine-in vs take-away revenue and returns response
 exports.dineVsTakeRevenueDetails = async (start, end) => {
+
+    // SQL Query
     const { rows } = await pool.query(`
         SELECT order_type, 
                COUNT(order_id) AS total_orders, 
@@ -113,17 +116,21 @@ exports.dineVsTakeRevenueDetails = async (start, end) => {
         WHERE order_status='Completed' AND DATE(order_time) BETWEEN $1 AND $2
         GROUP BY order_type`, [start, end]);
 
+    // SQL Query
     const categoryTotal = await pool.query(`
         SELECT COUNT(order_id) AS total_orders,
                SUM(total_price) AS total_revenue
         FROM orders
         WHERE order_status='Completed' AND DATE(order_time) BETWEEN $1 AND $2`, [start, end]);
 
+        // Return the response
     return {
         byOrderType: rows,
         overallTotal: categoryTotal.rows[0]
     };
 };
+
+// Method that makes SQL query to get weekly sales details and returns response
 exports.weeklySalesDetails = async () => {
     const { rows } = await pool.query(`
         SELECT TRIM(TO_CHAR(DATE(order_time), 'Day')) AS day_name,
@@ -136,6 +143,7 @@ exports.weeklySalesDetails = async () => {
         GROUP BY day_name, date
         ORDER BY date`);
 
+        // SQL Query
     const totalWeekRevenue = await pool.query(`
         SELECT SUM(total_price) AS weekly_total
         FROM orders
@@ -143,10 +151,7 @@ exports.weeklySalesDetails = async () => {
           AND DATE(order_time) >= DATE_TRUNC('week', CURRENT_DATE)
           AND DATE(order_time) < DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '7 days'`);
 
-    console.log({
-        dailySales: rows,
-        weeklyTotal: totalWeekRevenue.rows[0].weekly_total
-    });
+        // Return the response
     return {
         dailySales: rows,
         weeklyTotal: totalWeekRevenue.rows[0].weekly_total
