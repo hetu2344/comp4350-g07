@@ -1,7 +1,9 @@
 const pool = require('../db/db');
 
+// Method that makes SQL query to get total revenue and returns response
 exports.totalRevenueDetails = async (start, end) => {
 
+    // SQL Query
     const { rows } = await pool.query(`
         SELECT order_status, 
                COUNT(order_id) AS total_orders, 
@@ -10,16 +12,14 @@ exports.totalRevenueDetails = async (start, end) => {
         WHERE DATE(order_time) BETWEEN $1 AND $2
         GROUP BY order_status`, [start, end]);
 
+        // SQL Query
     const totalSummary = await pool.query(`
         SELECT COUNT(order_id) AS total_orders, 
                SUM(total_price) AS total_revenue
         FROM orders
         WHERE DATE(order_time) BETWEEN $1 AND $2`, [start, end]);
 
-    console.log({
-        byStatus: rows,
-        total: totalSummary.rows[0]
-    });
+        // Return the response
     return {
         byStatus: rows,
         total: totalSummary.rows[0]
@@ -38,35 +38,7 @@ exports.topMenuItems = async (start, end) => {
     return rows;
 };
 
-// exports.revenueByCategory = async (start, end) => {
-//     const { rows } = await pool.query(`
-//         SELECT c.name AS category, SUM(oi.quantity * oi.item_price) AS revenue
-//         FROM order_items oi
-//         JOIN menu_items m ON oi.menu_item_id = m.item_id
-//         JOIN menu_categories c ON m.category_id = c.id
-//         JOIN orders o ON oi.order_id = o.order_id
-//         WHERE o.order_status='Completed' AND DATE(o.order_time) BETWEEN $1 AND $2
-//         GROUP BY c.name`, [start, end]);
-//     return rows;
-// };
 
-// exports.revenueByCategoryWithItems = async (start, end) => {
-//     const { rows } = await pool.query(`
-//         SELECT c.name AS category, 
-//                SUM(oi.quantity * oi.item_price) AS revenue,
-//                json_agg(json_build_object(
-//                    'itemName', m.item_name,
-//                    'itemPrice', m.price,
-//                    'quantitySold', oi.quantity
-//                )) AS itemsSold
-//         FROM order_items oi
-//         JOIN menu_items m ON oi.menu_item_id = m.item_id
-//         JOIN menu_categories c ON m.category_id = c.id
-//         JOIN orders o ON oi.order_id = o.order_id
-//         WHERE o.order_status='Completed' AND DATE(o.order_time) BETWEEN $1 AND $2
-//         GROUP BY c.name`, [start, end]);
-//     return rows;
-// };
 
 exports.revenueByCategoryWithItems = async (start, end) => {
     const { rows } = await pool.query(`
