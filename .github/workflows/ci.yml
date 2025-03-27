@@ -56,7 +56,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    # needs: [build-frontend, build-backend] # Uncomment if builds should run on push too
+    needs: [build-frontend, build-backend] # Uncomment if builds should run on push too
     if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4 # Keep: Needed for files
