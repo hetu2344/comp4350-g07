@@ -34,7 +34,7 @@ function OrderHistory({ user }) {
       setOrders(detailedOrders);
     } catch (err) {
       console.error("Error loading orders:", err.message);
-      setError("Failed to load active orders.");
+      setError("Failed to load orders.");
     }
   };
 
@@ -44,7 +44,7 @@ function OrderHistory({ user }) {
 
       <Card>
         <div className={classes.container}>
-          <h1 className={classes.title}>📦 Active Orders</h1>
+          <h1 className={classes.title}>📦 All Orders</h1>
           {error && <p className={classes.error}>{error}</p>}
 
           <div className={classes.grid}>
