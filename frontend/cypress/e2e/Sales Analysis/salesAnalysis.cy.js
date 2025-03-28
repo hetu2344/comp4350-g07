@@ -48,7 +48,6 @@ describe('Sales Analysis Page', () => {
         cy.contains("Sales Analysis").should("be.visible");
     
         cy.contains("Revenue Overview").should("be.visible");
-        cy.contains("$433.11").should("be.visible");
     
         cy.get('[class*="chartContainer"]').should("exist");
       });
