@@ -9,19 +9,23 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "cypress run",
-    "test:headless": "cypress run"
+    "test:headless": "cypress run",
+    "test:coverage": "cypress run && nyc report --reporter=html --reporter=text-summary"
   },
   "dependencies": {
+    "@cypress/code-coverage": "^3.14.0",
     "axios": "^1.8.4",
     "chart.js": "^4.4.1",
+    "nyc": "^17.1.0",
     "react": "^19.0.0",
     "react-bootstrap": "^1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
-    "react-toastify": "^11.0.5"
+    "react-toastify": "^11.0.5",
+    "vite-plugin-istanbul": "^7.0.0"
   },
   "devDependencies": {
-    "@cypress/vite-dev-server": "^6.0.2",
+    "@cypress/vite-dev-server": "^6.0.3",
     "@eslint/js": "^9.19.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",

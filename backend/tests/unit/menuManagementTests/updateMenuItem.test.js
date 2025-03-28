@@ -79,7 +79,7 @@ describe("Menu Mannagement API Tests", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body).toEqual(expectedResponse);
-    expect(pool.__mockClient.query).toHaveBeenCalledTimes(13);
+    expect(pool.__mockClient.query).toHaveBeenCalledTimes(14);
   });
 
 

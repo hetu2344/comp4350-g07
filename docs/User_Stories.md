@@ -137,7 +137,7 @@ And the staff member should no longer be able to log in
 
 **Description**:
 
-As a customer, I want to book a table online so that I can secure my reservation in advance.
+As a employee, I want to book a table online so that I can secure customer's reservation in advance.
 
 * Priority: High
 * Time: 2 days
@@ -146,11 +146,11 @@ As a customer, I want to book a table online so that I can secure my reservation
 
 **Scenario**: Successful Table Reservation
 
-Given I am a logged in customer 
+Given I am a logged in employee
 And I am on the Reserve a Table page
-When I enter my reservation time and party size 
+When I enter customer's reservation time and party size 
 And click the reserve button 
-Then my table will be reserved for when I arrive with my party at the specified time.
+Then my table will be reserved for when customer arrives with my party at the specified time.
 
 ---
 
@@ -241,11 +241,11 @@ And the reservation will be removed from the list.
 
 ---
 
-### 2f - Change Status of Table to Taken
+### 2f - Change Status of Table to Taken on Specific Time Slot
 
 **Description**:
 
-As a store employee, I want to be able to mark that a table has been taken.
+As a store employee, I want to be able to mark that a table with the latest time slot it has been booked.
 
 * Priority: High
 * Time: 2 days
@@ -258,8 +258,8 @@ As a store employee, I want to be able to mark that a table has been taken.
 Given that I am a logged in employee 
 And I am on the Table Management page
 When I select an open table 
-And click Mark as sat 
-Then the table will appear as taken on the Table Management page
+And make a reservation
+Then the table should appear with the latest reserved time for it.
 
 ---
 
@@ -281,6 +281,45 @@ And I am on the Table Management page
 When I select a taken table 
 And click Mark as open
 Then the table will appear as open on the Table Management page 
+
+## 2h - Search Reservation by Customer Name
+
+**Description**  
+As a store employee, I want to be able to search for a reservation by a customer’s name so that I can quickly find and manage that specific reservation.
+
+- **Priority**: High  
+- **Time**: 1 day  
+
+### Acceptance Criteria
+
+**Scenario**: Successful search of reservation by customer name
+
+Given that I am a logged-in employee  
+And I am on the Reservation Management page  
+When I enter a customer’s name in the search field  
+And click the "Search" button  
+Then the reservations that match the customer’s name will be displayed  
+And I can select a reservation from the displayed list to manage it  
+
+## 2i - Search Reservation by Table Number
+
+**Description**  
+As a store employee, I want to be able to search for a reservation by its table number so that I can quickly find and manage the reservation associated with that table.
+
+- **Priority**: High  
+- **Time**: 1 day
+  
+### Acceptance Criteria
+
+**Scenario**: Successful search of reservation by table number
+
+Given that I am a logged-in employee  
+And I am on the Reservation Management page  
+When I enter a table number in the search field  
+And click the "Search" button  
+Then the reservations that match the entered table number will be displayed  
+And I can select a reservation from the displayed list to manage it  
+
 
 ## Feature 3 - Menu management
 

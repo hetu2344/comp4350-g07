@@ -5,6 +5,7 @@ class DBError extends Error {
   }
 }
 
+// Error that occurs when user does not exists
 class UserNotExistError extends Error {
   constructor(username) {
     super(`User with username '${username}' does not exist`);
@@ -12,6 +13,7 @@ class UserNotExistError extends Error {
   }
 }
 
+// Error that occurs if validation fails
 class ValidationError extends Error {
   constructor(message = "Validation failed") {
     super(message);
@@ -19,6 +21,7 @@ class ValidationError extends Error {
   }
 }
 
+// Error that occurs when user is unauthorized
 class UnauthorizedError extends Error {
   constructor(message = "Unauthorized access") {
     super(message);
@@ -26,6 +29,7 @@ class UnauthorizedError extends Error {
   }
 }
 
+// Error that occurs in case of conflict
 class ConflictError extends Error {
   constructor(message = "Conflict: Resource already exists") {
     super(message);
@@ -33,6 +37,7 @@ class ConflictError extends Error {
   }
 }
 
+// Exporting errors
 module.exports = {
   DBError,
   UserNotExistError,

@@ -1,5 +1,6 @@
 const pool = require("../db/db");
 
+// Method that makes SQL query to insert new menu item
 async function insertMenuItem(
   itemName,
   itemDescription,
@@ -10,30 +11,26 @@ async function insertMenuItem(
   isVegan,
   isGlutenFree
 ) {
-  console.log("itemName", itemName);
-  console.log("itemDescription", itemDescription);
-  console.log("price", price);
-  console.log("Category", category);
-  console.log("isAvailable", isAvailable);
-  console.log("isVegetarian", isVegetarian);
-  console.log("isVegan", isVegan);
-  console.log("isGlutenFree ", isGlutenFree);
 
   let client;
   try {
     client = await pool.connect();
+
+    // Transaction
     await client.query("BEGIN");
 
+    // SELECT Query to get category
     const categoryResult = await client.query(
       `SELECT id FROM menu_categories WHERE name = $1 FOR UPDATE`,
       [category]
     );
     
-    console.log("Category Result:",categoryResult.rows);
-
+    // If category not found
     if (categoryResult.rows.length === 0) {
       throw new Error("Category not found");
     }
+
+    // Get category id
     const categoryId = categoryResult.rows[0].id;
 
     // INSERT Query
@@ -51,17 +48,23 @@ async function insertMenuItem(
       ]
     );
 
+    //COMMIT TRANSACTION
     await client.query("COMMIT");
 
+    // Return the inserted menu item
     return {
       menuItemId: result.rows[0].item_id,
       menuItemName: result.rows[0].item_name,
     };
   } catch (error) {
+    // ERROR
+
+    // ROLLBACK TRANSACTION
       await client.query("ROLLBACK");
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
+    // RELEASE CLIENT
       client.release();
   }
 }
@@ -82,14 +85,18 @@ async function updateItem(
   try {
     client = await pool.connect();
 
+    // Transaction
     await client.query("BEGIN");
 
+    // SELECT Query TO GET CATEGORY
     const categoryResult=await client.query(`SELECT id FROM menu_categories WHERE name=$1 FOR UPDATE`,[category]);
 
+    // If category not found
     if(!categoryResult || categoryResult.rows.length===0){
       throw new Error(`Category ${category} not found.`);
     }
-    console.log("Category",categoryResult);
+
+    // Get category id
     const categoryId=categoryResult.rows[0].id;
     // UPDATE Query
     const result = await client.query(
@@ -107,18 +114,21 @@ async function updateItem(
       ]
     );
 
-    // if(result.rowCount===0){
-    //   throw new Error(`Menu item with ID ${itemId} not found.`);
-    // }
-
+  
+    // COMMIT TRANSACTION
     await client.query("COMMIT");
-
+    
+    //  Return the updated menu item 
     return result;
+
   } catch (error) {
+    // ERROR
+    // ROLLBACK TRANSACTION
       await client.query("ROLLBACK");
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
+    // RELEASE CLIENT
       client.release();
   }
 }
@@ -127,8 +137,10 @@ async function updateItem(
 async function removeAllAllergens(itemId) {
   let client;
   try {
+
     client = await pool.connect();
 
+    // Transaction
     await client.query("BEGIN");
 
     // DELETE Query
@@ -137,14 +149,19 @@ async function removeAllAllergens(itemId) {
       [itemId]
     );
 
+    // COMMIT TRANSACTION
     await client.query("COMMIT");
-    console.log("REMOVE ITEM RESULT",result);
+    
+    // Return the result
     return result;
   } catch (error) {
+    // ERROR
+    // ROLLBACK TRANSACTION
       await client.query("ROLLBACK");
     console.error("Transaction Failed:", error);
     throw error;
   } finally {
+    // RELEASE CLIENT
       client.release();
   }
 }
@@ -155,51 +172,63 @@ async function insertAllergens(itemId, allergens) {
   try {
     client = await pool.connect();
 
+    // Transaction
     await client.query("BEGIN");
     let insertCount=0;
+    // Loop through allergens
     for (const allergenName of allergens) {
       // INSERT Query
       const result=await client.query(
         `INSERT INTO menu_item_allergens (menu_item_id,allergen_id) VALUES ($1, (SELECT id FROM menu_allergens WHERE name = $2))`,
         [itemId, allergenName]
       );
+
+      // If allergen inserted
       if(result.rowCount>0){
         insertCount++;
       }
     }
+    // COMMIT TRANSACTION
     await client.query("COMMIT");
+
+    // Return the count of inserted allergens
     return insertCount;
   } catch (error) {
+    // ERROR
+    // ROLLBACK TRANSACTION
       await client.query("ROLLBACK");
-    console.error("Transaction Failed:", error);
     throw error;
   } finally {
+    // RELEASE CLIENT
       client.release();
   }
 }
 
+// Method that checks if an item exists
 async function checkItemExist(id,){
   let client;
   try {
     client = await pool.connect();
 
+    // Transaction
     await client.query("BEGIN");
 
-    console.log(id);
-
-
+    // SELECT Query
     const result = await client.query(
       "SELECT * FROM menu_items WHERE item_id = $1",
       [id]
     );
 
-    console.log("RowCount:",result.rowCount);
-    console.log("ROWS:",result.rows);
+    // if got no menu items
     if (result.rowCount===0) {
          throw new Error(`Menu item not found.`);
        }
+
+      //  COMMIT TRANSACTION
+      await client.query("COMMIT");
     return result.rows;
   } catch (error) {
+    // ERROR
       await client.query("ROLLBACK");
     console.error("Transaction Failed:", error);
     throw error;
@@ -216,11 +245,15 @@ async function removeItem(id) {
       "DELETE FROM menu_items WHERE item_id=$1 RETURNING *",
       [id]
     );
+    // If no item found
     if(result.rows.length===0){
       throw new Error(`Item with id = ${id} not found.`)
     }
+
+    // Return the result
     return result;
   } catch (err) {
+    // ERROR
     console.error("Error removing menu item:", err);
     throw err;
   }
@@ -240,12 +273,15 @@ async function getAllItems() {
       GROUP BY mi.item_id,c.name`
     );
 
+    // If no menu items found
       if (result.rows.length === 0) {
           throw new Error(`No menu items found.`);
         }
 
+    // Return the menu items
     return result.rows;
   } catch (err) {
+    // ERROR
     console.error("Error fetching menu items:", err);
     throw err;
   }
@@ -267,25 +303,29 @@ async function getAnItemById(id) {
       [id]
     );
 
+    // If no menu item found
     if(!result || result.rows.length === 0){
       throw new Error(`No menu item found with ID: ${id}`);
     }
 
+    // Return the menu item
     return result.rows;
   } catch (err) {
-    console.error("Error fetching menu items:", err);
+    // ERROR
     throw err;
   }
 }
 
-
+// Method that gets all allergens
 async function getAllAllergens() {
   try {
     // SELECT Query
     const result = await pool.query("SELECT * FROM menu_allergens");
-    console.log("Result:",result);
+
+    // return the allergens
     return result.rows;
   } catch (err) {
+    // ERROR
     console.error("Error fetching allergens:", err);
     throw err;
   }

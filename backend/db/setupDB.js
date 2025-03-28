@@ -2,6 +2,7 @@ const { Client } = require("pg");
 const fs = require("fs");
 const path = require("path");
 
+// Creating client to connect to sql
 const client = new Client({
     user: process.env.DB_USER,
     host: process.env.DB_HOST,
@@ -10,6 +11,7 @@ const client = new Client({
     port: process.env.DB_PORT,
 });
 
+// Setting up database
 async function setupDatabase() {
     try {
         await client.connect();

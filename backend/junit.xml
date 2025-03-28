@@ -1,57 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="20" failures="0" errors="0" time="0.424">
-  <testsuite name="GET /api/sales/totalRevenue" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.151" tests="3">
-    <testcase classname="GET /api/sales/totalRevenue should return total revenue details when startDate and endDate are provided" name="GET /api/sales/totalRevenue should return total revenue details when startDate and endDate are provided" time="0.018">
+<testsuites name="jest tests" tests="10" failures="0" errors="0" time="1.21">
+  <testsuite name="tableManagementModels" errors="0" failures="0" skipped="0" timestamp="2025-03-28T01:02:43" time="1.098" tests="10">
+    <testcase classname="tableManagementModels getAllTablesInfo should return table data successfully" name="tableManagementModels getAllTablesInfo should return table data successfully" time="0.023">
     </testcase>
-    <testcase classname="GET /api/sales/totalRevenue should default to current date when startDate and endDate are missing" name="GET /api/sales/totalRevenue should default to current date when startDate and endDate are missing" time="0.002">
+    <testcase classname="tableManagementModels getAllTablesInfo should rollback and throw error if a query fails (client exists)" name="tableManagementModels getAllTablesInfo should rollback and throw error if a query fails (client exists)" time="0.014">
     </testcase>
-    <testcase classname="GET /api/sales/totalRevenue should return 500 if an error occurs" name="GET /api/sales/totalRevenue should return 500 if an error occurs" time="0.002">
+    <testcase classname="tableManagementModels getAllTablesInfo should throw error if pool.connect fails (client undefined)" name="tableManagementModels getAllTablesInfo should throw error if pool.connect fails (client undefined)" time="0.003">
     </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/dinevstake" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.033" tests="3">
-    <testcase classname="GET /api/sales/dinevstake should return dine vs take revenue details when dates are provided" name="GET /api/sales/dinevstake should return dine vs take revenue details when dates are provided" time="0.002">
+    <testcase classname="tableManagementModels getReservationsByCustomerName should return reservations for a valid customer" name="tableManagementModels getReservationsByCustomerName should return reservations for a valid customer" time="0.003">
     </testcase>
-    <testcase classname="GET /api/sales/dinevstake should default to current date when query params are missing" name="GET /api/sales/dinevstake should default to current date when query params are missing" time="0.002">
+    <testcase classname="tableManagementModels getReservationsByCustomerName should throw error if no reservations found (client exists)" name="tableManagementModels getReservationsByCustomerName should throw error if no reservations found (client exists)" time="0.013">
     </testcase>
-    <testcase classname="GET /api/sales/dinevstake should return 500 if an error occurs" name="GET /api/sales/dinevstake should return 500 if an error occurs" time="0.001">
+    <testcase classname="tableManagementModels getReservationsByCustomerName should rollback and throw error if query fails (client exists)" name="tableManagementModels getReservationsByCustomerName should rollback and throw error if query fails (client exists)" time="0.005">
     </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/weeklySales" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.036" tests="2">
-    <testcase classname="GET /api/sales/weeklySales should return weekly sales details" name="GET /api/sales/weeklySales should return weekly sales details" time="0.004">
+    <testcase classname="tableManagementModels getReservationsByCustomerName should throw error if pool.connect fails (client undefined)" name="tableManagementModels getReservationsByCustomerName should throw error if pool.connect fails (client undefined)" time="0.009">
     </testcase>
-    <testcase classname="GET /api/sales/weeklySales should return 500 if an error occurs" name="GET /api/sales/weeklySales should return 500 if an error occurs" time="0.001">
+    <testcase classname="tableManagementModels getFutureReservationsByTableNum should return future reservations for a valid table" name="tableManagementModels getFutureReservationsByTableNum should return future reservations for a valid table" time="0.003">
     </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/revenueByCategory" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.031" tests="3">
-    <testcase classname="GET /api/sales/revenueByCategory should return revenue by category with items when dates are provided" name="GET /api/sales/revenueByCategory should return revenue by category with items when dates are provided" time="0.004">
+    <testcase classname="tableManagementModels getFutureReservationsByTableNum should rollback and throw error if query fails (client exists)" name="tableManagementModels getFutureReservationsByTableNum should rollback and throw error if query fails (client exists)" time="0.003">
     </testcase>
-    <testcase classname="GET /api/sales/revenueByCategory should default to current date when query params are missing" name="GET /api/sales/revenueByCategory should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/revenueByCategory should return 500 if an error occurs" name="GET /api/sales/revenueByCategory should return 500 if an error occurs" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/dailyTrend" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.029" tests="3">
-    <testcase classname="GET /api/sales/dailyTrend should return daily sales trend when dates are provided" name="GET /api/sales/dailyTrend should return daily sales trend when dates are provided" time="0.002">
-    </testcase>
-    <testcase classname="GET /api/sales/dailyTrend should default to current date when query params are missing" name="GET /api/sales/dailyTrend should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/dailyTrend should return 500 if an error occurs" name="GET /api/sales/dailyTrend should return 500 if an error occurs" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/topMenuItems" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.028" tests="3">
-    <testcase classname="GET /api/sales/topMenuItems should return top menu items when dates are provided" name="GET /api/sales/topMenuItems should return top menu items when dates are provided" time="0.002">
-    </testcase>
-    <testcase classname="GET /api/sales/topMenuItems should default to current date when query params are missing" name="GET /api/sales/topMenuItems should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/topMenuItems should return 500 if an error occurs" name="GET /api/sales/topMenuItems should return 500 if an error occurs" time="0.001">
-    </testcase>
-  </testsuite>
-  <testsuite name="GET /api/sales/averageOrderValue" errors="0" failures="0" skipped="0" timestamp="2025-03-22T02:21:41" time="0.029" tests="3">
-    <testcase classname="GET /api/sales/averageOrderValue should return average order value when dates are provided" name="GET /api/sales/averageOrderValue should return average order value when dates are provided" time="0.002">
-    </testcase>
-    <testcase classname="GET /api/sales/averageOrderValue should default to current date when query params are missing" name="GET /api/sales/averageOrderValue should default to current date when query params are missing" time="0.001">
-    </testcase>
-    <testcase classname="GET /api/sales/averageOrderValue should return 500 if an error occurs" name="GET /api/sales/averageOrderValue should return 500 if an error occurs" time="0.001">
+    <testcase classname="tableManagementModels getFutureReservationsByTableNum should throw error if pool.connect fails (client undefined)" name="tableManagementModels getFutureReservationsByTableNum should throw error if pool.connect fails (client undefined)" time="0.002">
     </testcase>
   </testsuite>
 </testsuites>
