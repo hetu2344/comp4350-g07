@@ -3,6 +3,10 @@ node_modules/
 npm-debug.log*
 yarn-error.log
 
+# Load test results
+loadtest/html-report
+loadtest/jtl-report
+
 # Environment variables
 .env
 .env.local
