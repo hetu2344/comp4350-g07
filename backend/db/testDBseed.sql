@@ -43,7 +43,7 @@ CREATE TABLE menu_items
     is_vegetarian BOOLEAN DEFAULT FALSE,
     is_vegan BOOLEAN DEFAULT FALSE,
     is_gluten_free BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268'
+    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268Z'
 );
 
 CREATE TABLE menu_item_allergens
@@ -148,7 +148,7 @@ CREATE TABLE order_items
     quantity INTEGER NOT NULL DEFAULT 1,
     item_price DECIMAL(10,2) NOT NULL,
     created_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL,
-    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268'
+    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268Z'
 );
 
 
