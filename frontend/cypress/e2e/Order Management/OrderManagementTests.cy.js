@@ -37,8 +37,8 @@ describe('Creating an order', () => {
         cy.contains('Order created successfully!').should('be.visible');
         cy.visit('http://localhost:8017/active-orders');
         cy.wait(4000);
-        cy.contains('owner_john').should('be.visible');
-
+        cy.scrollTo('bottom');
+        cy.contains('No onions, please.').should('be.visible');
         cy.visit('http://localhost:8017/dashboard');
       });
 
@@ -111,7 +111,7 @@ describe('Creating an order', () => {
     
         cy.get('.card').should('have.length.at.least', 1);
     
-        cy.contains('📦 All Orders').should('be.visible');
+        cy.contains('📦 Order History').should('be.visible');
 
         cy.get('.card').first().within(() => {
           cy.contains('$').should('be.visible');
