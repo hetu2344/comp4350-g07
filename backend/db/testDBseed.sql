@@ -43,7 +43,7 @@ CREATE TABLE menu_items
     is_vegetarian BOOLEAN DEFAULT FALSE,
     is_vegan BOOLEAN DEFAULT FALSE,
     is_gluten_free BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268Z'
+    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268'
 );
 
 CREATE TABLE menu_item_allergens
@@ -135,14 +135,9 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER trigger_generate_order_number
-BEFORE
-INSERT ON
-orders
-FOR
-EACH
-ROW
-EXECUTE FUNCTION generate_order_number
-();
+BEFORE INSERT ON orders
+FOR EACH ROW
+EXECUTE FUNCTION generate_order_number();
 
 
 CREATE TABLE order_items
@@ -153,7 +148,7 @@ CREATE TABLE order_items
     quantity INTEGER NOT NULL DEFAULT 1,
     item_price DECIMAL(10,2) NOT NULL,
     created_by VARCHAR(50) REFERENCES users(username) ON DELETE SET NULL,
-    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268Z'
+    created_at TIMESTAMP DEFAULT '2025-03-19 05:20:59.268'
 );
 
 
@@ -413,7 +408,7 @@ VALUES
 
 COMMIT;
 
-CREATE VIEW order_summary_view
+CREATE OR REPLACE VIEW order_summary_view
 AS
     SELECT
         o.order_id,
@@ -443,7 +438,7 @@ AS
          o.customer_name, o.order_status, o.order_time, o.created_by;
 
 
-CREATE VIEW order_details_view
+CREATE OR REPLACE VIEW order_details_view
 AS
     SELECT
         o.order_id,
