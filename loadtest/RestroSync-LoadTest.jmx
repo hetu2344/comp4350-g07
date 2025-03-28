@@ -28,7 +28,7 @@
         </HeaderManager>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="USER-LOGIN-HTTP Request">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">backend</stringProp>
           <stringProp name="HTTPSampler.port">8018</stringProp>
           <stringProp name="HTTPSampler.path">/api/user/login</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -136,7 +136,7 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="MENU GET-HTTP Request" enabled="true">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">backend</stringProp>
           <stringProp name="HTTPSampler.port">8018</stringProp>
           <stringProp name="HTTPSampler.path">/api/menu</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
@@ -234,7 +234,7 @@
           <hashTree/>
         </hashTree>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Create Order POST-HTTP Request" enabled="true">
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
+          <stringProp name="HTTPSampler.domain">backend</stringProp>
           <stringProp name="HTTPSampler.port">8018</stringProp>
           <stringProp name="HTTPSampler.path">/api/orders/</stringProp>
           <boolProp name="HTTPSampler.follow_redirects">true</boolProp>

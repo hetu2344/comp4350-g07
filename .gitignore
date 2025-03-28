@@ -6,6 +6,7 @@ yarn-error.log
 # Load test results
 loadtest/html-report
 loadtest/jtl-report
+loadtest/result
 
 # Environment variables
 .env
