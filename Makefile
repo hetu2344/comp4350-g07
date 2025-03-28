@@ -96,9 +96,8 @@ run-loadtest:
 	docker cp loadtest:/app/result loadtest/
 
 clean-loadtest-results:
-	rm -rf loadtest/result
-	docker-compose down db --volumes
-	docker-compose up db --build
+	docker-compose down db -d --volumes
+	docker-compose up db -d --build
 
 # Help command to show available commands
 help:
