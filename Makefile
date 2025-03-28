@@ -11,11 +11,15 @@ JMeter_IMAGE = justb4/jmeter
 
 # Start Docker Compose in detached mode
 up:
-	$(DOCKER_COMPOSE) up -d
+	$(DOCKER_COMPOSE) up backend -d
+	$(DOCKER_COMPOSE) up frontend -d
+	$(DOCKER_COMPOSE) up db -d
 
 # Start Docker Compose with build
 up-build:
-	$(DOCKER_COMPOSE) up -d --build
+	$(DOCKER_COMPOSE) up backend -d --build
+	$(DOCKER_COMPOSE) up frontend -d --build
+	$(DOCKER_COMPOSE) up db -d --build
 
 # Stop and remove all running containers
 down:
@@ -75,27 +79,16 @@ run-all-tests:
 	$(DOCKER_COMPOSE) run --rm test npm test -- --coverage --detectOpenHandles
 	$(DOCKER_COMPOSE) down
 
-test-file:
-	$(DOCKER_COMPOSE) run --rm test npm test -- $(FILE) --coverage --detectOpenHandles
+# test-file:
+# 	$(DOCKER_COMPOSE) run --rm test npm test -- $(FILE) --coverage --detectOpenHandles
 
-test-folder:
-ifndef DIR
-	@echo "Usage: make test-folder DIR=path/to/folder"
-	@echo "Example: make test-folder DIR=orderManagementTests"
-	@exit 1
-endif
-	$(DOCKER_COMPOSE) run --rm test npm test --tests/unit/$(DIR) --coverage --detectOpenHandles
-
-# Runs the JMeter test plan
-run-jmeter: check-results-dir
-	$(if $(findstring $(OS),Windows_NT), \
-		if not exist $(RESULTS_DIR) mkdir $(RESULTS_DIR), \
-		mkdir -p $(RESULTS_DIR))
-
-	$(if $(findstring $(OS),Windows_NT), \
-		docker run --rm -v "$(PWD)/loadtest:/test-plan" -v "$(PWD)/$(RESULTS_DIR):/results" $(JMeter_IMAGE) -n -t /test-plan/$(JMX_FILE) -l /results/test-results.jtl, \
-		docker run --rm -v $(PWD)/loadtest:/test-plan -v $(PWD)/$(RESULTS_DIR):/results $(JMeter_IMAGE) -n -t /test-plan/$(JMX_FILE) -l /results/test-results.jtl)
-
+# test-folder:
+# ifndef DIR
+# 	@echo "Usage: make test-folder DIR=path/to/folder"
+# 	@echo "Example: make test-folder DIR=orderManagementTests"
+# 	@exit 1
+# endif
+# 	$(DOCKER_COMPOSE) run --rm test npm test --tests/unit/$(DIR) --coverage --detectOpenHandles
 
 # run-loadtest: clean-loadtest-results
 run-loadtest:
