@@ -135,14 +135,9 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER trigger_generate_order_number
-BEFORE
-INSERT ON
-orders
-FOR
-EACH
-ROW
-EXECUTE FUNCTION generate_order_number
-();
+BEFORE INSERT ON orders
+FOR EACH ROW
+EXECUTE FUNCTION generate_order_number();
 
 
 CREATE TABLE order_items
@@ -385,10 +380,35 @@ VALUES
     (7, 3, 1, 6.49, 'employee_lisa'),
     (7, 1, 1, 12.99, 'employee_lisa');
 
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (5, 'Alice Johnson', '2025-04-27 12:45:00', 4),
+    (2, 'Michael Brown', '2025-04-27 19:00:00', 2);
+
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (10, 'David Miller', '2025-04-28 13:30:00', 7),
+    (9, 'Jessica White', '2025-04-28 18:00:00', 8);
+
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (8, 'Emma Green', '2025-04-30 10:30:00', 4),
+    (3, 'Brian Hall', '2025-04-30 19:30:00', 2);
+
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (1, 'Sophia Adams', '2025-05-02 12:45:00', 2),
+    (7, 'Lucas Nelson', '2025-05-02 12:50:00', 2),
+    (6, 'Mia Clark', '2025-05-02 13:30:00', 3);
+
 
 COMMIT;
 
-CREATE VIEW order_summary_view
+CREATE OR REPLACE VIEW order_summary_view
 AS
     SELECT
         o.order_id,
@@ -418,7 +438,7 @@ AS
          o.customer_name, o.order_status, o.order_time, o.created_by;
 
 
-CREATE VIEW order_details_view
+CREATE OR REPLACE VIEW order_details_view
 AS
     SELECT
         o.order_id,

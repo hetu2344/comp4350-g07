@@ -367,6 +367,32 @@ VALUES
 (13, 3, 1, 6.49, 'manager_bob'); -- Cheesecake (6.49), total = 19.48
 
 
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (5, 'Alice Johnson', '2025-04-27 12:45:00', 4),
+    (2, 'Michael Brown', '2025-04-27 19:00:00', 2);
+
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (10, 'David Miller', '2025-04-28 13:30:00', 7),
+    (9, 'Jessica White', '2025-04-28 18:00:00', 8);
+
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (8, 'Emma Green', '2025-04-30 10:30:00', 4),
+    (3, 'Brian Hall', '2025-04-30 19:30:00', 2);
+
+INSERT INTO reservations
+    (table_num, customer_name, reservation_time, party_size)
+VALUES
+    (1, 'Sophia Adams', '2025-05-02 12:45:00', 2),
+    (7, 'Lucas Nelson', '2025-05-02 12:50:00', 2),
+    (6, 'Mia Clark', '2025-05-02 13:30:00', 3);
+
+
 COMMIT;
 
 CREATE VIEW order_summary_view AS

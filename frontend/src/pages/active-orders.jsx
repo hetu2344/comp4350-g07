@@ -1,3 +1,20 @@
+/**
+ * ActiveOrders Page
+ * ------------------
+ * This page displays all currently active (non-completed) orders in a card layout.
+ * It allows store staff to:
+ *  - View ongoing Dine-In, Takeout, or Delivery orders.
+ *  - Mark orders as completed when they are fulfilled.
+ *  - Edit orders to update items, instructions, or customer details.
+ * 
+ * Orders are automatically fetched and refreshed every 10 seconds.
+ * 
+ * Role Access:
+ *  - S: Store Owners
+ *  - M: Managers
+ *  - E: Employees
+ */
+
 import { useEffect, useState } from "react";
 import Card from "react-bootstrap/Card";
 import classes from "./active-orders.module.css";
@@ -7,23 +24,27 @@ import OrderManagementNavigation from "../components/layout/OrderManagementNavig
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Main component for displaying and managing active orders
 function ActiveOrders({ user }) {
   const [orders, setOrders] = useState([]);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch orders on initial load and every 10 seconds
   useEffect(() => {
     fetchAllOrderDetails();
     const interval = setInterval(fetchAllOrderDetails, 10000);
-    return () => clearInterval(interval);
+    return () => clearInterval(interval); // Cleanup interval on unmount
   }, []);
 
+  // Fetch all active order details (excluding completed ones)
   const fetchAllOrderDetails = async () => {
     try {
       const response = await fetch("http://localhost:8018/api/orders");
       if (!response.ok) throw new Error("Failed to fetch orders list");
       const rawOrders = await response.json();
 
+      // Filter active orders and fetch their full details
       const fullDetailsPromises = rawOrders
         .filter((order) => order.order_status !== "Completed")
         .sort((a, b) => a.order_id - b.order_id)
@@ -42,6 +63,7 @@ function ActiveOrders({ user }) {
     }
   };
 
+  // Mark a specific order as completed
   const handleMarkCompleted = async (orderNumber) => {
     try {
       const response = await fetch(
@@ -62,7 +84,7 @@ function ActiveOrders({ user }) {
       }
 
       toast.success(`Order ${orderNumber} marked as completed!`);
-      fetchAllOrderDetails();
+      fetchAllOrderDetails(); // Refresh list
     } catch (err) {
       console.error("Failed to mark completed:", err.message);
       toast.error("Failed to mark order as completed.");
@@ -71,15 +93,19 @@ function ActiveOrders({ user }) {
 
   return (
     <>
+      {/* Order Management top navigation bar */}
       <OrderManagementNavigation />
 
       <Card>
         <div className={classes.container}>
           <h1 className={classes.title}>📦 Active Orders</h1>
+
+          {/* Show error if any */}
           {error && <p className={classes.error}>{error}</p>}
 
           <div className={classes.grid}>
             {orders.length > 0 ? (
+              // Render each active order in a styled card
               orders.map(({ order, items }) => (
                 <div key={order.order_number} className={classes.card}>
                   <div className={classes.header}>
@@ -109,6 +135,7 @@ function ActiveOrders({ user }) {
                     </p>
                   </div>
 
+                  {/* List of ordered items */}
                   <div className={classes.items}>
                     <p>
                       <strong>Items:</strong>
@@ -123,6 +150,7 @@ function ActiveOrders({ user }) {
                     </ul>
                   </div>
 
+                  {/* Totals and charges */}
                   <div className={classes.totals}>
                     <p>
                       <strong>Subtotal:</strong> ${order.item_total.toFixed(2)}
@@ -142,6 +170,7 @@ function ActiveOrders({ user }) {
                     </p>
                   </div>
 
+                  {/* Action buttons for completing or editing the order */}
                   <button
                     className={classes.completeBtn}
                     onClick={() => handleMarkCompleted(order.order_number)}
@@ -165,9 +194,12 @@ function ActiveOrders({ user }) {
         </div>
       </Card>
 
+      {/* Toast notifications */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </>
   );
 }
 
+// Restrict access based on roles:
+// S - Store Owner, M - Manager, E - Employee
 export default RoleProtection(ActiveOrders, ["S", "M", "E"]);

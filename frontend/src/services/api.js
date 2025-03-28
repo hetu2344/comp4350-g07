@@ -7,24 +7,12 @@ const API_BASE_URL = 'http://localhost:8018/api/tables';
 // Fetch all tables
 export const getAllTables = async () => {
     try {
-        const response = await fetch(API_BASE_URL);
-        const data = await response.json();
-        console.log("API Response:", data);
-        return data;
+        const response = await axios.get(`${API_BASE_URL}/`);
+        console.log("API Response:", response.data);
+        return response.data;
     } catch (error) {
         console.error("Error fetching tables:", error);
         return [];
-    }
-};
-
-// Update table status
-export const updateTableStatus = async (tableNum, isOpen) => {
-    try {
-        const response = await axios.post(`${API_BASE_URL}/`, { tableNum, isOpen });
-        return response.data;
-    } catch (error) {
-        console.error('Error updating table status:', error);
-        throw error;
     }
 };
 
@@ -54,7 +42,7 @@ export const getReservationsByTable = async (tableNum) => {
         const response = await axios.get(`${API_BASE_URL}/reservation/table`, {
             params: { tableNum },
         });
-        return response.data;
+        return response.data.rows || [];
     } catch (error) {
         console.error('Error fetching reservations by table:', error);
         throw error;
@@ -67,7 +55,7 @@ export const getReservationsByCustomer = async (customerName) => {
         const response = await axios.get(`${API_BASE_URL}/reservation/customer`, {
             params: { customerName }, // Match backend naming
         });
-        return response.data;
+        return response.data.rows || [];
     } catch (error) {
         console.error('Error fetching reservations by customer:', error.response?.data || error.message);
         throw error;

@@ -17,6 +17,12 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "restro_usr", "-d", "restro_sync"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
     
   test-db:
@@ -35,6 +41,12 @@ services:
       - "5433:5432"
     volumes:
       - test_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "restro_usr", "-d", "restro_test"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
   backend:
     build:
@@ -86,6 +98,20 @@ services:
       NODE_ENV: test  # Important for testing environment
     depends_on:
       - test-db
+  
+  loadtest:
+    build:
+      context: ./loadtest
+      dockerfile: Dockerfile
+    container_name: loadtest
+    working_dir: /app
+    # Show JMeter version (same as CMD in Dockerfile).
+    # Override the command here if you want to run tests automatically.
+    command: >
+      sh -c "rm -rf result/* && jmeter -n -t RestroSync-LoadTest.jmx -l result/jtl-report/results.jtl -e -o result/html-report"
+    volumes:
+      - loadtest_data:/app/result
 volumes:
   db_data:
   test_db_data:
+  loadtest_data:

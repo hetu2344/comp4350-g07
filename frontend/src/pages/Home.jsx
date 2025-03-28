@@ -91,9 +91,9 @@ function HomePage() {
         </div>
       </div>
 
-      <Link to="/reservation">
+      {/* <Link to="/reservation">
         <button style={styles.reservationButton}>Make a Reservation</button>
-      </Link>
+      </Link> */}
     </div>
   );
 }

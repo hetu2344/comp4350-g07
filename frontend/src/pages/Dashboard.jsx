@@ -16,9 +16,27 @@ function DashboardPage({ user }) {
     <div className="p-6 min-h-screen bg-gray-100 flex flex-col items-center">
       <DashboardNavigation />
 
-      <h1 className="text-3xl font-semibold text-gray-800 text-center mt-6 mb-4">
-        {user?.username || "Staff"}'s Dashboard
-      </h1>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h1
+          style={{
+            padding: "1rem 1rem", // Space around the text
+            fontSize: "2rem",
+            fontWeight: "bold",
+            color: "black",
+            borderRadius: "12px", // Rounded corners
+            backgroundColor: "#fff", // White background
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // Soft shadow
+          }}
+        >
+          {user?.username || "Staff"}'s Dashboard
+        </h1>
+      </div>
 
       <div className="dashboard-grid" style={styles.grid}>
         <NavigationCard

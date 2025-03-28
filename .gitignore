@@ -3,6 +3,9 @@ node_modules/
 npm-debug.log*
 yarn-error.log
 
+# Load test results
+loadtest/result
+
 # Environment variables
 .env
 .env.local
@@ -31,7 +34,7 @@ postgres-data/
 # Docker
 docker-compose.override.yml
 .dockerignore
-Dockerfile*
+# Dockerfile*
 docker-entrypoint-initdb.d/
 
 # IDE / Editor settings
