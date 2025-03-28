@@ -1,3 +1,22 @@
+/**
+ * EditOrder Page
+ * ----------------
+ * This page allows Store Owners, Managers, and Employees to edit an existing order.
+ * 
+ * Functionality includes:
+ *  - Fetching and displaying current order details by order number.
+ *  - Editing table number, customer name, and special instructions.
+ *  - Updating order items: modify quantity, add new items, remove existing ones.
+ * 
+ * All updates are made via API calls to the backend. A success toast confirms the update,
+ * and the user is redirected to the dashboard.
+ * 
+ * Role Access:
+ *  - S: Store Owner
+ *  - M: Manager
+ *  - E: Employee
+ */
+
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
@@ -6,20 +25,24 @@ import RoleProtection from "../components/security/RoleProtection";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Static order types
 const orderTypes = ["Dine-In", "Take-Out"];
 
 function EditOrder({ user }) {
   const { order_number } = useParams();
   const navigate = useNavigate();
+
   const [menuItems, setMenuItems] = useState([]);
   const [error, setError] = useState(null);
   const [orderData, setOrderData] = useState(null);
 
+  // Fetch menu items and order details on mount
   useEffect(() => {
     fetchOrderDetails();
     fetchMenuItems();
   }, []);
 
+  // Fetch current order details
   const fetchOrderDetails = async () => {
     try {
       const response = await fetch(`http://localhost:8018/api/orders/${order_number}`);
@@ -44,6 +67,7 @@ function EditOrder({ user }) {
     }
   };
 
+  // Fetch menu item list
   const fetchMenuItems = async () => {
     try {
       const response = await fetch("http://localhost:8018/api/menu");
@@ -55,11 +79,13 @@ function EditOrder({ user }) {
     }
   };
 
+  // Handle general field changes
   const handleChange = (event) => {
     const { name, value } = event.target;
     setOrderData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Handle adding/removing items
   const handleItemChange = (menu_item_id, isChecked) => {
     setOrderData((prev) => {
       if (isChecked) {
@@ -76,6 +102,7 @@ function EditOrder({ user }) {
     });
   };
 
+  // Handle quantity changes
   const handleQuantityChange = (menu_item_id, quantity) => {
     setOrderData((prev) => ({
       ...prev,
@@ -85,11 +112,13 @@ function EditOrder({ user }) {
     }));
   };
 
+  // Submit updated order
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!orderData) return;
 
     try {
+      // Step 1: Update base order info (table number, customer name, notes)
       const baseUpdateRes = await fetch(`http://localhost:8018/api/orders/${order_number}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -102,10 +131,12 @@ function EditOrder({ user }) {
 
       if (!baseUpdateRes.ok) throw new Error("Failed to update order details");
 
+      // Step 2: Sync order items (add/update/remove)
       const currentRes = await fetch(`http://localhost:8018/api/orders/${order_number}`);
       const { items: existingItems } = await currentRes.json();
       const existingMap = new Map(existingItems.map(item => [item.menu_item_id, item]));
 
+      // Update or add items
       for (const item of orderData.items) {
         const existing = existingMap.get(item.menu_item_id);
         if (existing) {
@@ -133,6 +164,7 @@ function EditOrder({ user }) {
         }
       }
 
+      // Remove unchecked items
       for (const [itemId] of existingMap) {
         await fetch(`http://localhost:8018/api/orders/${order_number}/items/${itemId}`, {
           method: "DELETE",
@@ -162,9 +194,11 @@ function EditOrder({ user }) {
           {error && <p className={classes.error}>{error}</p>}
 
           <form className={classes.form} onSubmit={handleSubmit}>
+            {/* Hidden fields for reference */}
             <input type="hidden" name="storeId" value={orderData.storeId} />
             <input type="hidden" name="createdBy" value={orderData.createdBy} />
 
+            {/* Order type (not editable) */}
             <div className={classes.control}>
               <label>Order Type:</label>
               <select name="orderType" value={orderData.orderType} disabled>
@@ -172,6 +206,7 @@ function EditOrder({ user }) {
               </select>
             </div>
 
+            {/* Table number if dine-in */}
             {orderData.orderType === "Dine-In" && (
               <div className={classes.control}>
                 <label>Table Number:</label>
@@ -184,6 +219,7 @@ function EditOrder({ user }) {
               </div>
             )}
 
+            {/* Customer name if take-out */}
             {orderData.orderType === "Take-Out" && (
               <div className={classes.control}>
                 <label>Customer Name:</label>
@@ -196,6 +232,7 @@ function EditOrder({ user }) {
               </div>
             )}
 
+            {/* Optional notes */}
             <div className={classes.control}>
               <label>Special Instructions:</label>
               <textarea
@@ -205,6 +242,7 @@ function EditOrder({ user }) {
               />
             </div>
 
+            {/* Item selection with quantity */}
             <div className={classes.control}>
               <label>Update Items:</label>
               <div className={classes.checkboxGroup}>

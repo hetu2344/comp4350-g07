@@ -1,3 +1,20 @@
+/**
+ * EditMenuItem Page
+ * -------------------
+ * This page allows users to edit an existing menu item.
+ * 
+ * Features:
+ *  - Loads item details from the backend using its ID from the URL.
+ *  - Pre-fills the form with existing data.
+ *  - Allows editing of:
+ *      - Name, description, price, category
+ *      - Dietary attributes: vegetarian, vegan, gluten-free, available
+ *      - Allergens
+ * 
+ * Upon saving, the updated item is sent via PUT to the backend.
+ * Success/failure feedback is shown using toasts.
+ */
+
 import Card from "react-bootstrap/Card";
 import classes from "./edit-menu-item.module.css";
 import { useState, useEffect } from "react";
@@ -5,12 +22,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Fixed list of item categories
 const categories = ["Appetizer", "Main Course", "Dessert", "Beverage"];
 
 function EditMenuItem() {
-  const { id } = useParams();
+  const { id } = useParams(); // Extract menu item ID from URL
   const navigate = useNavigate();
 
+  // Form data for the item
   const [itemData, setItemData] = useState({
     itemId: "",
     itemName: "",
@@ -25,10 +44,11 @@ function EditMenuItem() {
     createdAt: "",
   });
 
-  const [allergensList, setAllergensList] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [allergensList, setAllergensList] = useState([]); // Allergen options
+  const [error, setError] = useState(null);               // Error state
+  const [loading, setLoading] = useState(true);           // Loading state
 
+  // Fetch item data and allergens when component mounts
   useEffect(() => {
     async function fetchAllergens() {
       try {
@@ -74,6 +94,7 @@ function EditMenuItem() {
     fetchMenuItem();
   }, [id]);
 
+  // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -102,6 +123,7 @@ function EditMenuItem() {
     }
   };
 
+  // Handle input field changes (including checkboxes)
   const handleChange = (event) => {
     const { name, value, type, checked } = event.target;
     setItemData((prevData) => ({
@@ -110,6 +132,7 @@ function EditMenuItem() {
     }));
   };
 
+  // Handle allergen checkbox toggles
   const handleAllergenChange = (event) => {
     const { value, checked } = event.target;
     setItemData((prevData) => ({
@@ -120,11 +143,13 @@ function EditMenuItem() {
     }));
   };
 
+  // Loading or error states
   if (loading) return <p>Loading...</p>;
   if (error) return <p className={classes.error}>{error}</p>;
 
   return (
     <>
+      {/* Back to dashboard shortcut */}
       <div style={{ display: "flex", justifyContent: "flex-end", padding: "1rem" }}>
         <button onClick={() => navigate("/dashboard")} style={{
           backgroundColor: "#007bff",
@@ -141,19 +166,24 @@ function EditMenuItem() {
       <Card>
         <div className={classes.container}>
           <h1 className={classes.title}>✏️ Edit Menu Item</h1>
+          
           <form className={classes.form} onSubmit={handleSubmit}>
+            {/* Basic info */}
             <div className={classes.control}>
               <label>Item Name:</label>
               <input type="text" name="itemName" value={itemData.itemName} onChange={handleChange} required />
             </div>
+
             <div className={classes.control}>
               <label>Description:</label>
               <textarea name="itemDescription" value={itemData.itemDescription} onChange={handleChange} required />
             </div>
+
             <div className={classes.control}>
               <label>Price:</label>
               <input type="number" step="0.01" name="price" value={itemData.price} onChange={handleChange} required />
             </div>
+
             <div className={classes.control}>
               <label>Category:</label>
               <select name="category" value={itemData.category} onChange={handleChange} required>
@@ -163,6 +193,7 @@ function EditMenuItem() {
               </select>
             </div>
 
+            {/* Allergens */}
             <div className={classes.control}>
               <label>Allergens:</label>
               <div className={classes.checkboxGroup}>
@@ -180,6 +211,7 @@ function EditMenuItem() {
               </div>
             </div>
 
+            {/* Dietary info */}
             <div className={classes.checkboxGroup}>
               <label><input type="checkbox" name="isAvailable" checked={itemData.isAvailable} onChange={handleChange} /> Available</label>
               <label><input type="checkbox" name="isVegetarian" checked={itemData.isVegetarian} onChange={handleChange} /> Vegetarian</label>
@@ -187,6 +219,7 @@ function EditMenuItem() {
               <label><input type="checkbox" name="isGlutenFree" checked={itemData.isGlutenFree} onChange={handleChange} /> Gluten-Free</label>
             </div>
 
+            {/* Submit */}
             <div className={classes.actions}>
               <button type="submit">Update Item</button>
             </div>
@@ -194,6 +227,7 @@ function EditMenuItem() {
         </div>
       </Card>
 
+      {/* Toasts for success/error */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </>
   );

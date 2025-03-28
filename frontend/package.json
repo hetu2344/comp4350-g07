@@ -7,22 +7,26 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "cypress run",
+    "test:headless": "cypress run"
   },
   "dependencies": {
-    "react": "^19.0.0",
-    "chart.js": "^4.4.1",
     "axios": "^1.8.4",
+    "chart.js": "^4.4.1",
+    "react": "^19.0.0",
     "react-bootstrap": "^1",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
     "react-toastify": "^11.0.5"
   },
   "devDependencies": {
+    "@cypress/vite-dev-server": "^6.0.2",
     "@eslint/js": "^9.19.0",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
     "@vitejs/plugin-react": "^4.3.4",
+    "cypress": "^14.2.1",
     "eslint": "^9.19.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.0.0",

@@ -17,6 +17,12 @@ services:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "restro_usr", "-d", "restro_sync"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
     
   test-db:
@@ -35,6 +41,12 @@ services:
       - "5433:5432"
     volumes:
       - test_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "restro_usr", "-d", "restro_test"]
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
 
   backend:
     build:
