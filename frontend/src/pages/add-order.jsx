@@ -1,3 +1,23 @@
+/**
+ * AddOrder Page
+ * --------------
+ * This page allows Store Owners, Managers, and Employees to create a new customer order.
+ * 
+ * Users can:
+ *  - Select order type (Dine-In or Take-Out)
+ *  - Specify table number (for Dine-In)
+ *  - Enter customer name and optional special instructions
+ *  - Select one or more menu items and set quantities
+ * 
+ * Order data is submitted to the backend and saved in the database.
+ * After successful creation, the user is redirected to the Dashboard.
+ * 
+ * Role Access:
+ *  - S: Store Owner
+ *  - M: Manager
+ *  - E: Employee
+ */
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Card from "react-bootstrap/Card";
@@ -7,6 +27,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import OrderManagementNavigation from "../components/layout/OrderManagementNavigation";
 
+// Order type options
 const orderTypes = ["Dine-In", "Take-Out"];
 
 function AddOrder({ user }) {
@@ -14,6 +35,7 @@ function AddOrder({ user }) {
   const [menuItems, setMenuItems] = useState([]);
   const [error, setError] = useState(null);
 
+  // Initial order state
   const [orderData, setOrderData] = useState({
     storeId: user?.storeId?.toString() || "1",
     orderType: orderTypes[0],
@@ -24,6 +46,7 @@ function AddOrder({ user }) {
     items: [],
   });
 
+  // Fetch available menu items from API
   useEffect(() => {
     async function fetchMenuItems() {
       try {
@@ -38,6 +61,7 @@ function AddOrder({ user }) {
     fetchMenuItems();
   }, []);
 
+  // Handle changes in text/select fields
   const handleChange = (event) => {
     const { name, value } = event.target;
     setOrderData((prev) => ({
@@ -46,6 +70,7 @@ function AddOrder({ user }) {
     }));
   };
 
+  // Handle item checkbox toggle
   const handleItemChange = (menu_item_id, isChecked) => {
     setOrderData((prev) => {
       if (isChecked) {
@@ -64,6 +89,7 @@ function AddOrder({ user }) {
     });
   };
 
+  // Handle quantity change for selected items
   const handleQuantityChange = (menu_item_id, quantity) => {
     setOrderData((prev) => ({
       ...prev,
@@ -73,9 +99,11 @@ function AddOrder({ user }) {
     }));
   };
 
+  // Submit new order to backend
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    // Basic validation
     if (orderData.orderType === "Dine-In" && !orderData.tableNum) {
       const msg = "Table number is required for Dine-In orders.";
       setError(msg);
@@ -123,16 +151,20 @@ function AddOrder({ user }) {
 
   return (
     <>
+      {/* Navigation bar for order management pages */}
       <OrderManagementNavigation />
+
       <Card>
         <div className={classes.container}>
           <h1 className={classes.title}>🛒 Create a New Order</h1>
           {error && <p className={classes.error}>{error}</p>}
 
           <form className={classes.form} onSubmit={handleSubmit}>
+            {/* Hidden values for backend use */}
             <input type="hidden" name="storeId" value={orderData.storeId} />
             <input type="hidden" name="createdBy" value={orderData.createdBy} />
 
+            {/* Order Type Selection */}
             <div className={classes.control}>
               <label>Order Type:</label>
               <select
@@ -149,6 +181,7 @@ function AddOrder({ user }) {
               </select>
             </div>
 
+            {/* Table number only shown for Dine-In */}
             {orderData.orderType === "Dine-In" && (
               <div className={classes.control}>
                 <label>Table Number:</label>
@@ -162,6 +195,7 @@ function AddOrder({ user }) {
               </div>
             )}
 
+            {/* Customer Info */}
             <div className={classes.control}>
               <label>Customer Name:</label>
               <input
@@ -184,6 +218,7 @@ function AddOrder({ user }) {
               />
             </div>
 
+            {/* Menu Items List */}
             <div className={classes.control}>
               <label>Select Items:</label>
               <div className={classes.checkboxGroup}>
@@ -226,6 +261,7 @@ function AddOrder({ user }) {
               </div>
             </div>
 
+            {/* Submit Button */}
             <div className={classes.actions}>
               <button type="submit">Create Order</button>
             </div>
@@ -233,6 +269,7 @@ function AddOrder({ user }) {
         </div>
       </Card>
 
+      {/* Toasts for success/failure */}
       <ToastContainer
         position="top-right"
         autoClose={3000}
@@ -242,4 +279,5 @@ function AddOrder({ user }) {
   );
 }
 
+// Restrict access: S = Store Owner, M = Manager, E = Employee
 export default RoleProtection(AddOrder, ["S", "M", "E"]);
