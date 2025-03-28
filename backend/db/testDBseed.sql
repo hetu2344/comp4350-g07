@@ -135,14 +135,9 @@ END;
 $$ LANGUAGE 'plpgsql';
 
 CREATE TRIGGER trigger_generate_order_number
-BEFORE
-INSERT ON
-orders
-FOR
-EACH
-ROW
-EXECUTE FUNCTION generate_order_number
-();
+BEFORE INSERT ON orders
+FOR EACH ROW
+EXECUTE FUNCTION generate_order_number();
 
 
 CREATE TABLE order_items
@@ -413,7 +408,7 @@ VALUES
 
 COMMIT;
 
-CREATE VIEW order_summary_view
+CREATE OR REPLACE VIEW order_summary_view
 AS
     SELECT
         o.order_id,
@@ -443,7 +438,7 @@ AS
          o.customer_name, o.order_status, o.order_time, o.created_by;
 
 
-CREATE VIEW order_details_view
+CREATE OR REPLACE VIEW order_details_view
 AS
     SELECT
         o.order_id,

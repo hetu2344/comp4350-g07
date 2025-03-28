@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="7" failures="0" errors="0" time="1.049">
-  <testsuite name="tableManagementModels" errors="0" failures="0" skipped="0" timestamp="2025-03-26T05:21:33" time="0.961" tests="7">
-    <testcase classname="tableManagementModels getAllTablesInfo should return table data successfully" name="tableManagementModels getAllTablesInfo should return table data successfully" time="0.024">
+<testsuites name="jest tests" tests="10" failures="0" errors="0" time="1.21">
+  <testsuite name="tableManagementModels" errors="0" failures="0" skipped="0" timestamp="2025-03-28T01:02:43" time="1.098" tests="10">
+    <testcase classname="tableManagementModels getAllTablesInfo should return table data successfully" name="tableManagementModels getAllTablesInfo should return table data successfully" time="0.023">
     </testcase>
-    <testcase classname="tableManagementModels getAllTablesInfo should rollback and throw error if a query fails" name="tableManagementModels getAllTablesInfo should rollback and throw error if a query fails" time="0.023">
+    <testcase classname="tableManagementModels getAllTablesInfo should rollback and throw error if a query fails (client exists)" name="tableManagementModels getAllTablesInfo should rollback and throw error if a query fails (client exists)" time="0.014">
+    </testcase>
+    <testcase classname="tableManagementModels getAllTablesInfo should throw error if pool.connect fails (client undefined)" name="tableManagementModels getAllTablesInfo should throw error if pool.connect fails (client undefined)" time="0.003">
     </testcase>
     <testcase classname="tableManagementModels getReservationsByCustomerName should return reservations for a valid customer" name="tableManagementModels getReservationsByCustomerName should return reservations for a valid customer" time="0.003">
     </testcase>
-    <testcase classname="tableManagementModels getReservationsByCustomerName should throw error if no reservations found" name="tableManagementModels getReservationsByCustomerName should throw error if no reservations found" time="0.009">
+    <testcase classname="tableManagementModels getReservationsByCustomerName should throw error if no reservations found (client exists)" name="tableManagementModels getReservationsByCustomerName should throw error if no reservations found (client exists)" time="0.013">
     </testcase>
-    <testcase classname="tableManagementModels getReservationsByCustomerName should rollback and throw error if query fails" name="tableManagementModels getReservationsByCustomerName should rollback and throw error if query fails" time="0.007">
+    <testcase classname="tableManagementModels getReservationsByCustomerName should rollback and throw error if query fails (client exists)" name="tableManagementModels getReservationsByCustomerName should rollback and throw error if query fails (client exists)" time="0.005">
     </testcase>
-    <testcase classname="tableManagementModels getFutureReservationsByTableNum should return future reservations for a valid table" name="tableManagementModels getFutureReservationsByTableNum should return future reservations for a valid table" time="0.005">
+    <testcase classname="tableManagementModels getReservationsByCustomerName should throw error if pool.connect fails (client undefined)" name="tableManagementModels getReservationsByCustomerName should throw error if pool.connect fails (client undefined)" time="0.009">
     </testcase>
-    <testcase classname="tableManagementModels getFutureReservationsByTableNum should rollback and throw error if query fails" name="tableManagementModels getFutureReservationsByTableNum should rollback and throw error if query fails" time="0.006">
+    <testcase classname="tableManagementModels getFutureReservationsByTableNum should return future reservations for a valid table" name="tableManagementModels getFutureReservationsByTableNum should return future reservations for a valid table" time="0.003">
+    </testcase>
+    <testcase classname="tableManagementModels getFutureReservationsByTableNum should rollback and throw error if query fails (client exists)" name="tableManagementModels getFutureReservationsByTableNum should rollback and throw error if query fails (client exists)" time="0.003">
+    </testcase>
+    <testcase classname="tableManagementModels getFutureReservationsByTableNum should throw error if pool.connect fails (client undefined)" name="tableManagementModels getFutureReservationsByTableNum should throw error if pool.connect fails (client undefined)" time="0.002">
     </testcase>
   </testsuite>
 </testsuites>
