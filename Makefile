@@ -97,7 +97,8 @@ run-jmeter: check-results-dir
 		docker run --rm -v $(PWD)/loadtest:/test-plan -v $(PWD)/$(RESULTS_DIR):/results $(JMeter_IMAGE) -n -t /test-plan/$(JMX_FILE) -l /results/test-results.jtl)
 
 
-run-loadtest: clean-loadtest-results
+# run-loadtest: clean-loadtest-results
+run-loadtest:
 	# mkdir loadtest/jtl-report
 	# mkdir loadtest/html-report
 	# jmeter -n -t loadtest/RestroSync-LoadTest.jmx -l loadtest/jtl-report/results.jtl -e -o loadtest/html-report
