@@ -93,10 +93,8 @@ services:
       dockerfile: Dockerfile
     container_name: loadtest
     working_dir: /app
-    # Show JMeter version (same as CMD in Dockerfile).
-    # Override the command here if you want to run tests automatically.
-    command: >
-      sh -c "rm -rf result/* && jmeter -n -t RestroSync-LoadTest.jmx -l result/jtl-report/results.jtl -e -o result/html-report"
+    entrypoint: sh
+    command: -c "rm -rf result/* && jmeter -n -t RestroSync-LoadTest.jmx -l result/jtl-report/results.jtl -e -o result/html-report"
     volumes:
       - loadtest_data:/app/result
 volumes:

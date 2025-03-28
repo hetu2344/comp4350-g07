@@ -99,13 +99,14 @@ run-jmeter: check-results-dir
 
 # run-loadtest: clean-loadtest-results
 run-loadtest:
-	# mkdir loadtest/jtl-report
-	# mkdir loadtest/html-report
-	# jmeter -n -t loadtest/RestroSync-LoadTest.jmx -l loadtest/jtl-report/results.jtl -e -o loadtest/html-report
-	# open loadtest/html-report/index.html
-	docker-compose up loadtest --build
+	powershell -Command "New-Item -ItemType Directory -Force -Path 'loadtest/jtl-report'"
+	powershell -Command "New-Item -ItemType Directory -Force -Path 'loadtest/html-report'"
+	docker-compose up --build loadtest
 	docker cp loadtest:/app/result loadtest/
-	open loadtest/result/html-report/index.html
+	powershell -Command "Start-Process 'loadtest/result/html-report/index.html'"
+
+
+
 
 clean-loadtest-results:
 	rm -rf loadtest/result
