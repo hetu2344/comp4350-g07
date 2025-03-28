@@ -99,13 +99,8 @@ run-jmeter: check-results-dir
 
 # run-loadtest: clean-loadtest-results
 run-loadtest:
-	# mkdir loadtest/jtl-report
-	# mkdir loadtest/html-report
-	# jmeter -n -t loadtest/RestroSync-LoadTest.jmx -l loadtest/jtl-report/results.jtl -e -o loadtest/html-report
-	# open loadtest/html-report/index.html
 	docker-compose up loadtest --build
 	docker cp loadtest:/app/result loadtest/
-	open loadtest/result/html-report/index.html
 
 clean-loadtest-results:
 	rm -rf loadtest/result
