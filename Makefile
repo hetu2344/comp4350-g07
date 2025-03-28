@@ -96,17 +96,16 @@ run-jmeter: check-results-dir
 		docker run --rm -v "$(PWD)/loadtest:/test-plan" -v "$(PWD)/$(RESULTS_DIR):/results" $(JMeter_IMAGE) -n -t /test-plan/$(JMX_FILE) -l /results/test-results.jtl, \
 		docker run --rm -v $(PWD)/loadtest:/test-plan -v $(PWD)/$(RESULTS_DIR):/results $(JMeter_IMAGE) -n -t /test-plan/$(JMX_FILE) -l /results/test-results.jtl)
 
-# Clean up the results directory
-clean-loadtest-results:
-	$(if $(findstring $(OS),Windows_NT), \
-		del /f /s /q $(RESULTS_DIR) && rmdir /s /q $(RESULTS_DIR), \
-		rm -rf $(RESULTS_DIR))
 
-# Check if the results directory exists or create it
-check-results-dir:
-	$(if $(wildcard $(RESULTS_DIR)), \
-		echo "Results directory exists.", \
-		echo "Creating results directory."; mkdir -p $(RESULTS_DIR))
+run-loadtest: clean-loadtest-results
+	mkdir loadtest/jtl-report
+	mkdir loadtest/html-report
+	jmeter -n -t loadtest/RestroSync-LoadTest.jmx -l loadtest/jtl-report/results.jtl -e -o loadtest/html-report
+	open loadtest/html-report/index.html
+
+clean-loadtest-results:
+	rm -rf loadtest/jtl-report
+	rm -rf loadtest/html-report
 
 # Help command to show available commands
 help:
@@ -130,4 +129,5 @@ help:
 	@echo "  make test-coverage   					- Opens test coverage."
 	@echo "  make test-file FILE=filename.test.js  	- Run a specific test file"
 	@echo "  make test-folder DIR=foldername  		- Run all tests in one folder"
-	@echo "  makeclean-loadtest-results 			- Clean up load test results"	
+	@echo "  make clean-loadtest-results 			- Clean up load test results"
+	@echo "  make run-loadtest    					- Run JMeter test plan and generate HTML report"
