@@ -23,6 +23,12 @@
 ### Action - Booking a Table  
 ![Table Booking](bookingTable.png)
 
+### Action - Retrieve Table Reservation (By Customer Name)
+![Customer](TableReservationRetrieval(Customer).png)
+
+### Action - Retrieve Table Reservation (By Table Number) 
+![Table Number](TableReservationRetrieval(Table%20Number).png)
+
 # Core Feature - Sales Analysis
 ### Action - Looking at the sales  
 ![Looking at the sales](saleManagement.png)
