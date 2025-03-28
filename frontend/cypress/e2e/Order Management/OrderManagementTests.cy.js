@@ -37,8 +37,8 @@ describe('Creating an order', () => {
         cy.contains('Order created successfully!').should('be.visible');
         cy.visit('http://localhost:8017/active-orders');
         cy.wait(4000);
-        cy.contains('owner_john').should('be.visible');
-
+        cy.scrollTo('bottom');
+        cy.contains('No onions, please.').should('be.visible');
         cy.visit('http://localhost:8017/dashboard');
       });
 
