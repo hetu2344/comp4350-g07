@@ -97,6 +97,8 @@ run-loadtest:
 
 clean-loadtest-results:
 	rm -rf loadtest/result
+	docker-compose down db --volumes
+	docker-compose up db --build
 
 # Help command to show available commands
 help:
