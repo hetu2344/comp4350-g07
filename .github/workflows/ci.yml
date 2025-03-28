@@ -58,7 +58,7 @@ jobs:
       # Run Cypress Tests
       - name: Run Cypress Tests
         working-directory: frontend
-        run: npm run test:headless
+        run: npm run test:coverage
 
       # Tear Down Docker Services
       - name: Tear Down Docker Services
