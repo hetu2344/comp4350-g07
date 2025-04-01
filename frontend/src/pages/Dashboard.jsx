@@ -12,10 +12,10 @@ import tableImage from "../../public/table.png";
 /* This page is the first page the staff sees when they log in */
 
 function DashboardPage({ user }) {
+  console.log(user);
   return (
     <div className="p-6 min-h-screen bg-gray-100 flex flex-col items-center">
       <DashboardNavigation />
-
       <div
         style={{
           display: "flex",
@@ -34,7 +34,7 @@ function DashboardPage({ user }) {
             boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)", // Soft shadow
           }}
         >
-          {user?.username || "Staff"}'s Dashboard
+          {user?.firstName || "Staff"}'s Dashboard
         </h1>
       </div>
 
