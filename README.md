@@ -12,6 +12,15 @@ RestroSync is a restaurant management system designed to streamline daily operat
 ```{bash}
 make up-build
 ```
+**NOTES**: 
+   - Currently signing-up as a owner for new restaurant is in development, so one can use the following credentials to login and then they can create new accounts after that.
+   - Only **Owners** and **Managers** can create and signup for new users.
+
+| username | password |
+|----------|----------|
+| owner_john | password123|
+| manager_bob | password123 |
+| employee_emma | password123 |
 
 3. Go to the following link :
 [RestroSync](http://localhost:8017)
