@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import HomePageNavigation from "../components/layout/HomePageNavigation";
 import { Link } from "react-router-dom";
-/*
-This page will be the homepage of the website
-*/
-import "./Home.css"; 
+import "./Home.css";
 
 function HomePage() {
   const [menu, setMenu] = useState([]);
@@ -14,10 +11,7 @@ function HomePage() {
   useEffect(() => {
     async function fetchMenu() {
       try {
-        const response = await fetch("http://localhost:8018/api/menu", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        });
+        const response = await fetch("http://localhost:8018/api/menu");
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -26,7 +20,6 @@ function HomePage() {
         const data = await response.json();
         setMenu(data);
       } catch (error) {
-        console.error("Error fetching menu items:", error.message);
         setError("Failed to fetch menu items. Please try again.");
       } finally {
         setLoading(false);
@@ -37,78 +30,56 @@ function HomePage() {
   }, []);
 
   return (
-    <div>
+    <div className="homepage">
       <HomePageNavigation />
+
       <div className="home-container">
-        <h2>Welcome to RestroSync</h2>
-        <h3>Our Delicious Menu</h3>
+        <header className="home-header">
+          <h1>🍽️ Welcome to RestroSync!</h1>
+          <p>Discover our delightful menu</p>
+        </header>
 
-        {loading && <p>Loading menu...</p>}
-        {error && <p className="error">{error}</p>}
+        {loading && <p className="loading">Loading menu...</p>}
+        {error && <p className="error-message">{error}</p>}
 
-        <div className="menu-container">
-          {menu.length > 0 ? (
-            <ul className="menu-list">
-              {menu.map((item, index) => (
-                <li key={item.id || index} className="menu-item">
-                  <h3>{item.item_name}</h3>
-                  <p className="category">{item.category_name}</p>
-                  <p>{item.item_description}</p>
-                  <p>
-                    <strong>Price:</strong> ${item.price}
-                  </p>
+        {!loading && !error && menu.length === 0 && (
+          <p className="empty-menu">No menu items available.</p>
+        )}
 
-                  {/* Dietary Information */}
-                  <p>
-                    <strong>Dietary Info:</strong>
-                    {item.is_vegetarian ? " 🥦 Vegetarian" : ""}
-                    {item.is_vegan ? " 🌱 Vegan" : ""}
-                    {item.is_gluten_free ? " 🌾 Gluten-Free" : ""}
-                    {!item.is_vegetarian &&
-                    !item.is_vegan &&
-                    !item.is_gluten_free
-                      ? " 🍖 Contains Meat"
-                      : ""}
-                  </p>
+        <div className="menu-grid">
+          {menu.map((item,index) => (
+            <div key={item.id || `menu-item-${index}`} className="menu-card">
+              <h3>{item.item_name}</h3>
+              <span className="menu-category">{item.category_name}</span>
+              <p className="menu-description">{item.item_description}</p>
+              <div className="menu-price">${item.price.toFixed(2)}</div>
 
-                  {/* Allergens */}
-                  {item.allergens.length > 0 && (
-                    <p className="allergens">
-                      <strong>Allergens:</strong> {item.allergens.join(", ")}
-                    </p>
-                  )}
+              <div className="dietary-info">
+                {item.is_vegetarian && (
+                  <span className="diet-icon vegetarian">🥗 Vegetarian</span>
+                )}
+                {item.is_vegan && (
+                  <span className="diet-icon vegan">🌱 Vegan</span>
+                )}
+                {item.is_gluten_free && (
+                  <span className="diet-icon gluten-free">🚫🌾 Gluten-Free</span>
+                )}
+                {!item.is_vegetarian && !item.is_vegan && !item.is_gluten_free && (
+                  <span className="diet-icon meat">🍖 Contains Meat</span>
+                )}
+              </div>
 
-                  <p className="date-added">
-                    <strong>Added on:</strong>{" "}
-                    {new Date(item.created_at).toLocaleDateString()}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            !loading && <p>No menu items available.</p>
-          )}
+              {item.allergens.length > 0 && (
+                <p className="allergens">
+                  <strong>Allergens:</strong> {item.allergens.join(", ")}
+                </p>
+              )}
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* <Link to="/reservation">
-        <button style={styles.reservationButton}>Make a Reservation</button>
-      </Link> */}
     </div>
   );
 }
-
-const styles = {
-  reservationButton: {
-    padding: "0.5rem 1rem",
-    backgroundColor: "#FF8C42",
-    color: "white",
-    border: "none",
-    borderRadius: "0.25rem",
-    cursor: "pointer",
-    fontSize: "1rem",
-    marginTop: "1rem",
-  },
-};
 
 export default HomePage;
