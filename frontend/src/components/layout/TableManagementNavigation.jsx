@@ -12,7 +12,7 @@ function TableManagementNavigation() {
       <nav>
         <ul>
           <li>
-            <Link to="/dashboard">Back To Dashboard123</Link>
+            <Link to="/dashboard">Back To Dashboard</Link>
           </li>
         </ul>
       </nav>
