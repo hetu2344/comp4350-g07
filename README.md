@@ -1,4 +1,4 @@
-# Project Summary.
+# Project Summary
 RestroSync is a restaurant management system designed to streamline daily operations, enhance customer experience, and optimize business performance. By integrating table management, order processing, menu control, and sales analytics, RestroSync helps restaurants operate more efficiently while providing valuable insights for data-driven decision-making.
 
 # Running the application
